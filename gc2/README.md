@@ -16,13 +16,11 @@ Elasticsearch:
 
     sudo docker run --name gc2_elasticsearch -d -t mapcentia/gc2 /usr/share/elasticsearch/bin/elasticsearch -D FOREGROUND
 
-When start the HTTP server with links to the PostGreSQL and Elasticsearch containers:
-
-You can map port 80 inside the container to any port on your local host. Here is local post 80 mapped to port 80 inside the container.
+When start the HTTP server with links to the PostGreSQL and Elasticsearch containers. You can map port 80 inside the container to any port on your local host. Here is local post 80 mapped to port 80 inside the container.
 
     sudo docker run --name gc2_apache2 --link gc2_elasticsearch:gc2_elasticsearch --link gc2_postgres:gc2_postgres -p 80:80 -d -t mapcentia/gc2 /root/run-apache.sh -D FOREGROUND
 
-The call 127.0.0.1 in a webbrowser.
+Then browse to 127.0.0.1
 
 Enjoy!
 
