@@ -12,6 +12,6 @@ The start the HTTP server with container links:
 
 Enjoy!
 
-<img src="http://www.mapcentia.com/images/__od/863/mapcentialogo.png">
+[logo]:http://www.mapcentia.com/images/__od/863/mapcentialogo.png
 
 http://www.mapcentia.com/en/geocloud/
