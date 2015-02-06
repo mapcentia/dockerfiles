@@ -56,6 +56,7 @@ RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=
 #	npm install &&\
 #	grunt
 
+ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
 ADD conf/gc2/Connection.php /var/www/geocloud2/app/conf/
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 
