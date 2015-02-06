@@ -17,7 +17,7 @@ class App
         "databaseTemplate" => "template_geocloud",
 
         // The host of Elasticsearch
-        "esHost" => "",
+        "esHost" => "gc2_elasticsearch",
 
         // Encrypt api key in database
         "encryptSettings" => false,
