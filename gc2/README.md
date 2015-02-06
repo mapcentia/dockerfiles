@@ -1,10 +1,10 @@
 First start PostGreSQL and Elasticsearch:
 
-    sudo docker run --name gc2_postgres -d -p 5432:5432 mapcentia/gc2 sudo -u postgres /usr/lib/postgresql/9.3/bin/postgres -D /var/lib/postgresql/9.3/main -c config_file=/etc/postgresql/9.3/main/postgresql.conf -D FOREGROUND
+    sudo docker run --name gc2_postgres -d mapcentia/gc2 sudo -u postgres /usr/lib/postgresql/9.3/bin/postgres -D /var/lib/postgresql/9.3/main -c config_file=/etc/postgresql/9.3/main/postgresql.conf -D FOREGROUND
 
 And:
 
-    sudo docker run --name gc2_elasticsearch -p 9200:9200 -d -t mapcentia/gc2 /usr/share/elasticsearch/bin/elasticsearch -D FOREGROUND
+    sudo docker run --name gc2_elasticsearch -d -t mapcentia/gc2 /usr/share/elasticsearch/bin/elasticsearch -D FOREGROUND
 
 The start the HTTP server with container links:
 
