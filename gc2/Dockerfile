@@ -11,14 +11,19 @@ RUN apt-get -f install
 # Enable Apache2 modules
 RUN a2enmod rewrite headers expires include actions alias
 
-# Clone GC2 from GitHub
-RUN cd /var/www/ &&\
-	git clone http://github.com/mapcentia/geocloud2.git
+# Install Node.js and Grunt
+RUN npm install -g grunt-cli &&\
+	npm install -g forever &&\
+	ln -s /usr/bin/nodejs /usr/bin/node &&\
 
 # Get and install Elasticsearch
 RUN cd ~ && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.2.deb
 RUN cd ~ && dpkg -i elasticsearch-1.4.2.deb
 RUN update-rc.d elasticsearch defaults 95 10
+
+# Clone GC2 from GitHub
+RUN cd /var/www/ &&\
+	git clone http://github.com/mapcentia/geocloud2.git
 
 # Add config files
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
@@ -35,7 +40,7 @@ RUN cp /var/www/geocloud2/app/conf/Connection.php.dist /var/www/geocloud2/app/co
 
 # Create template database and run migrations
 RUN service postgresql start && \
-    	createdb template_geocloud -T template0 -E UTF8 -U postgres &&\
+    createdb template_geocloud -T template0 -E UTF8 -U postgres &&\
 	psql template_geocloud -c "create extension postgis" -U postgres &&\
 	psql template_geocloud -c "create extension pgcrypto" -U postgres &&\
 	createdb mapcentia -U postgres &&\
@@ -60,12 +65,10 @@ RUN mkdir /home/postgres && chown postgres:postgres /home/postgres
 # Add the 900913 projection to Proj4
 RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg
 
-# Install GruntJS
-#RUN npm install -g grunt-cli &&\
-#	ln -s /usr/bin/nodejs /usr/bin/node &&\
-#	cd /var/www/geocloud2 &&\
-#	npm install &&\
-#	grunt
+
+RUN	cd /var/www/geocloud2 &&\
+	npm install &&\
+	grunt
 
 # Add the custom config files.  
 ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
@@ -79,7 +82,6 @@ EXPOSE 80
 EXPOSE 5432
 EXPOSE 9200
 
-#VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
-VOLUME  ["/var/lib/postgresql"]
+VOLUME  ["/var/lib/postgresql", "/var/log", "/var/www/geocloud2/public/logs" ]
 
 #CMD service apache2 start && service postgresql start && service elasticsearch start && curl http://127.0.0.1/install/installmy.php?db=template_geocloud && cd /var/www/geocloud2/app/conf/migration/ && ./run && tail -f /var/log/apache2/access.log

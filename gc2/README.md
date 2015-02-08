@@ -20,9 +20,15 @@ When start the HTTP server with links to the PostGreSQL and Elasticsearch contai
 
     sudo docker run --name gc2_apache2 --link gc2_elasticsearch:gc2_elasticsearch --link gc2_postgres:gc2_postgres -p 80:80 -d -t mapcentia/gc2 /root/run-apache.sh -D FOREGROUND
 
-Then browse to 127.0.0.1
+Then browse to 127.0.0.1 and Enjoy!
 
-Enjoy!
+Let the PostGreSQL to Elasticsearch river run:
+
+	sudo docker run --name gc2_river --link gc2_postgres:gc2_postgres --link gc2_apache2:gc2_apache2 -d -t mapcentia/gc2 nodejs /var/www/geocloud2/app/scripts/pg2es.js [database] --host gc2_postgres --es-host gc2_apache2 --key [api key]
+
+Tail the river
+
+	sudo docker run --volumes-from gc2_river -i -t mapcentia/gc2  tail -f /var/www/geocloud2/public/logs/pg2es.log
 
 ![MapCentia](http://www.mapcentia.com/images/__od/863/mapcentialogo.png)
 
