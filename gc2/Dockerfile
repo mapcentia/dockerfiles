@@ -11,10 +11,10 @@ RUN apt-get -f install
 # Enable Apache2 modules
 RUN a2enmod rewrite headers expires include actions alias
 
-# Install Node.js and Grunt
+# Install Node.js, Grunt and Forever
 RUN npm install -g grunt-cli &&\
 	npm install -g forever &&\
-	ln -s /usr/bin/nodejs /usr/bin/node &&\
+	ln -s /usr/bin/nodejs /usr/bin/node
 
 # Get and install Elasticsearch
 RUN cd ~ && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.2.deb
@@ -65,7 +65,7 @@ RUN mkdir /home/postgres && chown postgres:postgres /home/postgres
 # Add the 900913 projection to Proj4
 RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg
 
-
+# Install npm packages run Grunt
 RUN	cd /var/www/geocloud2 &&\
 	npm install &&\
 	grunt
@@ -82,6 +82,4 @@ EXPOSE 80
 EXPOSE 5432
 EXPOSE 9200
 
-VOLUME  ["/var/lib/postgresql", "/var/log", "/var/www/geocloud2/public/logs" ]
-
-#CMD service apache2 start && service postgresql start && service elasticsearch start && curl http://127.0.0.1/install/installmy.php?db=template_geocloud && cd /var/www/geocloud2/app/conf/migration/ && ./run && tail -f /var/log/apache2/access.log
+VOLUME  ["/var/lib/postgresql", "/var/log", "/var/www/geocloud2/public/logs"]
