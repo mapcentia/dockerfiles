@@ -81,5 +81,3 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 EXPOSE 80
 EXPOSE 5432
 EXPOSE 9200
-
-VOLUME  ["/var/lib/postgresql", "/var/log", "/var/www/geocloud2/public/logs"]
