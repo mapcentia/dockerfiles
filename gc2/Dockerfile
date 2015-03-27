@@ -3,7 +3,7 @@ FROM ubuntu:trusty
 RUN apt-get update
 
 # Install packages
-RUN apt-get -y install wget curl php5 postgis php5-pgsql php5-mapscript php5-curl libapache2-mod-python python-mapscript gdal-bin python-paste python-flup python-imaging git php5-gd python-boto php5-cli unzip postgresql-9.3-postgis-2.1 postgresql-contrib-9.3 python-software-properties rng-tools apache2-utils npm openjdk-7-jre-headless
+RUN apt-get -y install wget curl php5 postgis php5-pgsql php5-mapscript php5-curl libapache2-mod-python python-mapscript gdal-bin python-paste python-flup python-imaging git php5-gd python-boto php5-cli unzip postgresql-9.3-postgis-2.1 postgresql-contrib-9.3 python-software-properties rng-tools apache2-utils npm openjdk-7-jre-headless supervisor
 
 # Fix install for openjdk-7-jre-headless
 RUN apt-get -f install
@@ -25,7 +25,7 @@ RUN update-rc.d elasticsearch defaults 95 10
 RUN cd /var/www/ &&\
 	git clone http://github.com/mapcentia/geocloud2.git
 
-# Add config files
+# Add config files from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 ADD conf/apache/run-apache.sh /root/
 ADD conf/postgresql/pg_hba.conf /etc/postgresql/9.3/main/
@@ -81,3 +81,8 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 EXPOSE 80
 EXPOSE 5432
 EXPOSE 9200
+
+# Add Supervisor config and run the deamon
+ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+CMD ["/usr/bin/supervisord"]

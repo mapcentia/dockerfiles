@@ -4,7 +4,7 @@ namespace app\conf;
 class Connection
 {
     static $param = array(
-        "postgishost" => "gc2_postgres",
+        "postgishost" => "127.0.0.1",
         "postgisdb" => "postgres",
         "postgisuser" => "postgres",
         "postgisport" => "5432",
