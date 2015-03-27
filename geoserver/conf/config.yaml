@@ -1,0 +1,277 @@
+#===========================================================================
+# allowed DPIs
+#===========================================================================
+dpis: [254, 190, 127, 56]
+
+#===========================================================================
+# the allowed scales
+#===========================================================================
+scales:
+  - 25000
+  - 50000
+  - 100000
+  - 200000
+  - 500000
+  - 1000000
+  - 2000000
+  - 4000000
+
+#===========================================================================
+# the list of allowed hosts
+#===========================================================================
+hosts:
+  - !localMatch
+    dummy: true
+  - !dnsMatch
+    host: maps.google.com
+    port: 80
+  - !dnsMatch
+    host: labs.metacarta.com
+    port: 80
+  - !dnsMatch
+    host: a.tile.openstreetmap.org
+    port: 80
+  - !dnsMatch
+    host: b.tile.openstreetmap.org
+    port: 80
+  - !dnsMatch
+    host: c.tile.openstreetmap.org
+    port: 80
+  - !dnsMatch
+    host: ecn.t0.tiles.virtualearth.net
+    port: 80
+  - !dnsMatch
+    host: ecn.t1.tiles.virtualearth.net
+    port: 80
+  - !dnsMatch
+    host: ecn.t2.tiles.virtualearth.net
+    port: 80
+  - !dnsMatch
+    host: ecn.t3.tiles.virtualearth.net
+    port: 80
+  - !dnsMatch
+    host: services.digitalglobe.com
+    port: 443
+  - !dnsMatch
+    host: 52.16.185.99
+    port: 80
+     
+layouts:
+
+  #===========================================================================
+  # A4 Portrait   597 x 842
+  #===========================================================================
+  A4 Portrait:
+
+    mainPage:
+      pageSize: A4
+      landscape: false
+      rotation: true
+      marginLeft: 30
+      marginRight: 30
+      marginTop: 30
+      marginBottom: 30
+      #backgroundPDF:
+
+      items:
+
+      #The Map
+        - !map
+          absoluteX: 32
+          absoluteY: 819
+          width: 535
+          height: 700
+
+      #The map border
+      #After the map so it is on top
+        - !columns
+          config:
+            borderWidth: 1
+            cells:
+              - borderColor: black
+                #padding is required otherwise the box will be empty
+                padding: 351
+          absoluteX: 31
+          absoluteY: 820
+          width: 537
+          #Blank item required or MapFish Print will fail badly.
+          items:
+            - !text
+              text: ''
+
+        #Legend
+        - !columns
+          #This line determines if the legend is shown in the template.
+          condition: legends
+          absoluteX: 37
+          absoluteY: 814
+          width: 160
+          config:
+            borderWidth: 1
+            cells:
+              - borderWidth: 1
+                borderColor: #555555
+                padding: 5
+
+          items:
+            - !legends
+              iconMaxWidth: 145
+              iconMaxHeight: 200
+              defaultScale: 0.5
+              maxWidth: 150
+              #Padding between layers
+              layerSpace: 5
+              layerFont: Helvetica
+              layerFontSize: 8
+              #Padding between text and icon within layer
+              classSpace: 2
+              classIndentation: 5
+              classFont: Helvetica
+              classFontSize: 8
+              backgroundColor: white
+              inline:true
+
+
+        #Attribution
+        - !columns
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          absoluteX: 37
+          absoluteY: 133
+          width: 300
+          items:
+            - !text
+              fontSize: 9
+              align: left
+              text: 'Copyright ${now yyyy}.'
+
+
+        #Comments box
+        - !columns
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 2
+                backgroundColor: white
+          absoluteX: 31
+          absoluteY: 99
+          width: 180
+          items:
+            - !text
+              fontSize: 9
+              align: left
+              text: '${mapComment}'
+
+
+        #WCC Logo
+        - !columns
+          absoluteX: 215
+          absoluteY: 70
+          width: 101
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          items:
+            - !image
+              maxWidth: 100
+              spacingAfter: 100
+              align: center
+              url: 'https://geocloud.mapcentia.com/assets/images/MapCentia_500.png'
+
+
+        #ScaleBar
+        - !columns
+          absoluteX: 215
+          absoluteY: 90
+          width: 130
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          items:
+            - !scalebar
+              align: center
+              maxSize: 130
+              type: 'line'
+              intervals: 2
+            - !text
+              font: Helvetica
+              fontSize: 9
+              align: right
+              text: '1:${scale}'
+
+        #North Arrow taken from Wikipedia (from public domain)
+        - !columns
+          absoluteX: 325
+          absoluteY: 60
+          width: 30
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          items:
+            - !image
+              maxWidth: 30
+              maxHeight: 30
+              url: 'http://trac.mapfish.org/trac/mapfish/export/2892/print/trunk/print-standalone/samples/Arrow_North_CFCF.svg'
+              rotation: '${rotation}'
+
+        #Kadaster contact details
+        - !columns
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 2
+                vertAlign: middle
+          absoluteX: 353
+          absoluteY: 90
+          width: 115
+          items:
+            - !text
+              fontSize: 8
+              align: center
+              text: "Het Kadaster,\nHofstraat 110\n7311KZ Apeldoorn,\nTelefoon: (088) 183 20 00\nwww.kadaster.nl\nkcc@kadaster.nl"
+
+        #Date Box
+        - !columns
+          config:
+            borderWidth: 1
+            borderColor: black
+            cells:
+              - padding: 3
+                paddingBottom: 4
+                vertAlign: middle
+          absoluteX: 400
+          absoluteY: 115
+          width: 65
+          items:
+            - !text
+              fontSize: 10
+              align: center
+              text: '${now yyyy-MM-dd}'
+
+        #Title Box
+        #On the bottom so its borders are on top
+        #Don't show box if mapTitle not set.
+        - !columns
+          condition: mapTitle
+          config:
+            borderWidth: 1
+            borderColor: black
+            cells:
+              - padding: 0
+                paddingBottom: 3
+                backgroundColor: white
+                vertAlign: middle
+          absoluteX: 31
+          absoluteY: 115
+          width: 370
+          items:
+            - !text
+              fontSize: 14
+              align: center
+              text: '${mapTitle}'
+

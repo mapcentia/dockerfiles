@@ -20,5 +20,7 @@ ENV JAVA_HOME /usr/
 RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/2.7.0/extensions/geoserver-2.7.0-printing-plugin.zip -O ~/geoserver-printing-plugin.zip &&\
     unzip ~/geoserver-printing-plugin.zip -d /opt/geoserver/webapps/geoserver/WEB-INF/lib/
 
+ADD conf/config.yaml /opt/geoserver/webapps/geoserver/data/printing/
+
 CMD ["/opt/geoserver/bin/startup.sh"]
 EXPOSE 8080
