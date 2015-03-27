@@ -1,4 +1,5 @@
 FROM ubuntu:trusty
+MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN apt-get update
 
