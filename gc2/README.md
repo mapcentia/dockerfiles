@@ -7,25 +7,34 @@ A complete platform for managing geospatial data, making map visualisations and 
 The Docker image comes with HTTP server, Elasticsearch and PostGreSQL including a template database. 
 
 
-Just run a container like this.
+Just run a container like this:
 
     sudo docker run --name gc2 -p 80:80 -t -d mapcentia/gc2
 
 You can map port 80 inside the container to any port on your local host. Here is host port 80 mapped to port 80 inside the container.
 
 ### Optional
-Start a daemon that makes data flow from PostGIS to Elasticsearch in real-time.
+You can edit the GC2 configuration by starting an other container with volumes mounted from the GC2 container like this:
+
+    run --volumes-from=gc2 -t -i mapcentia/gc2 /bin/bash
+    
+And when on the command line of the container. edit the file:
+    
+    /var/www/geocloud2/app/conf/App.php
+    
+Start a daemon that makes data flow from PostGIS to Elasticsearch in real-time:
 
 	sudo docker run --name gc2_river --link gc2:gc2 -d -t mapcentia/gc2 nodejs /var/www/geocloud2/app/scripts/pg2es.js [database] --host gc2 --es-host gc2 --key [api key]
 
-And tail the flow of data to Elasticsearch.
+And tail the flow of data to Elasticsearch:
 
 	sudo docker run --volumes-from gc2_river -i -t mapcentia/gc2  tail -f /var/www/geocloud2/public/logs/pg2es.log
 
-You can login to PostGreSQL like this.
+You can login to PostGreSQL from a command line like this:
     
     sudo docker run --link gc2:gc2 -i -t mapcentia/gc2 psql --host gc2 --user postgres [database]
+    
 
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
 
-http://www.mapcentia.com/en/geocloud/
+[www.mapcentia.com/en/geocloud](http://www.mapcentia.com/en/geocloud/)

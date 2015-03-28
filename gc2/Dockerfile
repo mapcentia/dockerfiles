@@ -83,7 +83,7 @@ EXPOSE 80
 EXPOSE 5432
 EXPOSE 9200
 
-VOLUME  ["/var/www/geocloud2/public/logs" ]
+VOLUME  ["/var/www/geocloud2/public/logs","/var/www/geocloud2/app/conf"]
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
