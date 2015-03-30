@@ -1,9 +1,11 @@
 FROM ubuntu:trusty
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
-RUN apt-get update
+RUN  export DEBIAN_FRONTEND=noninteractive
+ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
+RUN apt-get -y update
 RUN apt-get -y install wget curl php5 postgis php5-pgsql php5-mapscript php5-curl libapache2-mod-python python-mapscript gdal-bin python-paste python-flup python-imaging git php5-gd python-boto php5-cli unzip postgresql-9.3-postgis-2.1 postgresql-contrib-9.3 python-software-properties rng-tools apache2-utils npm openjdk-7-jre-headless supervisor
 
 # Fix install for openjdk-7-jre-headless

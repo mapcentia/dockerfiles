@@ -1,6 +1,9 @@
 FROM ubuntu:trusty
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
+RUN  export DEBIAN_FRONTEND=noninteractive
+ENV  DEBIAN_FRONTEND noninteractive
+
 # Install packages
 RUN apt-get -y update
 RUN apt-get -y install curl vim git supervisor
