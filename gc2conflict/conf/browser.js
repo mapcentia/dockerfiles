@@ -1,0 +1,1 @@
+var browserConfig = require('./browserConfig');

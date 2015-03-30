@@ -35,7 +35,7 @@ ADD conf/gc2/geometry_columns_join.sql /var/www/geocloud2/public/install/
 # Script for starting Apache2 and removing incompletely-shutdown httpd pids
 RUN chmod +x /root/run-apache.sh
 
-# Copy GC2 config files from GIT repo
+# Copy GC2 config files from GIT repo, so we can create the template database and run migrations
 RUN cp /var/www/geocloud2/app/conf/App.php.dist /var/www/geocloud2/app/conf/App.php
 RUN cp /var/www/geocloud2/app/conf/Connection.php.dist /var/www/geocloud2/app/conf/Connection.php
 
@@ -71,7 +71,7 @@ RUN	cd /var/www/geocloud2 &&\
 	npm install &&\
 	grunt
 
-# Add the custom config files.  
+# Add the custom config files form the Docker repo.
 ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
 ADD conf/gc2/Connection.php /var/www/geocloud2/app/conf/
 
