@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install curl vim git supervisor
+RUN apt-get -y install phantomjs curl vim git supervisor
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup | sudo bash -
@@ -40,7 +40,7 @@ ADD conf/nodeConfig.js /root/gc2conflict/app/config/
 RUN cd /root/gc2conflict &&\
 	grunt
 
-VOLUME  ["/root/gc2conflict/app/conf"]
+VOLUME  ["/root/gc2conflict/app/config"]
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
