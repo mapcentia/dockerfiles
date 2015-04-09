@@ -20,9 +20,13 @@ ENV JAVA_HOME /usr/
 RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/2.7.0/extensions/geoserver-2.7.0-printing-plugin.zip -O ~/geoserver-printing-plugin.zip &&\
     unzip ~/geoserver-printing-plugin.zip -d /opt/geoserver/webapps/geoserver/WEB-INF/lib/
 
-# Make dir and copy config for print
+# Make dir and copy print config file from docker repo
 RUN mkdir /opt/geoserver/data_dir/printing/
 ADD conf/config.yaml /opt/geoserver/data_dir/printing/
 
+# Share volume, so config.yaml can be edited in running container
+VOLUME ["/opt/geoserver/data_dir/printing"]
+
+# Expose GeoServer's default port
 EXPOSE 8080
 CMD ["/opt/geoserver/bin/startup.sh"]

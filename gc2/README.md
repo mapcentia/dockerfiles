@@ -16,7 +16,7 @@ You can map port 80 inside the container to any port on your local host. Here is
 ### Optional
 You can edit the GC2 configuration by starting an other container with volumes mounted from the GC2 container like this:
 
-    run --volumes-from=gc2 -t -i mapcentia/gc2 /bin/bash
+    run --volumes-from=gc2 --rm=true -t -i mapcentia/gc2 /bin/bash
     
 And when on the command line of the container. edit the file:
     
@@ -28,11 +28,11 @@ Start a daemon that makes data flow from PostGIS to Elasticsearch in real-time:
 
 And tail the flow of data to Elasticsearch:
 
-	sudo docker run --volumes-from gc2_river -i -t mapcentia/gc2  tail -f /var/www/geocloud2/public/logs/pg2es.log
+	sudo docker run --volumes-from gc2_river --rm=true -i -t mapcentia/gc2  tail -f /var/www/geocloud2/public/logs/pg2es.log
 
 You can login to PostGreSQL from a command line like this:
     
-    sudo docker run --link gc2:gc2 -i -t mapcentia/gc2 psql --host gc2 --user postgres [database]
+    sudo docker run --link gc2:gc2 --rm=true -i -t mapcentia/gc2 psql --host gc2 --user postgres [database]
     
 
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
