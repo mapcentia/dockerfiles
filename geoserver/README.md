@@ -10,6 +10,15 @@ Just run a container like this:
     
 You can map port 8080 inside the container to any port on your local host. Here is host port 8080 mapped to port 8080 inside the container.
 
+
+You can edit the print config file in a running contianer like this:
+
+    sudo docker run --rm=true --volumes-from geoserver -i -t mapcentia/geoserver /bin/bash
+    
+And edit the file:
+    
+    /opt/geoserver/data_dir/printing/config.yaml
+
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
 
 [www.mapcentia.com/en/geocloud](http://www.mapcentia.com/en/geocloud/)
