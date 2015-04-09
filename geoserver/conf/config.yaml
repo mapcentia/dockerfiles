@@ -22,39 +22,9 @@ scales:
 hosts:
   - !localMatch
     dummy: true
-  - !dnsMatch
-    host: maps.google.com
-    port: 80
-  - !dnsMatch
-    host: labs.metacarta.com
-    port: 80
-  - !dnsMatch
-    host: a.tile.openstreetmap.org
-    port: 80
-  - !dnsMatch
-    host: b.tile.openstreetmap.org
-    port: 80
-  - !dnsMatch
-    host: c.tile.openstreetmap.org
-    port: 80
-  - !dnsMatch
-    host: ecn.t0.tiles.virtualearth.net
-    port: 80
-  - !dnsMatch
-    host: ecn.t1.tiles.virtualearth.net
-    port: 80
-  - !dnsMatch
-    host: ecn.t2.tiles.virtualearth.net
-    port: 80
-  - !dnsMatch
-    host: ecn.t3.tiles.virtualearth.net
-    port: 80
-  - !dnsMatch
-    host: services.digitalglobe.com
-    port: 443
-  - !dnsMatch
-    host: eu1.mapcentia.com
-    port: 80
+  - !ipMatch
+    host:0.0.0.0
+    mask:0.0.0.0
      
 layouts:
   #===========================================================================
