@@ -12,7 +12,7 @@ RUN apt-get -y install phantomjs curl vim git supervisor
 RUN curl -sL https://deb.nodesource.com/setup | sudo bash -
 RUN apt-get -y install nodejs
 
-# Clone GC2 from GitHub
+# Clone gc2conflict and html2pdf from GitHub
 RUN cd /root &&\
 	git clone http://github.com/mapcentia/gc2conflict.git &&\
 	git  clone http://github.com/mapcentia/html2pdf.it.git
@@ -40,7 +40,8 @@ ADD conf/nodeConfig.js /root/gc2conflict/app/config/
 RUN cd /root/gc2conflict &&\
 	grunt
 
-VOLUME  ["/root/gc2conflict/app/config"]
+# Share config dir and js, so a new bundle.js can be created by Grunt
+VOLUME  ["/root/gc2conflict/app/config", "/root/gc2conflict/app/public/js"]
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
