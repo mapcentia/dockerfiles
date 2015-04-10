@@ -18,7 +18,7 @@ You can edit the GC2 configuration by starting an other container with volumes m
 
     run --volumes-from=gc2 --rm=true -t -i mapcentia/gc2 /bin/bash
     
-And when on the command line of the container. edit the file:
+And when on the command line of the container, edit the file:
     
     /var/www/geocloud2/app/conf/App.php
     
