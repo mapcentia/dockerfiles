@@ -1,6 +1,6 @@
 # MapCentia GeoServer-printing Dockerfile
 
-GeoServer 2.7.0 with the printing plug-in. 
+GeoServer 2.7.0 with the printing plug-in running on Oracle Java7 with native JAI and JAI ImageIO.  
 
 ## How to use this image
 
