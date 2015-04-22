@@ -9,6 +9,7 @@ RUN  dpkg-divert --local --rename --add /sbin/initctl
 RUN apt-get -y update --fix-missing
 RUN apt-get -y install vim unzip software-properties-common tomcat7
 
+# Get and install Oracle Java 7
 RUN \
   echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
   add-apt-repository -y ppa:webupd8team/java && \
@@ -21,12 +22,11 @@ RUN \
 ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
 
 # Get GeoServer
-
 RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/2.7.0/geoserver-2.7.0-bin.zip -O ~/geoserver.zip &&\
     unzip ~/geoserver.zip -d /opt && mv -v /opt/geoserver* /opt/geoserver
 
+# Define GEOSERVER_HOME variable
 ENV GEOSERVER_HOME /opt/geoserver
-ENV JAVA_HOME /usr/
 
 # Get printing-plugin
 RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/2.7.0/extensions/geoserver-2.7.0-printing-plugin.zip -O ~/geoserver-printing-plugin.zip &&\
