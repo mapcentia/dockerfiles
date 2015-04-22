@@ -16,7 +16,7 @@ You can map port 80 inside the container to any port on your local host. Here is
 ### Optional
 You can edit the GC2 configuration by starting an other container with volumes mounted from the GC2 container like this:
 
-    run --volumes-from=gc2 --rm=true -t -i mapcentia/gc2 /bin/bash
+    sudo docker run --volumes-from=gc2 --rm=true -t -i mapcentia/gc2 /bin/bash
     
 And when on the command line of the container, edit the file:
     
