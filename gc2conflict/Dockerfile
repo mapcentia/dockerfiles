@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install ghostscript phantomjs curl vim git supervisor
+RUN apt-get -y install ghostscript phantomjs curl vim git supervisor postgresql-client
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup | sudo bash -
