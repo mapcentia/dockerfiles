@@ -81,6 +81,7 @@ EXPOSE 80
 EXPOSE 5432
 EXPOSE 9200
 
+# Share the source dir
 VOLUME  ["/var/www/geocloud2"]
 
 # Add Supervisor config and run the deamon

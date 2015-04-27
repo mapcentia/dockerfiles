@@ -4,11 +4,11 @@ GC2conflict is a web based tool for making spatial conflict queries in a PostGIS
 
 ## How to use this image
 
-GC2conflict depends on the APIs of GC2, so link to a running GC2 container like this:
+GC2conflict depends on the APIs of GC2 and GeoServer with Printing Plugin, so link to a running GC2 and GeoServer container like this:
 
-    sudo docker run --name "gc2conflict" --link gc2:gc2 -p 80:80 -d -t mapcentia/gc2conflict
+    sudo docker run --name "gc2conflict" --link gc2:gc2 --link geoserver:geoserver -p 80:80 -d -t mapcentia/gc2conflict
 
-You can map port 80 inside the container to any port on your local host. Here is host port 80 mapped to port 80 inside the container.
+You can map port 80 inside the container to any port on your local host. Here is host port 80 mapped to port 80 inside the container. Get the GC2 and GeoServer Docker Image from our account.
 
 
 To edit the connection settings in the running container, run:

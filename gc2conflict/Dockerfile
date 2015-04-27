@@ -42,7 +42,7 @@ RUN cd ~/gc2conflict &&\
 
 EXPOSE 80
 
-# Share source dir
+# Share the source dir
 VOLUME  ["/root/gc2conflict"]
 
 # Add Supervisor config and run the deamon
