@@ -34,7 +34,9 @@ RUN cd ~/gc2conflict &&\
 
 #Add config files from Docker repo
 RUN cp ~/gc2conflict/app/config/browserConfig.dist.js ~/gc2conflict/app/config/browserConfig.js &&\
-	cp ~/gc2conflict/app/config/nodeConfig.dist.js ~/gc2conflict/app/config/nodeConfig.js
+	cp ~/gc2conflict/app/config/nodeConfig.dist.js ~/gc2conflict/app/config/nodeConfig.js &&\
+	cp ~/gc2conflict/app/config/browserify.dist.js ~/gc2conflict/app/config/browserify.js
+
 
 #Run Grunt
 RUN cd ~/gc2conflict &&\

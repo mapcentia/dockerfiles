@@ -17,8 +17,10 @@ To edit the connection settings in the running container, run:
     
 And from the command-line edit the files:
 
-    ~/gc2conflict/app/config/nodeConfig.js
     ~/gc2conflict/app/config/browserConfig.js
+    ~/gc2conflict/app/config/nodeConfig.js
+
+At least you've to set the "host" in browserConfig.js. It's the public IP address or domain name of your running GC2 container. You don't need to change nodeConfig.js. 
 
 And still on the command-line, run Grunt:
 
@@ -27,6 +29,10 @@ And still on the command-line, run Grunt:
 After editing config files and running Grunt, you've to restart the GC2conflict container from the host:
 
     sudo docker restart gc2conflict
+
+Call the web app in a browser with:
+
+    [your host]/?db=[database]&schema=[schema]
 
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
 
