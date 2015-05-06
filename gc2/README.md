@@ -6,7 +6,6 @@ A complete platform for managing geospatial data, making map visualisations and 
 
 The Docker image comes with HTTP server, Elasticsearch and PostGreSQL including a template database. 
 
-
 Just run a container like this:
 
     sudo docker run --name gc2 -p 80:80 -t -d mapcentia/gc2
