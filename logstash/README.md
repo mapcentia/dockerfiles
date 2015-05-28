@@ -1,0 +1,1 @@
+sudo docker run -it --rm -p 9200:9200 -p 5601:5601 -v /var/log:/logs gc2logstash
