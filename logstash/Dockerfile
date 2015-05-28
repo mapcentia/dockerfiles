@@ -17,9 +17,6 @@ RUN set -x \
 	&& apt-get install -y --no-install-recommends logstash=$LOGSTASH_VERSION \
 	&& rm -rf /var/lib/apt/lists/*
 
-ADD conf/logstash/logstash-apache.conf /root/
-
-
 # Elasticsearch
 ENV ELASTICSEARCH_VERSION 1.5.2
 
@@ -36,6 +33,9 @@ RUN cd /root && curl -L -O https://download.elastic.co/kibana/kibana/kibana-${KI
 
 # Expose Elasticsearch and Kibana
 EXPOSE 9200 9300 5601
+
+# Add the logstash configuration
+ADD conf/logstash/logstash-apache.conf /root/
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
