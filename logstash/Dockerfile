@@ -31,12 +31,29 @@ ENV KIBANA_VERSION 4.0.2
 RUN cd /root && curl -L -O https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz \
         && tar xzvf kibana-4.0.2-linux-x64.tar.gz
 
-# Expose Elasticsearch and Kibana
-EXPOSE 9200 9300 5601
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
+RUN apt-get -y install nodejs
+
+ADD nodejs/* /root/server/
+
+# Install packages
+RUN cd /root/server &&\
+	npm install
+
+# Expose Logstash, Elasticsearch and Kibana
+EXPOSE 9200 5601 5043 1337
 
 # Add the logstash configuration
 ADD conf/logstash/logstash-apache.conf /root/
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN mkdir /certs
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
