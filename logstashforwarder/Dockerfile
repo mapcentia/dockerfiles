@@ -1,11 +1,15 @@
-FROM debian:jessie
+FROM ubuntu:trusty
+MAINTAINER Martin Høgh<mh@mapcentia.com>
+
+RUN  export DEBIAN_FRONTEND=noninteractive
+ENV  DEBIAN_FRONTEND noninteractive
 
 # Suppress prompts from dpkg to resolve conffile differences
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-      wget
+      wget curl
 
 # Download and install the Public Signing Key:
 RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
