@@ -21,5 +21,7 @@ RUN apt-get update && apt-get install -y \
 COPY ./logstash-forwarder.conf /etc/
 RUN mkdir /certs
 
+VOLUME  ["/etc"]
+
 # Run logstash forwarder
 CMD [ "/opt/logstash-forwarder/bin/logstash-forwarder", "-config", "/etc/logstash-forwarder.conf" ]
