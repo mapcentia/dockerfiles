@@ -1,0 +1,24 @@
+logstash:
+  build: logstashmaster
+  ports:
+    - 9200:9200
+    - 9300:9300
+    - 5601:5601
+  volumes_from:
+    - certs
+  environment:
+    LOGSTASH_DOMAIN: logstash
+
+forward:
+  build: logstashforwarder
+  volumes_from:
+    - certs
+  volumes:
+    - /var/log/apache2:/var/log/apache
+  links:
+    - "logstash:logstash"
+
+certs:
+  image: debian
+  volumes:
+    - /certs
