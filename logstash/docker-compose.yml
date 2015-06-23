@@ -1,5 +1,5 @@
 gc2logstash:
-  build: logstash
+  build: ../logstash
   ports:
     - 1337:1337
     - 5601:5601
