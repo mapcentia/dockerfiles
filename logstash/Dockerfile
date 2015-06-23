@@ -35,18 +35,20 @@ RUN cd /root && curl -L -O https://download.elastic.co/kibana/kibana/kibana-${KI
 RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
 RUN apt-get -y install nodejs
 
+# Add the Nodejs proxy
 ADD nodejs/* /root/server/
 
 # Install packages
 RUN cd /root/server &&\
 	npm install
 
+# Install package for geo-location
 RUN cd /etc/logstash &&\
 	curl -O "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" &&\
 	gunzip GeoLiteCity.dat.gz
 
-# Expose Logstash, Elasticsearch and Kibana
-EXPOSE 9200 5601 5043 1337
+# Expose Elasticsearch, Logstash, Kibana and the Nodejs proxy
+EXPOSE 9200 5043 5601 1337
 
 # Add the logstash configuration
 ADD conf/logstash/logstash-apache.conf /root/
@@ -54,6 +56,7 @@ ADD conf/logstash/logstash-apache.conf /root/
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Make a dir for the certificate
 RUN mkdir /certs
 
 COPY entrypoint.sh /entrypoint.sh
