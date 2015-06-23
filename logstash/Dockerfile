@@ -41,6 +41,10 @@ ADD nodejs/* /root/server/
 RUN cd /root/server &&\
 	npm install
 
+RUN cd /etc/logstash &&\
+	curl -O "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" &&\
+	gunzip GeoLiteCity.dat.gz
+
 # Expose Logstash, Elasticsearch and Kibana
 EXPOSE 9200 5601 5043 1337
 
