@@ -1,15 +1,15 @@
-logstash:
-  build: gc2logstash
+gc2logstash:
+  build: logstash
   ports:
     - 1337:1337
     - 5601:5601
   volumes_from:
     - certs
   environment:
-    LOGSTASH_DOMAIN: logstash
+    LOGSTASH_DOMAIN: gc2logstash
 
-forward:
-  build: gc2logstashforwarder
+gc2logstashforwarder:
+  build: ../logstashforwarder
   volumes_from:
     - certs
   volumes:
