@@ -1,8 +1,7 @@
 logstash:
-  build: logstashmaster
+  build: gc2logstash
   ports:
-    - 9200:9200
-    - 9300:9300
+    - 1337:1337
     - 5601:5601
   volumes_from:
     - certs
@@ -10,13 +9,13 @@ logstash:
     LOGSTASH_DOMAIN: logstash
 
 forward:
-  build: logstashforwarder
+  build: gc2logstashforwarder
   volumes_from:
     - certs
   volumes:
-    - /var/log/apache2:/var/log/apache
+    - /var/log:/var/log
   links:
-    - "logstash:logstash"
+    - "gc2logstash:gc2logstash"
 
 certs:
   image: debian
