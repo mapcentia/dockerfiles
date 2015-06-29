@@ -9,7 +9,7 @@ gc2logstash:
     LOGSTASH_DOMAIN: gc2logstash
 
 gc2logstashforwarder:
-  build: ../logstashforwarder
+  build: ../logstash-forwarder
   volumes_from:
     - certs
   volumes:
