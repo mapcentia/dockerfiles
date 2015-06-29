@@ -16,6 +16,8 @@ gc2logstashforwarder:
     - /var/log:/var/log
   links:
     - "gc2logstash:gc2logstash"
+  environment:
+    LOGSTASH: gc2logstash:5043
 
 certs:
   image: debian

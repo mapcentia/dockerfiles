@@ -6,7 +6,7 @@ Full ELK stack (Logstash 1.5.0, Elasticsearch 1.5.2 and Kibana 4.0.2) with a Nod
 
 Start a Logstash container like this:
 
-    sudo docker run --name gc2logstash -t -d -p 5043:5043 -p 5601:5601 -p 1337:1337 -e "LOGSTASH_DOMAIN=example.com" mapcentia/gc2logstash
+    sudo docker run --name gc2logstash -t -d -p 5043:5043 -p 5601:5601 -p 1337:1337 -e "LOGSTASH_DOMAIN=example.com" mapcentia/logstash
     
 Change the DNS hostname "example.com" to the hostname of your ELK server. You can also use "LOGSTASH_IP=1.2.3.4" but there is some issues with certificates based on IPs and Logstash. So better use a DNS hostname. 
 

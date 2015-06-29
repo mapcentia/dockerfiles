@@ -1,6 +1,8 @@
+/* eslint-env node */
+
 var express = require('express');
 var es = require('elasticsearch');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 var app = express();
 
@@ -23,6 +25,9 @@ app.post('/data', function(request, res){
             ];
         });
         res.send(data);
+    }, function(error){
+        console.error(error);
+        res.status(500).send('Something broke!');
     });
 });
 

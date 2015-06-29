@@ -10,13 +10,24 @@ First make a folder on the host to hold the certificate (You get this when creat
 
 When copy the certificate (with the name "logstash.crt") to the folder.
 
-Now you can start a Logstash-forwarder container with the log folder mounted in the contianer:
+Now you can start a Logstash-forwarder container with the log folder mounted in the contianer. Set -e LOGSTASH=LOGSTASHDOMAIN to the hostname of the Logstash server eg. -e LOGSTASH=example.com:5043
 
-    sudo docker run --name gc2logstashforwarder -t -d -v /var/log:/var/log -v ~/certs:/certs mapcentia/gc2logstashforwarder
+    sudo docker run \
+        --name gc2logstashforwarder -t -d \
+        -v /var/log:/var/log \
+        -v ~/certs:/certs \
+        -e LOGSTASH=LOGSTASHDOMAIN \
+        mapcentia/logstashforwarder
      
 If you are running GC2 in a container when do it like this:
 
-    sudo docker run --name gc2logstashforwader -t -d --volumes-from gc2 --link gc2logstash:gc2logstash -v ~/certs/:/certs gc2logstashforwarder
+    sudo docker run \
+        --name gc2logstashforwader -t -d \
+        --volumes-from gc2 \
+        --link gc2logstash:gc2logstash \
+        -v ~/certs/:/certs \
+        -e LOGSTASH=gc2logstash:5043 \
+        mapcentia/logstashforwarder
 
 
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)

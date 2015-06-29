@@ -30,5 +30,9 @@ RUN mkdir /certs
 # Share the root dir, so the logstash-forwarder.conf can be edited
 VOLUME  ["/root"]
 
+
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Run logstash forwarder
 CMD [ "/opt/logstash-forwarder/bin/logstash-forwarder", "-config", "/root/logstash-forwarder.conf" ]
