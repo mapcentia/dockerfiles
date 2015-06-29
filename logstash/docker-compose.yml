@@ -17,7 +17,7 @@ gc2logstashforwarder:
   links:
     - "gc2logstash:gc2logstash"
   environment:
-    LOGSTASH: gc2logstash:5043
+    MASTER: "gc2logstash:5043"
 
 certs:
   image: debian
