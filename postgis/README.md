@@ -1,1 +1,2 @@
 docker run --rm -p 5432:5432 -e GC2_PASSWORD=1234 -e LOCALE=da_DK.UTF-8 -t -i mapcentia/postgis
+docker run --name postgis -p 5432:5432 -e GC2_PASSWORD=naTH7crU -e LOCALE=da_DK.UTF-8 -t -d mapcentia/postgis

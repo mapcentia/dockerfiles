@@ -1,4 +1,4 @@
-docker run --name gc2core --link postgis:postgis --link elasticsearch:elasticsearch -d -t -p 80:80 mapcentia/gc2core
+docker run --name gc2core --link postgis:postgis --link elasticsearch:elasticsearch -d -t -p 80:80 -e GC2_PASSWORD=password mapcentia/gc2core
 
 docker run --name gc2core --link postgis:postgis -v ~/ssl:/etc/apache2/ssl -v ~/sites-enabled:/etc/apache2/sites-enabled/ -d -t -p 80:80 -p 443:443 mapcentia/gc2core
 

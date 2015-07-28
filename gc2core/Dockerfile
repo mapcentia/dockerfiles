@@ -108,6 +108,10 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 #
 RUN a2enmod ssl
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Share the source and log dir
 VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2/ssl", "/etc/apache2/sites-enabled/"]
 
