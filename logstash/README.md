@@ -18,7 +18,7 @@ When a container is created a certificate is generated. Copy the certificate out
 
     sudo docker cp gc2logstash:/certs/logstash.crt ~/certs/
     
-Use the certificate for [Logstashforwarder](https://registry.hub.docker.com/u/mapcentia/logstashforwarder) on the GC2 servers.
+Use the certificate for [Logstashforwarder](https://registry.hub.docker.com/u/mapcentia/logstash-forwarder) on the GC2 servers.
 
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
 
