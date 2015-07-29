@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+# If container is run without commando, then check if pgsql pw for gc2 is passed.
 if [ $1 == "/usr/bin/supervisord" ]; then
     if [ -n "$GC2_PASSWORD" ]; then
       sed -i "s/YOUR_PASSWORD/$GC2_PASSWORD/g" /var/www/geocloud2/app/conf/Connection.php
@@ -14,5 +15,11 @@ if [ $1 == "/usr/bin/supervisord" ]; then
             '
         exit 1
     fi
+fi
+
+# Set time zone if passed
+if [ -n "$TIMEZONE" ]; then
+    echo '$TIMEZONE' | sudo tee /etc/timezone
+    dpkg-reconfigure -f noninteractive tzdata
 fi
 exec "$@"
