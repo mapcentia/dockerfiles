@@ -3,6 +3,12 @@ set -e
 
 export PGUSER=gc2
 
+# Set time zone if passed
+if [ -n "$TIMEZONE" ]; then
+    echo $TIMEZONE | sudo tee /etc/timezone
+    dpkg-reconfigure -f noninteractive tzdata
+fi
+
 if [ -n "$GC2_PASSWORD" ]; then
     exec "$@"
 else
