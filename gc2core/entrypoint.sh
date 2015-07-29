@@ -19,7 +19,7 @@ fi
 
 # Set time zone if passed
 if [ -n "$TIMEZONE" ]; then
-    echo '$TIMEZONE' | sudo tee /etc/timezone
+    echo $TIMEZONE | tee /etc/timezone
     dpkg-reconfigure -f noninteractive tzdata
 fi
 exec "$@"

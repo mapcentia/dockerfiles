@@ -30,6 +30,11 @@ EXPOSE 5432
 # Share the source dir
 VOLUME  ["/etc/postgresql/9.4/main/", "/var/log"]
 
+# Set entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Use wrapper scripts to start Postgres
 ADD start.sh /root/
 RUN chmod 755 /root/start.sh

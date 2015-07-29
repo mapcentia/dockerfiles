@@ -11,9 +11,6 @@ RUN apt-get -y update --fix-missing
 RUN apt-get -y install wget php5-dev php-pear g++ build-essential apache2-mpm-worker libapache2-mod-fastcgi libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git php5-memcache memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
 	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev
 
-# Enable Apache2 modules
-RUN a2enmod rewrite headers expires include actions fastcgi alias cgid
-
 # Install MapServer 7.0.0
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.0.tar.gz &&\
 	tar -zxvf mapserver-7.0.0.tar.gz &&\
@@ -90,30 +87,31 @@ RUN	cd /var/www/geocloud2 &&\
 ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
 ADD conf/gc2/Connection.php /var/www/geocloud2/app/conf/
 
-# Run php-fpm in the foreground
+# Make php-fpm run in the foreground
 RUN sed 's/;daemonize = yes/daemonize = no/' -i /etc/php5/fpm/php-fpm.conf
 
-# Add config files from Docker repo
+# Add MapScript module to php.ini
+RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
+
+# Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 
-# Expose standard port for HTTP and HTTPS
-EXPOSE 80
-EXPOSE 443
+# Enable Apache2 modules
+RUN a2enmod rewrite headers expires include actions fastcgi alias cgid ssl
 
 # create dir for certs
 RUN mkdir /etc/apache2/ssl
-
-RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
-
-#
-RUN a2enmod ssl
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Share the source and log dir
+# Share dirs
 VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2/ssl", "/etc/apache2/sites-enabled/"]
+
+# Expose standard ports for HTTP and HTTPS
+EXPOSE 80
+EXPOSE 443
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
