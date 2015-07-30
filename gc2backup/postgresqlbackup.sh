@@ -66,6 +66,6 @@ echo "_ts_ host1 end" `date`
 
 s3fs $BUCKET /mnt
 rsync -avrz --delete --inplace --stats $BACKUPDIR/* /mnt
-fusermount -u /mnt/s3
+fusermount -u /mnt
 
 exec "$@"
