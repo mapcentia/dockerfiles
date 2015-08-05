@@ -3,7 +3,7 @@ formats:
 #===========================================================================
 # allowed DPIs
 #===========================================================================
-dpis: [254, 190, 127, 56]
+dpis: [254, 190, 127, 72]
 
 #===========================================================================
 # the allowed scales
@@ -52,40 +52,62 @@ layouts:
       #The Map
         - !map
           absoluteX: 32
+          absoluteY: 735
+          width: 535
+          height: 710
+
+      #The header border
+      #After the map so it is on top
+        - !columns
+          config:
+            borderColor: black
+            borderWidth: 1
+            cells:
+                #padding is required otherwise the box will be empty
+                - paddingBottom: 70
+                  vertAlign: middle
+          absoluteX: 32
           absoluteY: 819
           width: 535
-          height: 700
-
+          #Blank item required or MapFish Print will fail badly.
+          items:
+            - !text
+              fontSize: 10
+              align: center
+              text: ' '
       #The map border
       #After the map so it is on top
         - !columns
           config:
-            borderWidth: 0
+            borderColor: black
+            borderWidth: 1
             cells:
-              - borderColor: black
                 #padding is required otherwise the box will be empty
-                padding: 351
-          absoluteX: 31
-          absoluteY: 820
-          width: 537
+                - paddingBottom: 700
+                  vertAlign: middle
+          absoluteX: 32
+          absoluteY: 735
+          width: 535
           #Blank item required or MapFish Print will fail badly.
           items:
             - !text
-              text: ''
+              fontSize: 10
+              align: center
+              text: ' '
 
-        #Legend
+	#Legend
         - !columns
           #This line determines if the legend is shown in the template.
           condition: legends
-          absoluteX: 37
-          absoluteY: 814
+          absoluteX: 250
+          absoluteY: 817
           width: 160
           config:
-            borderWidth: 1
+            borderWidth: 0
             cells:
-              - borderWidth: 1
+              - borderWidth: 0
                 borderColor: #555555
-                padding: 5
+                padding: 0
 
           items:
             - !legends
@@ -105,15 +127,14 @@ layouts:
               backgroundColor: white
               inline:true
 
-
         #Attribution
         - !columns
           config:
-            borderWidth: 0
+            borderWidth:0
             cells:
               - padding: 0
           absoluteX: 37
-          absoluteY: 133
+          absoluteY: 40
           width: 300
           items:
             - !text
@@ -121,16 +142,36 @@ layouts:
               align: left
               text: 'Copyright ${now yyyy}. ${mapAttribution}'
 
+        #Title Box
+        #On the bottom so its borders are on top
+        #Don't show box if mapTitle not set.
+        - !columns
+          condition: mapTitle
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+                paddingBottom: 3
+                backgroundColor: white
+                vertAlign: middle
+          absoluteX: 37
+          absoluteY: 818
+          width: 200
+          items:
+            - !text
+              fontSize: 14
+              align: left
+              text: '${mapTitle}'
 
         #Comments box
         - !columns
           config:
             borderWidth: 0
             cells:
-              - padding: 2
+              - padding: 0
                 backgroundColor: white
-          absoluteX: 31
-          absoluteY: 99
+          absoluteX: 37
+          absoluteY: 798
           width: 180
           items:
             - !text
@@ -141,8 +182,8 @@ layouts:
 
         #WCC Logo
         - !columns
-          absoluteX: 215
-          absoluteY: 70
+          absoluteX: 460
+          absoluteY: 810
           width: 101
           config:
             borderWidth: 0
@@ -152,35 +193,46 @@ layouts:
             - !image
               maxWidth: 80
               spacingAfter: 100
-              align: center
-              url: 'http://geocloud.mapcentia.com/assets/images/MapCentia_500.png'
+              align: right
+              url: 'http://www.furesoe.dk/~/media/Secure/Logoer/toplogo.ashx'
 
 
         #ScaleBar
         - !columns
-          absoluteX: 215
-          absoluteY: 90
-          width: 130
+          absoluteX: 37
+          absoluteY: 755
+          width: 230
           config:
             borderWidth: 0
             cells:
               - padding: 0
           items:
             - !scalebar
-              align: center
+              align: left
               maxSize: 130
               type: 'line'
               intervals: 2
+
+        #ScaleText
+        - !columns
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          absoluteX: 132
+          absoluteY: 755
+          width: 115
+          items:
             - !text
-              font: Helvetica
-              fontSize: 9
+              fontSize: 8
               align: center
               text: '1:${scale}'
 
+
         #North Arrow taken from Wikipedia (from public domain)
         - !columns
-          absoluteX: 325
-          absoluteY: 60
+          absoluteX: 40
+          absoluteY: 725
           width: 30
           config:
             borderWidth: 0
@@ -197,17 +249,17 @@ layouts:
         - !columns
           config:
             borderWidth: 0
+            borderColor: black
             cells:
-              - padding: 2
-                vertAlign: middle
-          absoluteX: 400
-          absoluteY: 100
-          width: 115
+              - padding: 0
+          absoluteX: 355
+          absoluteY: 751
+          width: 165
           items:
             - !text
               fontSize: 8
-              align: center
-              text: '${mapFooter}'
+              align: right
+              text: '© Furesø Kommune. Kortet er vejledende.'
 
         #Date Box
         - !columns
@@ -215,38 +267,16 @@ layouts:
             borderWidth: 0
             borderColor: black
             cells:
-              - padding: 3
-                paddingBottom: 4
-                vertAlign: middle
-          absoluteX: 400
-          absoluteY: 115
+              - padding: 0
+          absoluteX: 498
+          absoluteY: 751
           width: 65
           items:
             - !text
-              fontSize: 10
-              align: center
+              fontSize: 8
+              align: right
               text: '${now yyyy-MM-dd}'
 
-        #Title Box
-        #On the bottom so its borders are on top
-        #Don't show box if mapTitle not set.
-        - !columns
-          condition: mapTitle
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-                paddingBottom: 3
-                backgroundColor: white
-                vertAlign: middle
-          absoluteX: 31
-          absoluteY: 115
-          width: 370
-          items:
-            - !text
-              fontSize: 14
-              align: left
-              text: '${mapTitle}'
 
 
   #===========================================================================
@@ -270,46 +300,68 @@ layouts:
       #The Map
         - !map
           absoluteX: 32
-          absoluteY: 565
-          width: 675
-          height: 542
+          absoluteY: 487
+          width: 778
+          height: 465
+
+      #The header border
+        - !columns
+          config:
+            borderColor: black
+            borderWidth: 1
+            cells:
+                #padding is required otherwise the box will be empty
+                - paddingBottom: 70
+                  vertAlign: middle
+          absoluteX: 32
+          absoluteY: 572
+          width: 778
+          #Blank item required or MapFish Print will fail badly.
+          items:
+            - !text
+              fontSize: 10
+              align: center
+              text: ' '
 
       #The map border
       #After the map so it is on top
         - !columns
           config:
-            borderWidth: 0
+            borderColor: black
+            borderWidth: 1
             cells:
-              - borderColor: black
                 #padding is required otherwise the box will be empty
-                padding: 272
-          absoluteX: 31
-          absoluteY: 566
-          width: 677
+                - paddingBottom: 455
+                  vertAlign: middle
+          absoluteX: 32
+          absoluteY: 487
+          width: 778
           #Blank item required or MapFish Print will fail badly.
           items:
             - !text
-              text: ''
-
+              fontSize: 10
+              align: center
+              text: ' '
+   
         #Legend
         - !columns
           #This line determines if the legend is shown in the template.
           condition: legends
-          absoluteX: 37
-          absoluteY: 560
+          absoluteX: 410
+          absoluteY: 568
           width: 160
           config:
-            borderWidth: 1
+            borderWidth: 0
             cells:
-              - borderWidth: 1
+              - borderWidth: 0
                 borderColor: #555555
-                padding: 5
+                padding: 0
 
           items:
             - !legends
               iconMaxWidth: 145
               iconMaxHeight: 200
-              defaultScale: 0.55
+              defaultScale: 0.5
               maxWidth: 150
               #Padding between layers
               layerSpace: 5
@@ -337,10 +389,8 @@ layouts:
               fontSize: 9
               align: left
               text: 'Copyright ${now yyyy}. ${mapAttribution}'
-
-    ####################################
-
-        #Title Box
+      
+	#Title Box
         #On the bottom so its borders are on top
         #Don't show box if mapTitle not set.
         - !columns
@@ -348,17 +398,17 @@ layouts:
           config:
             borderWidth: 0
             cells:
-              - padding: 3
-                paddingBottom: 4
+              - padding: 0
+                paddingBottom: 3
                 backgroundColor: white
                 vertAlign: middle
-          absoluteX: 710
-          absoluteY: 566
-          width: 113
+          absoluteX: 37
+          absoluteY: 571
+          width: 200
           items:
             - !text
               fontSize: 14
-              align: center
+              align: left
               text: '${mapTitle}'
 
         #Comments box
@@ -366,40 +416,70 @@ layouts:
           config:
             borderWidth: 0
             cells:
-              - padding: 2
+              - padding: 0
                 backgroundColor: white
-          absoluteX: 711
-          absoluteY: 490
-          width: 109
+          absoluteX: 37
+          absoluteY: 551
+          width: 180
           items:
             - !text
-              fontSize: 10
-              align: center
+              fontSize: 9
+              align: left
               text: '${mapComment}'
+  	
+        #WCC Logo
+        - !columns
+          absoluteX: 702
+          absoluteY: 565
+          width: 101
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          items:
+            - !image
+              maxWidth: 80
+              spacingAfter: 100
+              align: right
+              url: 'http://www.furesoe.dk/~/media/Secure/Logoer/toplogo.ashx'
 
 
-        #Date Box
+        #ScaleBar
+        - !columns
+          absoluteX: 37
+          absoluteY: 508
+          width: 230
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          items:
+            - !scalebar
+              align: left
+              maxSize: 130
+              type: 'line'
+              intervals: 2
+
+        #ScaleText
         - !columns
           config:
             borderWidth: 0
-            borderColor: black
             cells:
-              - padding: 3
-                paddingBottom: 4
-                vertAlign: middle
-          absoluteX: 710
-          absoluteY: 350
-          width: 113
+              - padding: 0
+          absoluteX: 132
+          absoluteY: 508
+          width: 115
           items:
             - !text
-              fontSize: 10
+              fontSize: 8
               align: center
-              text: '${now yyyy-MM-dd}'
+              text: '1:${scale}'
+
 
         #North Arrow taken from Wikipedia (from public domain)
         - !columns
-          absoluteX: 758
-          absoluteY: 320
+          absoluteX: 40
+          absoluteY: 477
           width: 30
           config:
             borderWidth: 0
@@ -412,89 +492,37 @@ layouts:
               url: 'http://trac.mapfish.org/trac/mapfish/export/2892/print/trunk/print-standalone/samples/Arrow_North_CFCF.svg'
               rotation: '${rotation}'
 
-        #ScaleBar
-        - !columns
-          absoluteX: 711
-          absoluteY: 280
-          width: 110
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-          items:
-            - !scalebar
-              align: center
-              maxSize: 110
-              type: 'line'
-              intervals: 2
-
-        #Scale text
-        - !columns
-          absoluteX: 711
-          absoluteY: 260
-          width: 111
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-          items:
-            - !text
-              font: Helvetica
-              fontSize: 9
-              align: center
-              text: '1:${scale}'
-
-        #WCC Logo
-        - !columns
-          absoluteX: 711
-          absoluteY: 240
-          width: 111
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-          items:
-            - !image
-              maxWidth: 80
-              spacingAfter: 100
-              align: center
-              url: 'http://geocloud.mapcentia.com/assets/images/MapCentia_500.png'
-
         #Footer
         - !columns
           config:
             borderWidth: 0
+            borderColor: black
             cells:
-              - padding: 2
-                vertAlign: middle
-          absoluteX: 710
-          absoluteY: 190
-          width: 110
+              - padding: 0
+          absoluteX: 595
+          absoluteY: 504
+          width: 165
           items:
             - !text
               fontSize: 8
-              align: center
-              text: "${mapFooter}"
+              align: right
+              text: '© Furesø Kommune. Kortet er vejledende.'
 
-
-    ####################################
-
-      #Blurb border
+        #Date Box
         - !columns
           config:
             borderWidth: 0
+            borderColor: black
             cells:
-              - borderColor: black
-                #padding is required otherwise the box will be empty
-                padding: 272
-          absoluteX: 710
-          absoluteY: 566
-          width: 113
-          #Blank item required or MapFish Print will fail badly.
+              - padding: 0
+          absoluteX: 740
+          absoluteY: 504
+          width: 65
           items:
             - !text
-              text: ''
-
+              fontSize: 8
+              align: right
+              text: '${now yyyy-MM-dd}'
 
 
   #===========================================================================
@@ -517,41 +545,80 @@ layouts:
       #The Map
         - !map
           absoluteX: 32
+          absoluteY: 1075
+          width: 778
+          height: 1042
+
+      #The header border
+        - !columns
+          config:
+            borderColor: black
+            borderWidth: 1
+            cells:
+                #padding is required otherwise the box will be empty
+                - paddingBottom: 70
+                  vertAlign: middle
+          absoluteX: 32
           absoluteY: 1160
-          width: 780
-          height: 1020
+          width: 778
+          #Blank item required or MapFish Print will fail badly.
+          items:
+            - !text
+              fontSize: 10
+              align: center
+              text: ' '
 
       #The map border
       #After the map so it is on top
         - !columns
           config:
-            borderWidth: 0
+            borderColor: black
+            borderWidth: 1
             cells:
-              - borderColor: black
                 #padding is required otherwise the box will be empty
-                padding: 351
-          absoluteX: 31
-          absoluteY: 1161
-          width: 781
+                - paddingBottom: 1032
+                  vertAlign: middle
+          absoluteX: 32
+          absoluteY: 1075
+          width: 778
           #Blank item required or MapFish Print will fail badly.
           items:
             - !text
-              text: ''
-
-        #Legend
+              fontSize: 10
+              align: center
+              text: ' '
+	
+     #Legend
         - !columns
           #This line determines if the legend is shown in the template.
           condition: legends
-          absoluteX: 37
-          absoluteY: 1155
+          absoluteX: 410
+          absoluteY: 1156
           width: 160
           config:
-            borderWidth: 1
+            borderWidth: 0
             cells:
-              - borderWidth: 1
+              - borderWidth: 0
                 borderColor: #555555
-                padding: 5
+                padding: 0
 
+          items:
+            - !legends
+              iconMaxWidth: 145
+              iconMaxHeight: 200
+              defaultScale: 0.5
+              maxWidth: 150
+              #Padding between layers
+              layerSpace: 5
+              layerFont: Helvetica
+              layerFontSize: 8
+              #Padding between text and icon within layer
+              classSpace: 2
+              classIndentation: 5
+              classFont: Helvetica
+              classFontSize: 8
+              backgroundColor: white
+              inline:true
           items:
             - !legends
               iconMaxWidth: 145
@@ -578,7 +645,7 @@ layouts:
             cells:
               - padding: 0
           absoluteX: 37
-          absoluteY: 133
+          absoluteY: 47
           width: 300
           items:
             - !text
@@ -587,15 +654,36 @@ layouts:
               text: 'Copyright ${now yyyy}. ${mapAttribution}'
 
 
+	#Title Box
+        #On the bottom so its borders are on top
+        #Don't show box if mapTitle not set.
+        - !columns
+          condition: mapTitle
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+                paddingBottom: 3
+                backgroundColor: white
+                vertAlign: middle
+          absoluteX: 37
+          absoluteY: 1159
+          width: 200
+          items:
+            - !text
+              fontSize: 14
+              align: left
+              text: '${mapTitle}'
+
         #Comments box
         - !columns
           config:
             borderWidth: 0
             cells:
-              - padding: 2
+              - padding: 0
                 backgroundColor: white
-          absoluteX: 31
-          absoluteY: 99
+          absoluteX: 37
+          absoluteY: 1139
           width: 180
           items:
             - !text
@@ -603,11 +691,10 @@ layouts:
               align: left
               text: '${mapComment}'
 
-
-        #WCC Logo
+	#WCC Logo
         - !columns
-          absoluteX: 350
-          absoluteY: 70
+          absoluteX: 702
+          absoluteY: 1153
           width: 101
           config:
             borderWidth: 0
@@ -617,35 +704,44 @@ layouts:
             - !image
               maxWidth: 80
               spacingAfter: 100
-              align: center
-              url: 'http://geocloud.mapcentia.com/assets/images/MapCentia_500.png'
+              align: right
+              url: 'http://www.furesoe.dk/~/media/Secure/Logoer/toplogo.ashx'
 
-
-        #ScaleBar
+	#ScaleBar
         - !columns
-          absoluteX: 350
-          absoluteY: 90
-          width: 130
+          absoluteX: 37
+          absoluteY: 1096
+          width: 230
           config:
             borderWidth: 0
             cells:
               - padding: 0
           items:
             - !scalebar
-              align: center
+              align: left
               maxSize: 130
               type: 'line'
               intervals: 2
+
+	#ScaleText
+        - !columns
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          absoluteX: 132
+          absoluteY: 1096
+          width: 115
+          items:
             - !text
-              font: Helvetica
-              fontSize: 9
+              fontSize: 8
               align: center
               text: '1:${scale}'
 
         #North Arrow taken from Wikipedia (from public domain)
         - !columns
-          absoluteX: 480 
-          absoluteY: 60
+          absoluteX: 40
+          absoluteY: 1065
           width: 30
           config:
             borderWidth: 0
@@ -658,21 +754,21 @@ layouts:
               url: 'http://trac.mapfish.org/trac/mapfish/export/2892/print/trunk/print-standalone/samples/Arrow_North_CFCF.svg'
               rotation: '${rotation}'
 
-        #Footer
+	#Footer
         - !columns
           config:
             borderWidth: 0
+            borderColor: black
             cells:
-              - padding: 2
-                vertAlign: middle
-          absoluteX: 600
-          absoluteY: 90
-          width: 115
+              - padding: 0
+          absoluteX: 595
+          absoluteY: 1092
+          width: 165
           items:
             - !text
               fontSize: 8
-              align: center
-              text: '${mapFooter}'
+              align: right
+              text: '© Furesø Kommune. Kortet er vejledende.'
 
         #Date Box
         - !columns
@@ -680,39 +776,15 @@ layouts:
             borderWidth: 0
             borderColor: black
             cells:
-              - padding: 3
-                paddingBottom: 4
-                vertAlign: middle
-          absoluteX: 600
-          absoluteY: 115
+              - padding: 0
+          absoluteX: 740
+          absoluteY: 1092
           width: 65
           items:
             - !text
-              fontSize: 10
-              align: center
+              fontSize: 8
+              align: right
               text: '${now yyyy-MM-dd}'
-
-        #Title Box
-        #On the bottom so its borders are on top
-        #Don't show box if mapTitle not set.
-        - !columns
-          condition: mapTitle
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-                paddingBottom: 3
-                backgroundColor: white
-                vertAlign: middle
-          absoluteX: 31
-          absoluteY: 135
-          width: 370
-          items:
-            - !text
-              fontSize: 14
-              align: left
-              text: '${mapTitle}'
-
 
   #===========================================================================
   # A3 Landscape   1188 x 842
@@ -735,46 +807,69 @@ layouts:
       #The Map
         - !map
           absoluteX: 32
-          absoluteY: 811
-          width: 1005
-          height: 780
+          absoluteY: 735
+          width: 1125
+          height: 710
+
+      #The header border
+      #After the map so it is on top
+        - !columns
+          config:
+            borderColor: black
+            borderWidth: 1
+            cells:
+                #padding is required otherwise the box will be empty
+                - paddingBottom: 70
+                  vertAlign: middle
+          absoluteX: 32
+          absoluteY: 819
+          width: 1125
+          #Blank item required or MapFish Print will fail badly.
+          items:
+            - !text
+              fontSize: 10
+              align: center
+              text: ' '
 
       #The map border
       #After the map so it is on top
         - !columns
           config:
-            borderWidth: 0
+            borderColor: black
+            borderWidth: 1
             cells:
-              - borderColor: black
                 #padding is required otherwise the box will be empty
-                padding: 272
-          absoluteX: 31
-          absoluteY: 812
-          width: 1006
+                - paddingBottom: 700
+                  vertAlign: middle
+          absoluteX: 32
+          absoluteY: 735
+          width: 1125
           #Blank item required or MapFish Print will fail badly.
           items:
             - !text
-              text: ''
+              fontSize: 10
+              align: center
+              text: ' '
 
-        #Legend
+#Legend
         - !columns
           #This line determines if the legend is shown in the template.
           condition: legends
-          absoluteX: 37
-          absoluteY: 806
+          absoluteX: 310
+          absoluteY: 817
           width: 160
           config:
-            borderWidth: 1
+            borderWidth: 0
             cells:
-              - borderWidth: 1
+              - borderWidth: 0
                 borderColor: #555555
-                padding: 5
+                padding: 0
 
           items:
             - !legends
               iconMaxWidth: 145
               iconMaxHeight: 200
-              defaultScale: 0.55
+              defaultScale: 0.5
               maxWidth: 150
               #Padding between layers
               layerSpace: 5
@@ -788,14 +883,14 @@ layouts:
               backgroundColor: white
               inline:true
 
-        #Attribution
+#Attribution
         - !columns
           config:
-            borderWidth: 0
+            borderWidth:0
             cells:
               - padding: 0
           absoluteX: 37
-          absoluteY: 47
+          absoluteY: 40
           width: 300
           items:
             - !text
@@ -803,9 +898,7 @@ layouts:
               align: left
               text: 'Copyright ${now yyyy}. ${mapAttribution}'
 
-    ####################################
-
-        #Title Box
+#Title Box
         #On the bottom so its borders are on top
         #Don't show box if mapTitle not set.
         - !columns
@@ -813,17 +906,17 @@ layouts:
           config:
             borderWidth: 0
             cells:
-              - padding: 3
-                paddingBottom: 4
+              - padding: 0
+                paddingBottom: 3
                 backgroundColor: white
                 vertAlign: middle
-          absoluteX: 1044
-          absoluteY: 812
-          width: 113
+          absoluteX: 37
+          absoluteY: 818
+          width: 200
           items:
             - !text
               fontSize: 14
-              align: center
+              align: left
               text: '${mapTitle}'
 
         #Comments box
@@ -831,89 +924,24 @@ layouts:
           config:
             borderWidth: 0
             cells:
-              - padding: 2
+              - padding: 0
                 backgroundColor: white
-          absoluteX: 1046
-          absoluteY: 700
-          width: 109
+          absoluteX: 37
+          absoluteY: 798
+          width: 180
           items:
             - !text
-              fontSize: 10
-              align: center
+              fontSize: 9
+              align: left
               text: '${mapComment}'
 
 
-        #Date Box
-        - !columns
-          config:
-            borderWidth: 0
-            borderColor: black
-            cells:
-              - padding: 3
-                paddingBottom: 4
-                vertAlign: middle
-          absoluteX: 1046
-          absoluteY: 450
-          width: 113
-          items:
-            - !text
-              fontSize: 10
-              align: center
-              text: '${now yyyy-MM-dd}'
 
-        #North Arrow taken from Wikipedia (from public domain)
+#WCC Logo
         - !columns
-          absoluteX: 1088
-          absoluteY: 410
-          width: 45
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-          items:
-            - !image
-              maxWidth: 45
-              maxHeight: 45
-              url: 'http://trac.mapfish.org/trac/mapfish/export/2892/print/trunk/print-standalone/samples/Arrow_North_CFCF.svg'
-              rotation: '${rotation}'
-
-        #ScaleBar
-        - !columns
-          absoluteX: 1046
-          absoluteY: 345
-          width: 110
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-          items:
-            - !scalebar
-              align: center
-              maxSize: 110
-              type: 'line'
-              intervals: 2
-
-        #Scale text
-        - !columns
-          absoluteX: 1046
-          absoluteY: 325
-          width: 111
-          config:
-            borderWidth: 0
-            cells:
-              - padding: 0
-          items:
-            - !text
-              font: Helvetica
-              fontSize: 9
-              align: center
-              text: '1:${scale}'
-
-        #WCC Logo
-        - !columns
-          absoluteX: 1046
-          absoluteY: 300
-          width: 111
+          absoluteX: 1050
+          absoluteY: 810
+          width: 101
           config:
             borderWidth: 0
             cells:
@@ -922,41 +950,85 @@ layouts:
             - !image
               maxWidth: 80
               spacingAfter: 100
+              align: right
+              url: 'http://www.furesoe.dk/~/media/Secure/Logoer/toplogo.ashx'
+
+
+        #ScaleBar
+        - !columns
+          absoluteX: 37
+          absoluteY: 755
+          width: 230
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          items:
+            - !scalebar
+              align: left
+              maxSize: 130
+              type: 'line'
+              intervals: 2
+
+        #ScaleText
+        - !columns
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          absoluteX: 132
+          absoluteY: 755
+          width: 115
+          items:
+            - !text
+              fontSize: 8
               align: center
-              url: 'http://geocloud.mapcentia.com/assets/images/MapCentia_500.png'
+              text: '1:${scale}'
+
+#North Arrow taken from Wikipedia (from public domain)
+        - !columns
+          absoluteX: 40
+          absoluteY: 725
+          width: 30
+          config:
+            borderWidth: 0
+            cells:
+              - padding: 0
+          items:
+            - !image
+              maxWidth: 30
+              maxHeight: 30
+              url: 'http://trac.mapfish.org/trac/mapfish/export/2892/print/trunk/print-standalone/samples/Arrow_North_CFCF.svg'
+              rotation: '${rotation}'
 
         #Footer
         - !columns
           config:
             borderWidth: 0
+            borderColor: black
             cells:
-              - padding: 2
-                vertAlign: middle
-          absoluteX: 1046
-          absoluteY: 250
-          width: 110
+              - padding: 0
+          absoluteX: 935
+          absoluteY: 751
+          width: 165
           items:
             - !text
               fontSize: 8
-              align: center
-              text: "${mapFooter}"
+              align: right
+              text: '© Furesø Kommune. Kortet er vejledende.'
 
-
-    ####################################
-
-      #Blurb border
+        #Date Box
         - !columns
           config:
             borderWidth: 0
+            borderColor: black
             cells:
-              - borderColor: black
-                #padding is required otherwise the box will be empty
-                padding: 272
-          absoluteX: 1046
-          absoluteY: 566
-          width: 113
-          #Blank item required or MapFish Print will fail badly.
+              - padding: 0
+          absoluteX: 1087
+          absoluteY: 751
+          width: 65
           items:
             - !text
-              text: ''
-
+              fontSize: 8
+              align: right
+              text: '${now yyyy-MM-dd}'
