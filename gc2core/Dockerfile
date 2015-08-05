@@ -60,8 +60,10 @@ RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &
 	mkdir /usr/lib/gdalplugins/1.11 &&\
 	cp /usr/lib/gdalplugins/1.10/gdal_ECW_JP2ECW.so /usr/lib/gdalplugins/1.11
 
-# Add the 900913 projection to Proj4
-RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg
+# Add some projections to Proj4
+RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg && \
+	echo "<34004> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg && \
+	echo "<34005> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg
 
 # Install Node.js, Grunt and Forever
 RUN npm install -g grunt-cli &&\
@@ -107,7 +109,7 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Share dirs
-VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2/ssl", "/etc/apache2/sites-enabled/"]
+VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2/ssl", "/etc/apache2/sites-enabled/", "/usr/share/proj"]
 
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
