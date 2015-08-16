@@ -6,8 +6,8 @@ docker run \
     -e USER=gc2 \
     -e PASSWORD=naTH7crU \
     -e BUCKET=gc2-furesoe \
-    -e AWSACCESSKEYID=AKIAJUMX36CJNFIPXJLA \
-    -e AWSSECRETACCESSKEY=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 \
+    -e AWSACCESSKEYID=xxxxxx \
+    -e AWSSECRETACCESSKEY=xxxxxx \
     -e SKIP="template1 postgres" \
     -t -i \
     mapcentia/gc2backup

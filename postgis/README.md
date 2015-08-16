@@ -1,9 +1,9 @@
 sudo docker run \
     --name postgis \
     -p 5432:5432 \
-    -e GC2_PASSWORD=T5uHenuc \
+    -e GC2_PASSWORD=xxxxxx \
     -e LOCALE=da_DK.UTF-8 \
-    -e TIMEZONE="Europe/London" \
+    -e TIMEZONE="Europe/Copenhagen" \
     -t -d \
     mapcentia/postgis
     
