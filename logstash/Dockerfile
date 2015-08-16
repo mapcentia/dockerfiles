@@ -18,7 +18,7 @@ RUN set -x \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Elasticsearch
-ENV ELASTICSEARCH_VERSION 1.5.2
+ENV ELASTICSEARCH_VERSION 1.7.1
 
 RUN echo "deb http://packages.elasticsearch.org/elasticsearch/${ELASTICSEARCH_VERSION%.*}/debian stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
@@ -62,5 +62,7 @@ RUN mkdir /certs
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+VOLUME ["/usr/share/elasticsearch", "/var/lib/elasticsearch/data", "/var/log", "/etc/elasticsearch"]
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

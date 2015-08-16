@@ -9,8 +9,17 @@ service postgresql start
 # But first we check if they are created. I.e. if the container is restarted
 if echo 'SELECT 1' | psql postgres >/dev/null 2>&1; then
     echo "GC2 system already initiated"
+    echo '
+            ****************************************************
+            INFO:   GC2 system already initiated.
+                    Doing nothing else than start the service.
+            ****************************************************
+        '
+    # Stop the service, so it can be started in foreground.
     service postgresql stop
 else
+    # First run
+
     # Set time zone if passed
     if [ -n "$TIMEZONE" ]; then
 
@@ -41,8 +50,8 @@ else
         locale=en_US.UTF-8
         echo '
             ****************************************************
-            WARNING: No locale has been for the GC2 template db.
-                     Setting it to en_US.UTF-8.
+            WARNING: No locale has been set for the GC2
+                     template db. Setting it to en_US.UTF-8.
                      Use "-e locale=your_locale" to set
                      it in "docker run".
             ****************************************************
@@ -54,7 +63,7 @@ else
 
     # Create template database and run latest migrations
     echo "Creating GC2 template database and user $PGUSER"
-    psql postgres -U postgres -c "CREATE USER $PGUSER WITH CREATEDB SUPERUSER PASSWORD '$GC2_PASSWORD'" &&\
+    psql postgres -U postgres -c "CREATE USER $PGUSER WITH SUPERUSER CREATEROLE CREATEDB PASSWORD '$GC2_PASSWORD'" &&\
         createdb template_geocloud -T template0 --encoding UTF-8 --locale $locale &&\
         psql template_geocloud -c "create extension postgis"  &&\
         psql template_geocloud -c "create extension pgcrypto"  &&\

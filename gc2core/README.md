@@ -1,9 +1,31 @@
-docker run --name gc2core --link postgis:postgis --link elasticsearch:elasticsearch -d -t -p 80:80 -e GC2_PASSWORD=password mapcentia/gc2core
+sudo docker run \
+    --name gc2core \
+    --link postgis:postgis \
+    --link elasticsearch:elasticsearch \
+    --link geoserver:geoserver \
+    -v ~/ssl:/etc/apache2/ssl \
+    -v ~/sites-enabled:/etc/apache2/sites-enabled/ \
+    -v ~/conf:/var/www/geocloud2/app/conf \
+    -v ~/__bitmaps:/var/www/geocloud2/app/tmp/dragoer/__bitmaps \
+    -e GC2_PASSWORD=T5uHenuc \
+    -e TIMEZONE="Europe/London" \
+    -p 80:80 -p 443:443 \
+    -d -t \
+    mapcentia/gc2core
 
-docker run --name gc2core --link postgis:postgis -v ~/ssl:/etc/apache2/ssl -v ~/sites-enabled:/etc/apache2/sites-enabled/ -d -t -p 80:80 -p 443:443 mapcentia/gc2core
+docker run --rm=true --volumes-from=gc2core --link postgis:postgis -t -i mapcentia/gc2core /bin/bash
 
-docker run --volumes-from=gc2core --rm=true -t -i mapcentia/gc2core /bin/bash
 
 /path/to/openssl rsa -in /path/to/originalkeywithpass.key -out /path/to/newkeywithnopass.key
 
-docker cp gc2core:/var/www/geocloud2/app/tmp/ ~/gc2files/
+
+docker run --rm -i -v ~/:/tmp mapcentia/gc2core cp /etc/apache2/sites-enabled /tmp -R
+docker run --rm -i -v ~/:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
+
+sudo docker run \
+        --name gc2river \
+        -e PGPASSWORD=naTH7crU \
+        --link gc2core:gc2core \
+        --link postgis:postgis \
+        -i -t mapcentia/gc2core \
+        nodejs /var/www/geocloud2/app/scripts/pg2es.js furesoe --host postgis --user gc2 --es-host gc2core --key cdde733d7eec8e37492ab242f155b3c8

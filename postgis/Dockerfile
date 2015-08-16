@@ -28,7 +28,7 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.4/main/postgresql.conf
 EXPOSE 5432
 
 # Share the source dir
-VOLUME  ["/etc/postgresql/9.4/main/", "/var/log", "/var/lib/postgresql/data"]
+VOLUME  ["/etc/postgresql/9.4/main", "/var/log", "/var/lib/postgresql/data"]
 
 # Use wrapper scripts to start Postgres
 ADD start.sh /root/

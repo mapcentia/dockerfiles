@@ -32,7 +32,7 @@ RUN sed -i 's/\~0\.12\.5/0\.12\.5/g' ~/gc2conflict/node_modules/jsts/package.jso
 RUN cd ~/gc2conflict &&\
 	npm update
 
-#Add config files from Docker repo
+#Add config files from Git repo
 RUN cp ~/gc2conflict/app/config/browserConfig.dist.js ~/gc2conflict/app/config/browserConfig.js &&\
 	cp ~/gc2conflict/app/config/nodeConfig.dist.js ~/gc2conflict/app/config/nodeConfig.js &&\
 	cp ~/gc2conflict/app/config/browserify.dist.js ~/gc2conflict/app/config/browserify.js
