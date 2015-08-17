@@ -24,7 +24,8 @@ RUN cd /var/www/ &&\
 	git clone http://github.com/mapcentia/geocloud2.git
 
 # Check ou branch
-RUN git checkout gc2min
+RUN cd /var/www/geocloud2 && \
+	git checkout gc2min
 
 # Make dirs writeable for web server
 RUN chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
