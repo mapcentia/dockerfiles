@@ -68,9 +68,9 @@ Kør seneste database migration
         -v ~/gc2/conf:/var/www/geocloud2/app/conf \
         -t -i mapcentia/gc2basic grunt --gruntfile /var/www/geocloud2/Gruntfile.js migration
     
-Gå til http://[ip-adresse]:8080 og opret en brugerprofil med samme navn som databasen.
+Gå til http://[ip-adresse]:8080 og opret en brugerprofil med samme navn som databasen. Fx hvis databasen hedder 'geodata' skal brugerprofilen hedde det samme.
 
-Hvsi du vil opdatere en kørende GC2 container med seneste kode. Altid en god ide at køre migration fra ovenstående trin efter en kode-opdatering.
+Hvis du vil opdatere en kørende GC2 container med seneste kode afvikles nedenstående. Det er altid en god ide at køre migration fra ovenstående trin efter en kode-opdatering.
 
     docker run \
         --rm \
@@ -116,15 +116,7 @@ Kør Grunt
 Genstart containeren.
     
     docker restart gc2conflict
-     
 
-
-    docker run \
-             --rm \
-             -v ~/gc2conflict/config:/root/gc2conflict/app/config \
-             --link gc2:gc2 \
-             --link geoserver:geoserver \
-             -i -t mapcentia/gc2conflict bash
 
 
 
