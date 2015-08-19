@@ -117,6 +117,9 @@ Genstart containeren.
     
     docker restart gc2conflict
 
+I en browser kald adressen.
+
+    http://[ip-adresse]/?db=[database]&schema=[schema]
 
 
 
