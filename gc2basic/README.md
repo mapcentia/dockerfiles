@@ -15,7 +15,8 @@ Vi antager i guiden, at PostGreSQL og GC2conflict kører på samme server.
 
 Kopier konfigurationsfilerne ud fra containeren, så vi har dem på hosten.
     
-    docker run --rm -i \
+    docker run \
+        --rm -i \
         -v ~/gc2:/tmp mapcentia/gc2basic \
         cp /var/www/geocloud2/app/conf /tmp -R
         
