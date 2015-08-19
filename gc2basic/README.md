@@ -1,5 +1,5 @@
 #GC2conflict basic
-Dette er installationsvejledningen til GC2conflict koblet til en eksisterende PostGIS database. Den bruger en neddroslet vsersion af GC2, kaldet GC2basic, til udstilling af API'er og håndtering af metadata.
+Dette er installationsvejledningen til GC2conflict koblet til en eksisterende PostGIS database. Den bruger en neddroslet version af GC2, kaldet GC2basic, til udstilling af API'er og håndtering af metadata.
 
 ##Forberedelser
 Start med at lave foldere på hosten. Disse skal bruges til konfigurationsfiler, så det ikke er nødvendigt at rette dem inde i containeren.
