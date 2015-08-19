@@ -8,7 +8,6 @@ Just run a container like this:
 
     sudo docker run --name "geoserver" \
         -p 8080:8080 \
-        -v ~/printing:/opt/geoserver/data_dir/printing \
         -d -t \
         mapcentia/geoserver
     

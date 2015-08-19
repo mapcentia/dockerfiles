@@ -4,7 +4,7 @@ sudo docker run \
     --link elasticsearch:elasticsearch \
     --link geoserver:geoserver \
     -v ~/ssl:/etc/apache2/ssl \
-    -v ~/sites-enabled:/etc/apache2/sites-enabled \
+    -v ~/sites-enabled:/etc/apache2/sites-enabled/ \
     -v ~/conf:/var/www/geocloud2/app/conf \
     -v ~/tmp:/var/www/geocloud2/app/tmp \
     -e GC2_PASSWORD=xxxxxx \
