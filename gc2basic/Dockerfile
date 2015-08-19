@@ -45,6 +45,9 @@ ADD conf/gc2/Connection.php /var/www/geocloud2/app/conf/
 # Add custom front-controller
 ADD index.php /var/www/geocloud2/public/
 
+# Add custom css
+RUN echo ".hide-in-basic{display:none;}" >> /var/www/geocloud2/public/css/dashboard.css
+
 # Make php-fpm run in the foreground
 RUN sed 's/;daemonize = yes/daemonize = no/' -i /etc/php5/fpm/php-fpm.conf
 
