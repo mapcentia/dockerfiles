@@ -8,7 +8,7 @@ RUN echo "deb http://eu-west-1.ec2.archive.ubuntu.com/ubuntu/ trusty main multiv
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install wget php5-mapscript g++ build-essential apache2-mpm-worker libapache2-mod-fastcgi libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor
+RUN apt-get -y install wget php5-mapscript g++ build-essential apache2-mpm-worker libapache2-mod-fastcgi libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-mapscript python-paste python-flup python-imaging git php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor
 
 # Add some projections to Proj4
 RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg && \
