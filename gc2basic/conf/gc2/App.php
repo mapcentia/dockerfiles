@@ -77,6 +77,8 @@ class App
 
         //Hide layers without a group in viewer
         "hideUngroupedLayers" => true,
+
+        "basic" => true,
     );
     function __construct(){
         // This is the autoload function and include path setting. No need to fiddle with this.
