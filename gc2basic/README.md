@@ -11,6 +11,8 @@ Start med at lave foldere på hosten. Disse skal bruges til konfigurationsfiler,
 tmp folderen skal være skrivebar indefra Docker containeren.
 
 ##Installer GC2basic
+Vi antager i guiden, at PostGreSQL og GC2conflict kører på samme server.
+
 Kopier konfigurationsfilerne ud fra containeren, så vi har dem på hosten.
     
     docker run --rm -i \
