@@ -21,4 +21,16 @@ RUN cd ~ && \
     make &&\
     make install
 
+# Add apache config file from Docker repo
+ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
+ADD conf/apache/mapcache.conf /etc/apache2/sites-enabled/
+
+# Share dirs
+VOLUME  ["/var/log", "/etc/apache2/sites-enabled/"]
+
+# Expose standard ports for HTTP
+EXPOSE 80
+
+CMD ["/bin/bash", "-c", "source /etc/apache2/envvars && exec /usr/sbin/apache2 -D FOREGROUND"]
+
 
