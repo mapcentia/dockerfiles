@@ -19,7 +19,8 @@ RUN cd ~ && \
     cd build &&\
     cmake .. &&\
     make &&\
-    make install
+    make install &&\
+    ldconfig
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
@@ -31,6 +32,7 @@ VOLUME  ["/var/log", "/etc/apache2/sites-enabled/"]
 # Expose standard ports for HTTP
 EXPOSE 80
 
+# Start httpd with apache2ctl, so the lock file is created
 RUN apache2ctl start
 
 CMD ["/bin/bash", "-c", "source /etc/apache2/envvars && exec /usr/sbin/apache2 -D FOREGROUND"]
