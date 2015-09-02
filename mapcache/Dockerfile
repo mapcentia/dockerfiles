@@ -17,7 +17,7 @@ RUN cd ~ && \
     cd mapcache &&\
     mkdir build &&\
     cd build &&\
-    cmake ..
+    cmake .. &&\
     make &&\
     make install
 
