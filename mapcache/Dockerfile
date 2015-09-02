@@ -31,6 +31,8 @@ VOLUME  ["/var/log", "/etc/apache2/sites-enabled/"]
 # Expose standard ports for HTTP
 EXPOSE 80
 
+RUN apache2ctl start
+
 CMD ["/bin/bash", "-c", "source /etc/apache2/envvars && exec /usr/sbin/apache2 -D FOREGROUND"]
 
 
