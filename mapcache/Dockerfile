@@ -26,6 +26,9 @@ RUN cd ~ && \
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 ADD conf/apache/mapcache.conf /etc/apache2/sites-enabled/
 
+RUN mkdir /mapcache
+RUN cp /root/mapcache/mapcache.xml /mapcache/
+
 # Share dirs
 VOLUME  ["/var/log", "/etc/apache2/sites-enabled/"]
 
