@@ -1,4 +1,4 @@
-#Elastichseach
+# Elastichseach
 Elasticsearch 1.7.1
 
 ## How to use this image
