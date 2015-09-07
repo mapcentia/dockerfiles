@@ -27,9 +27,9 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 #Kibana
-ENV KIBANA_VERSION 4.0.2
+ENV KIBANA_VERSION 4.1.1
 RUN cd /root && curl -L -O https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz \
-        && tar xzvf kibana-4.0.2-linux-x64.tar.gz
+        && tar xzvf kibana-${KIBANA_VERSION}-linux-x64.tar.gz
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -

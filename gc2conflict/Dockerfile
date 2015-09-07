@@ -42,6 +42,10 @@ RUN cp ~/gc2conflict/app/config/browserConfig.dist.js ~/gc2conflict/app/config/b
 RUN cd ~/gc2conflict &&\
 	grunt
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 EXPOSE 80
 
 # Share the source dir

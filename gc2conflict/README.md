@@ -10,6 +10,7 @@ GC2conflict depends on the APIs of GC2 and GeoServer with Printing Plugin, so li
         --name "gc2conflict" \
         --link gc2:gc2 \
         --link geoserver:geoserver \
+        -e TIMEZONE="Europe/Copenhagen" \
         -p 80:80 \
         -d -t mapcentia/gc2conflict
 
