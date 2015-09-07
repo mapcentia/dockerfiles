@@ -1,4 +1,4 @@
-# MapCentia GC2 Dockerfile
+# MapCentia GC2core Dockerfile
 
 A complete platform for managing geospatial data, making map visualisations and creating applications. Built on the best open source and standard based software.
 
