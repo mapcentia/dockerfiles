@@ -13,7 +13,7 @@ Run container
             --name mapcache \
             -p 8080:80 \
             -p 1337:1337 \
-            -v /var/www/geocloud2:/var/www/geocloud2 \
+            -v /var/www/geocloud2/app:/var/www/geocloud2/app \
             -d -t mapcentia/mapcache
             
     sudo docker run \
