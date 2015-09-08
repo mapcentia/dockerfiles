@@ -48,6 +48,7 @@ VOLUME  ["/var/log", "/etc/apache2/sites-enabled/", "/mapcache", "/tmp"]
 
 # Expose standard ports for HTTP
 EXPOSE 80
+EXPOSE 1337
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
