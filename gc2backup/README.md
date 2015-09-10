@@ -26,7 +26,7 @@ Run a container like this. Put the command in a crontab file on the host, so it 
     
 
 ### Optional
-Restore a backup. In the case the latest one. Notice: This command is using the image mapcentia/postgis.
+Restore a backup. In this case the latest one. Notice: This command is using the image mapcentia/postgis.
 
     sudo docker run \
         --rm=true \
