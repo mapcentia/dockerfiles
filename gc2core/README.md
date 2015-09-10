@@ -4,7 +4,7 @@ A complete platform for managing geospatial data, making map visualisations and 
 
 This image is for a decoupled setup of GC2. Its depends on PostGIS and Elasticsearch. If you just want to test GC2, take a look at our stand-alone gc2 image.
 
-Support for ECW imagery is build in.
+The image comes with MapServer 7.0.0 and support for ECW imagery.
 
 This following setup is for use together with our custom PostGIS image. 
 
