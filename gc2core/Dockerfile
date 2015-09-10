@@ -109,7 +109,7 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Share dirs
-VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2/ssl", "/etc/apache2/sites-enabled/", "/usr/share/proj"]
+VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2", "/usr/share/proj"]
 
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
