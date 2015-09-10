@@ -19,6 +19,7 @@ Start by copying config files out from the image, so they can be stored on the h
         --rm -i \
         -v ~/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
         
+
 Run a container. Mount only on /etc/apache2/ssl if you need HTTPS. The GC2_PASSWORD is the password for the PostGreSQL user "gc2" (See the README for our PostGIS image).
 
 Leave -e TIMEZONE="..." to default to CEST.
@@ -38,12 +39,13 @@ Leave -e TIMEZONE="..." to default to CEST.
         -d -t \
         mapcentia/gc2core
         
+
 If you are using SSL you can strip the password phrase from the key. 
 
     /path/to/openssl rsa -in /path/to/originalkeywithpass.key -out /path/to/newkeywithnopass.key
     
 ### Optional
-Start a node.js deamon to keep the Elasticsearch indices out to date.
+Start a node.js deamon to keep the Elasticsearch indices up to date.
 
     sudo docker run \
             --name gc2river \
@@ -54,6 +56,7 @@ Start a node.js deamon to keep the Elasticsearch indices out to date.
             nodejs /var/www/geocloud2/app/scripts/pg2es.js [database] --host postgis --user gc2 --es-host gc2core --key [API key]
     
     
+
 Update source and run database migrations.
 
     sudo docker run \
