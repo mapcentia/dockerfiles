@@ -99,7 +99,7 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 
 # Enable Apache2 modules
-RUN a2enmod rewrite headers expires include actions fastcgi alias cgid ssl
+RUN a2enmod rewrite headers expires include actions fastcgi alias cgid ssl proxy
 
 # create dir for certs
 RUN mkdir /etc/apache2/ssl
