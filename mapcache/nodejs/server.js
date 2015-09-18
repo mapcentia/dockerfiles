@@ -18,6 +18,13 @@ app.get('/reload', function (request, res) {
 
 });
 
+// TODO Check for existing file and add minimal if not
+
+/*
+ <mapcache>
+    <service type="wmts" enabled="true"/>
+ </mapcache>
+ */
 app.get('/add', function (request, res) {
     var db = request.query.db;
     console.log(db);

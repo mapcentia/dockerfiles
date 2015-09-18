@@ -34,4 +34,8 @@ Restore a backup. In this case the latest one. Notice: This command is using the
         --link postgis:postgis \
         -t -i \
         mapcentia/postgis pg_restore --clean --dbname [database] -U gc2 -h postgis /restore/[database].bak
+        
+![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
+
+[www.mapcentia.com/en/geocloud](http://www.mapcentia.com/en/geocloud/)
     

@@ -27,7 +27,7 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.4/main/postgresql.conf
 # Expose standard for PostGreSQL
 EXPOSE 5432
 
-# Share the source dir
+# Share volumes
 VOLUME  ["/etc/postgresql/9.4/main", "/var/log", "/var/lib/postgresql/data"]
 
 # Use wrapper scripts to start Postgres

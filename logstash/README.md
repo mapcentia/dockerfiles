@@ -1,6 +1,6 @@
 # MapCentia ELK stack for GC2 Dockerfile
 
-Full ELK stack (Logstash 1.5.0, Elasticsearch 1.5.2 and Kibana 4.0.2) with a NodeJS proxy for GC2. The container is set up to index Apache access logs with client IP geo-location.
+Full ELK stack (Logstash 1.5.0, Elasticsearch 1.7.1 and Kibana 4.1.1) with a NodeJS proxy for GC2. The container is set up to index Apache access logs with client IP geo-location.
 
 ## How to use this image
 

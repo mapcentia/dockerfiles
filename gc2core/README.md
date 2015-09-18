@@ -21,10 +21,12 @@ Start by copying config files out from the image, so they can be stored on the h
         --rm -i \
         -v ~/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
         
+    sudo chmod 777 ~gc2/tmp -R
+        
 
 Run a container. Mount only on /etc/apache2/ssl if you need HTTPS. The GC2_PASSWORD is the password for the PostGreSQL user "gc2" (See the README for our PostGIS image).
 
-Leave -e TIMEZONE="..." to default to CEST.
+Leave -e TIMEZONE="..." to default to UTC.
 
     sudo docker run \
         --name gc2core \
@@ -71,6 +73,10 @@ Update source and run database migrations.
         --rm --volumes-from=gc2core \
         --link postgis:postgis \
         -t -i mapcentia/gc2core grunt --gruntfile /var/www/geocloud2/Gruntfile.js migration
+        
+![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
+
+[www.mapcentia.com/en/geocloud](http://www.mapcentia.com/en/geocloud/)
 
 
 
