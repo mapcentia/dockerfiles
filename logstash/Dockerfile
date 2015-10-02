@@ -8,7 +8,7 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC85485
 
 # Logstash
 ENV LOGSTASH_MAJOR 1.5
-ENV LOGSTASH_VERSION 1:1.5.0-1
+ENV LOGSTASH_VERSION 1:1.5.4-1
 
 RUN echo "deb http://packages.elasticsearch.org/logstash/${LOGSTASH_MAJOR}/debian stable main" > /etc/apt/sources.list.d/logstash.list
 
