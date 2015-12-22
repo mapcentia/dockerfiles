@@ -2,7 +2,11 @@
 
 A complete platform for managing geospatial data, making map visualisations and creating applications. Built on the best open source and standard based software.
 
-This image is not for production use. Use it for easy testing and evaluating of GC2. For production use, check out the gc2core image.
+This image is not for production use. Use it for easy testing and evaluating of GC2. It allows anyone with a Docker host (on their laptop, on a VM in the cloud, etc.) to, with a single command, run a single node of GC2 technology.
+
+
+For production use, check out the gc2core image.
+
 
 ## How to use this image
 

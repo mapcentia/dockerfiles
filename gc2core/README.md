@@ -21,10 +21,14 @@ Start by copying config files out from the image, so they can be stored on the h
         --rm -i \
         -v ~/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
         
-    sudo chmod 777 ~gc2/tmp -R
+    sudo docker run \
+        --rm -i \
+        -v ~/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/tmp /tmp -R
+        
+    sudo chmod 777 ~/gc2/tmp -R
         
 
-Run a container. Mount only on /etc/apache2/ssl if you need HTTPS. The GC2_PASSWORD is the password for the PostGreSQL user "gc2" (See the README for our PostGIS image).
+The GC2_PASSWORD is the password for the PostGreSQL user "gc2" (See the README for our PostGIS image).
 
 Leave -e TIMEZONE="..." to default to UTC.
 

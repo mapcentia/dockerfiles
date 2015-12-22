@@ -6,6 +6,7 @@ var app = express();
 
 app.use(express.static('.'));
 app.use(bodyParser.json());
+
 app.get('/reload', function (request, res) {
     console.log("reload");
     res.setHeader('Content-Type', 'application/json');
@@ -26,6 +27,7 @@ app.get('/reload', function (request, res) {
  </mapcache>
  */
 app.get('/add', function (request, res) {
+    // TODO Check if entry is already there
     var db = request.query.db;
     console.log(db);
     exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + db + '.xml" >> /etc/apache2/sites-enabled/mapcache.conf', function (error, stdout, stderr) {

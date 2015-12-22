@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install vim git php5-pgsql php5-cli wget curl postgresql-9.4-postgis-2.1 postgresql-contrib-9.4 postgresql-9.4-pgrouting
+RUN apt-get -y install vim git php5-pgsql php5-cli wget curl postgis postgresql-9.4-postgis-2.1 postgresql-contrib-9.4 postgresql-9.4-pgrouting
 
 # Clone GC2 from GitHub
 RUN mkdir /var/www &&\
