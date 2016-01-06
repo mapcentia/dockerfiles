@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var exec = require('child_process').exec;
+var fs = require("fs");
 
 var app = express();
 
@@ -16,7 +17,6 @@ app.get('/reload', function (request, res) {
         }
         res.send({success: true});
     });
-
 });
 
 // TODO Check for existing file and add minimal if not
@@ -28,9 +28,15 @@ app.get('/reload', function (request, res) {
  */
 app.get('/add', function (request, res) {
     // TODO Check if entry is already there
+    fs.readFile('/etc/apache2/sites-enabled/mapcache.conf', function (err, data) {
+        if (err) throw err;
+        if(data.indexOf('#' + db) < 0){
+            console.log(" hej")
+        }
+    });
     var db = request.query.db;
     console.log(db);
-    exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + db + '.xml" >> /etc/apache2/sites-enabled/mapcache.conf', function (error, stdout, stderr) {
+    exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + db + '.xml" >> /etc/apache2/sites-enabled/mapcache.conf #' + db, function (error, stdout, stderr) {
         if (error !== null) {
             console.log(error);
         }
