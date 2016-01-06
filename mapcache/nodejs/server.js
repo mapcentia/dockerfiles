@@ -5,8 +5,8 @@ var fs = require("fs");
 
 var app = express();
 
-//var file = "/etc/apache2/sites-enabled/mapcache.conf";
-var file = "mapcache.conf";
+var file = "/etc/apache2/sites-enabled/mapcache.conf";
+//var file = "mapcache.conf";
 
 app.use(express.static('.'));
 app.use(bodyParser.json());
