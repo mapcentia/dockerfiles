@@ -5,6 +5,9 @@ var fs = require("fs");
 
 var app = express();
 
+//var file = "/etc/apache2/sites-enabled/mapcache.conf";
+var file = "mapcache.conf";
+
 app.use(express.static('.'));
 app.use(bodyParser.json());
 
@@ -23,30 +26,47 @@ app.get('/reload', function (request, res) {
 
 /*
  <mapcache>
-    <service type="wmts" enabled="true"/>
+ <service type="wmts" enabled="true"/>
  </mapcache>
  */
 app.get('/add', function (request, res) {
-    // TODO Check if entry is already there
-    fs.readFile('/etc/apache2/sites-enabled/mapcache.conf', function (err, data) {
-        if (err) throw err;
-        if(data.indexOf('#' + db) < 0){
-            console.log(" hej")
-        }
-    });
     var db = request.query.db;
-    console.log(db);
-    exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + db + '.xml" >> /etc/apache2/sites-enabled/mapcache.conf #' + db, function (error, stdout, stderr) {
-        if (error !== null) {
-            console.log(error);
+
+    fs.exists(file, function (exists) {
+        if (exists) {
+            callback();
+        } else {
+            fs.writeFile(file, {flag: 'wx'}, function (err, data) {
+                console.log("Creating mapcache.conf");
+                callback();
+            })
         }
-        res.setHeader('Content-Type', 'application/json');
-        exec("service apache2 reload", function (error, stdout, stderr) {
-            if (error !== null) {
-                console.log(error);
-            }
-            res.send({success: true});
-        });
     });
+
+    function callback() {
+        fs.readFile(file, function (err, data) {
+            if (err) {
+                res.send({success: false, message: "error"});
+            }
+            console.log(data.toString('utf-8'));
+            if (data.toString('utf-8').indexOf('#' + db) === -1) {
+                exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + db + '.xml #' + db + '" >> ' + file, function (error, stdout, stderr) {
+                    if (error !== null) {
+                        console.log(error);
+                    }
+                    res.setHeader('Content-Type', 'application/json');
+                    exec("service apache2 reload", function (error, stdout, stderr) {
+                        if (error !== null) {
+                            console.log(error);
+                        }
+                        res.send({success: true});
+                    });
+                });
+            } else {
+                res.send({success: true, message: "Already there"});
+            }
+        });
+    }
+
 });
 app.listen(1337);
