@@ -9,7 +9,7 @@ RUN echo "deb http://eu-west-1.ec2.archive.ubuntu.com/ubuntu/ trusty main multiv
 # Install packages
 RUN apt-get -y update --fix-missing
 RUN apt-get -y install wget php5-dev php-pear g++ build-essential apache2-mpm-worker libapache2-mod-fastcgi libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git php5-memcache memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
-	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev
+	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl
 
 # Install MapServer 7.0.0
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.0.tar.gz &&\

@@ -16,9 +16,10 @@ app.get('/reload', function (request, res) {
     res.setHeader('Content-Type', 'application/json');
     exec("service apache2 reload", function (error, stdout, stderr) {
         if (error !== null) {
-            console.log(error);
+            res.send({success: false, message: error});
+        } else {
+            res.send({success: true});
         }
-        res.send({success: true});
     });
 });
 
@@ -49,8 +50,8 @@ app.get('/add', function (request, res) {
                 res.send({success: false, message: "error"});
             }
             console.log(data.toString('utf-8'));
-            if (data.toString('utf-8').indexOf('#' + db) === -1) {
-                exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + db + '.xml #' + db + '" >> ' + file, function (error, stdout, stderr) {
+            if (data.toString('utf-8').indexOf('/mapcache/' + db) === -1) {
+                exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + db + '.xml" >> ' + file, function (error, stdout, stderr) {
                     if (error !== null) {
                         console.log(error);
                     }
@@ -67,5 +68,6 @@ app.get('/add', function (request, res) {
             }
         });
     }
+
 });
 app.listen(1337);
