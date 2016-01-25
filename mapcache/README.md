@@ -33,6 +33,13 @@ In app/conf/App.php add:
 
 
 ## Optional
+MapCache is by default proxied by GC2, which adds a security layer. This adds a small resource overhead. If you want to bypass GC2 security you can add these lines to the Apache2 configuration in the GC2 container.
+
+    ProxyPreserveHost On
+    ProxyPass /mapcache/ http://172.17.42.1:8888/mapcache/
+    ProxyPassReverse /mapcache/ http://172.17.42.1:8888/mapcache/
+
+
 Start an interactive container for debugging:
     
     sudo docker run \
@@ -43,3 +50,6 @@ Start an interactive container for debugging:
            -i -t mapcentia/mapcache bash
             
                 
+![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
+
+[www.mapcentia.com/en/product](http://www.mapcentia.com/en/product)

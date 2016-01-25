@@ -19,6 +19,10 @@ Start by copying config files out from the image, so they can be stored on the h
     
     sudo docker run \
         --rm -i \
+        -v ~:/tmp mapcentia/gc2core cp /etc/php5/fpm /tmp -R
+    
+    sudo docker run \
+        --rm -i \
         -v ~/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
         
     sudo docker run \
@@ -39,11 +43,13 @@ Leave -e TIMEZONE="..." to default to UTC.
         --link geoserver:geoserver \
         -v ~/apache2/ssl:/etc/apache2/ssl \
         -v ~/apache2/sites-enabled:/etc/apache2/sites-enabled/ \
+        -v ~/fpm:/etc/php5/fpm/ \
         -v ~/gc2/conf:/var/www/geocloud2/app/conf \
         -v ~/gc2/tmp:/var/www/geocloud2/app/tmp \
+        -v ~/gc2/mapcache:/var/www/geocloud2/app/wms/mapcache \
         -e GC2_PASSWORD=xxxxxx \
         -e TIMEZONE="Europe/Copenhagen" \
-        -p 80:80 -p 443:443 \
+        -p 80:80 -p 443:443 -p 9000:9000\
         -d -t \
         mapcentia/gc2core
         
