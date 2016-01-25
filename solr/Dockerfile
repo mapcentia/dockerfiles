@@ -19,12 +19,12 @@ RUN useradd -d /opt/solr -s /sbin/false solr &&\
     chown solr:solr -R /opt/solr
 
 RUN cd /opt/solr/solr &&\
-    mv collection1 ckan
+    mv collection1 ckan &&\
+    cd ckan
 
-ADD conf/solr/schema.xml /opt/solr/solr/conf/schema.xml
+ADD conf/solr/schema.xml /opt/solr/solr/ckan/conf/schema.xml
 
 EXPOSE 8983
 
-RUN cd /opt/solr
-
+WORKDIR /opt/solr
 CMD ["/usr/bin/java", "-jar", "/opt/solr/start.jar"]
