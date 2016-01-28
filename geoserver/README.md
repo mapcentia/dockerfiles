@@ -6,7 +6,9 @@ GeoServer 2.7.0 with the printing plug-in running on Oracle Java 7 with native J
 
 Just run a container like this:
 
-    sudo docker run --name "geoserver" \
+    sudo docker run \
+        --name "geoserver" \
+        --restart=always \
         -p 8080:8080 \
         -d -t \
         mapcentia/geoserver

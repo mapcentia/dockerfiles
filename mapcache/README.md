@@ -9,6 +9,7 @@ The API is listening to port 1337.
         
     sudo docker run \
             --name mapcache \
+            --restart=always \
             -p 8888:80 \
             -p 1337:1337 \
             --link gc2core:gc2core \
@@ -35,6 +36,14 @@ In app/conf/App.php add:
 ## Optional
 MapCache is by default proxied by GC2, which adds a security layer. This adds a small resource overhead. If you want to bypass GC2 security you can add these lines to the Apache2 configuration in the GC2 container.
 
+    # Always rewrite GetLegendGraphic, GetFeatureInfo, DescribeFeatureType, format_options and all POST to WMS
+    RewriteEngine On
+    RewriteCond %{QUERY_STRING} (^|&)REQUEST=GetLegendGraphic($|&) [NC,OR]
+    RewriteCond %{QUERY_STRING} (^|&)REQUEST=GetFeatureInfo($|&) [NC,OR]
+    RewriteCond %{QUERY_STRING} (^|&)REQUEST=DescribeFeatureType($|&) [NC,OR]
+    RewriteCond %{REQUEST_METHOD} POST
+    RewriteRule /mapcache/(.*)/wms/(.*) /ows/$1/$2 [L]
+    
     ProxyPreserveHost On
     ProxyPass /mapcache/ http://172.17.42.1:8888/mapcache/
     ProxyPassReverse /mapcache/ http://172.17.42.1:8888/mapcache/

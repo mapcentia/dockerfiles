@@ -35,6 +35,7 @@ Start en gc2basic container med navnet "gc2".
     
     docker run \
         --name gc2 \
+        --restart=always \
         -p 8080:80 \
         -v ~/gc2/conf:/var/www/geocloud2/app/conf \
         -v ~/tmp:/var/www/geocloud2/app/tmp \

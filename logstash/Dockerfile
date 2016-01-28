@@ -7,27 +7,26 @@ RUN apt-get -y install supervisor
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC8548582C1A2699A9D27D666CD88E42B4
 
 # Logstash
-ENV LOGSTASH_MAJOR 1.5
-ENV LOGSTASH_VERSION 1:1.5.4-1
+ENV LOGSTASH_MAJOR 2.1
 
 RUN echo "deb http://packages.elasticsearch.org/logstash/${LOGSTASH_MAJOR}/debian stable main" > /etc/apt/sources.list.d/logstash.list
 
 RUN set -x \
 	&& apt-get update \
-	&& apt-get install -y --no-install-recommends logstash=$LOGSTASH_VERSION \
+	&& apt-get install -y logstash \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Elasticsearch
-ENV ELASTICSEARCH_VERSION 1.7.1
+ENV ELASTICSEARCH_VERSION 2.1.1
 
 RUN echo "deb http://packages.elasticsearch.org/elasticsearch/${ELASTICSEARCH_VERSION%.*}/debian stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
 RUN apt-get update \
-	&& apt-get -y install elasticsearch=$ELASTICSEARCH_VERSION \
+	&& apt-get -y install elasticsearch \
 	&& rm -rf /var/lib/apt/lists/*
 
 #Kibana
-ENV KIBANA_VERSION 4.1.1
+ENV KIBANA_VERSION 4.3.1
 RUN cd /root && curl -L -O https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz \
         && tar xzvf kibana-${KIBANA_VERSION}-linux-x64.tar.gz
 

@@ -38,6 +38,7 @@ Leave -e TIMEZONE="..." to default to UTC.
 
     sudo docker run \
         --name gc2core \
+        --restart=always \
         --link postgis:postgis \
         --link elasticsearch:elasticsearch \
         --link geoserver:geoserver \

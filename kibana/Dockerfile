@@ -5,7 +5,7 @@ RUN  export DEBIAN_FRONTEND=noninteractive
 ENV  DEBIAN_FRONTEND noninteractive
 
 #Kibana
-ENV KIBANA_VERSION 4.1.1
+ENV KIBANA_VERSION 4.3.1
 RUN cd /root && curl -L -O https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz \
         && tar xzvf kibana-${KIBANA_VERSION}-linux-x64.tar.gz
 

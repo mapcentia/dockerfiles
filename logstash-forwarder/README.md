@@ -14,6 +14,7 @@ Now you can start a Logstash-forwarder container with the host log-folder mounte
 
      sudo docker run \
         --name logstashforwarder \
+        --restart=always \
         -v /var/log:/var/log \
         -v ~/certs:/certs \
         -e "MASTER=example.com:5043" \
@@ -24,6 +25,7 @@ If you are running GC2 in a container called GC2 when do it like this:
 
     sudo docker run \
         --name logstashforwader \
+        --restart=always \
         --volumes-from gc2 \
         -v ~/certs/:/certs \
         -e "MASTER=example.com:5043" \

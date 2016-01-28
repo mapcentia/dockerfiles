@@ -10,6 +10,7 @@ Leave -e TIMEZONE="..." to default to UTC and -e LOCALE= to default to en_US.UTF
 
     sudo docker run \
         --name postgis \
+        --restart=always \
         -p 5432:5432 \
         -e GC2_PASSWORD=xxxxxx \
         -e LOCALE=da_DK.UTF-8 \
