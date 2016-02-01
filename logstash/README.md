@@ -9,9 +9,7 @@ Start a Logstash container like this:
     sudo docker run \
         --name logstash \
         -p 5043:5043 \
-        -p 5601:5601 \
         -p 1337:1337 \
-        -p 9200:9200 \
         -e "LOGSTASH_DOMAIN=example.com" \
         -t -d \
         mapcentia/logstash

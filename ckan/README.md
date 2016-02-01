@@ -8,6 +8,15 @@
     sudo docker run \
         --name ckan \
         --restart=always \
+        --link solr:solr \
+        --link postgis:postgres \
         -v ~/ckan:/etc/ckan \
-        -p 80:80 \
+        -p 7777:80 \
         -d -t mapcentia/ckan
+        
+    docker run \
+        --rm \
+        --link solr:solr \
+        --link postgis:postgres \
+        -v ~/ckan:/etc/ckan \
+        -i -t mapcentia/ckan bash

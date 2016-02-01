@@ -16,7 +16,7 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
 
-VOLUME ["/etc/ckan"]
+VOLUME ["/etc/ckan", "/var/log"]
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

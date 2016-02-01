@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
       logstash-forwarder
 
 # Copy configuration file
+
 COPY ./logstash-forwarder.conf /root/
 
 # Make a dir for the certificate

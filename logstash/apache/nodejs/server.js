@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var client = new es.Client({
-    hosts: 'localhost:9200'
+    hosts: 'elasticsearch:9200'
 });
 
 app.use(express.static('.'));
@@ -31,4 +31,4 @@ app.post('/data', function(request, res){
     });
 });
 
-app.listen(1337);
+app.listen(1338);

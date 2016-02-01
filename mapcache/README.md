@@ -10,7 +10,7 @@ The API is listening to port 1337.
     sudo docker run \
             --name mapcache \
             --restart=always \
-            -p 8888:80 \
+            -p 5555:5555 \
             -p 1337:1337 \
             --link gc2core:gc2core \
             -v ~/gc2/mapcache:/var/www/geocloud2/app/wms/mapcache \
@@ -23,13 +23,13 @@ In app/conf/App.php add:
 
     "mapCache" => [
                 // MapCache host URL. This is the Docker host IP and port of the running MapCache container from within the GC2 container.
-                "host" => "http://172.17.42.1:8888",
+                "host" => "http://mapcache",
     
                 // WMS host for MapCache. This is the Docker host IP and port of the running GC2 container from within the MapCache container.
-                "wmsHost" => "http://172.17.42.1",
+                "wmsHost" => "http://gc2core",
     
                 // MapCache API URL. This is the Docker host IP and port of the running MapCache container from within the GC2 container.
-                "api" => "http://172.17.42.1:1337",
+                "api" => "http://mapcache:1337",
             ],
 
 
@@ -45,8 +45,8 @@ MapCache is by default proxied by GC2, which adds a security layer. This adds a 
     RewriteRule /mapcache/(.*)/wms/(.*) /ows/$1/$2 [L]
     
     ProxyPreserveHost On
-    ProxyPass /mapcache/ http://172.17.42.1:8888/mapcache/
-    ProxyPassReverse /mapcache/ http://172.17.42.1:8888/mapcache/
+    ProxyPass /mapcache/ http://mapcache/mapcache/
+    ProxyPassReverse /mapcache/ http://mapcache/mapcache/
 
 
 Start an interactive container for debugging:
