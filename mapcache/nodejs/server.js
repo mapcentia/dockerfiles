@@ -18,7 +18,7 @@ app.get('/reload', function (request, res) {
         if (error !== null) {
             res.send({success: false, message: error});
         } else {
-            res.send({success: true});
+            res.send({success: true, message: stdout});
         }
     });
 });

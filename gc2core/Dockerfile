@@ -1,15 +1,13 @@
-FROM ubuntu:trusty
+FROM ubuntu:vivid
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
 ENV  DEBIAN_FRONTEND noninteractive
 
-RUN echo "deb http://eu-west-1.ec2.archive.ubuntu.com/ubuntu/ trusty main multiverse" >> /etc/apt/sources.list
-
 # Install packages
-RUN apt-get -y update --fix-missing
-RUN apt-get -y install wget php5-dev php-pear g++ build-essential apache2-mpm-event libapache2-mod-fastcgi libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git php5-memcache memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
-	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl
+RUN apt-get -y update  --fix-missing
+RUN apt-get -y install wget php5-dev php-pear g++ build-essential apache2-mpm-event libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git php5-memcache memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
+	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev
 
 # Install MapServer 7.0.0
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.0.tar.gz &&\
@@ -26,11 +24,12 @@ RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.0.tar.gz &&\
     -DWITH_PHP=ON \
     -DWITH_PYTHON=ON \
     -DWITH_ORACLESPATIAL=0 \
-    -DWITH_FCGI=0 \
     -DPHP5_EXTENSION_DIR=/opt \
     -DWITH_RSVG=ON \
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
+
+RUN cp /mapserver-7.0.0/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
@@ -78,6 +77,7 @@ RUN cd /var/www/ &&\
 RUN chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/mapfiles/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/cfgfiles/ &&\
+	chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
 	chown www-data:www-data /var/www/geocloud2/public/logs/
 
 # Install npm packages run Grunt
@@ -99,14 +99,10 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 
 # Enable Apache2 modules
-RUN a2enmod rewrite headers expires include actions fastcgi alias cgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel
+RUN a2enmod rewrite headers expires include actions alias cgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi
 
 # create dir for certs
 RUN mkdir /etc/apache2/ssl
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
 
 # Share dirs
 VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/php5/fpm"]
@@ -114,6 +110,35 @@ VOLUME  ["/var/www/geocloud2", "/var/log", "/etc/apache2", "/usr/share/proj", "/
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
 EXPOSE 443
+EXPOSE 1339
+
+# Install New Relic daemon
+RUN apt-get -yq install wget && \
+    wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
+    echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list
+
+RUN apt-get update && \
+    apt-get -yq install newrelic-php5
+
+# Setup environment variables for initializing New Relic
+ENV NR_INSTALL_SILENT 1
+ENV NR_INSTALL_KEY **ChangeMe**
+ENV NR_APP_NAME "Default App Name"
+
+# Add the Nodejs proxy
+ADD nodejs/* /root/server/
+
+# Install packages
+RUN cd /root/server &&\
+	npm install
+
+# Add the check-if-fpm-is-alive script
+COPY check-fpm.sh /check-fpm.sh
+RUN chmod +x /check-fpm.sh
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

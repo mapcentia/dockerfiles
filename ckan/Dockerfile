@@ -13,6 +13,8 @@ RUN wget http://packaging.ckan.org/python-ckan_2.5-trusty_amd64.deb &&\
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
+ADD conf/ckan/production.ini /etc/ckan/default/
+
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
 
