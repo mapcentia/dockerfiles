@@ -20,6 +20,10 @@ EXPOSE 80
 
 VOLUME ["/etc/ckan", "/var/log"]
 
+# Install ckanext-geoview plugins
+RUN . /usr/lib/ckan/default/bin/activate &&\
+        pip install ckanext-geoview
+
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
