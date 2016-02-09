@@ -11,7 +11,7 @@
         --link solr:solr \
         --link postgis:postgres \
         -v ~/ckan:/etc/ckan \
-        -p 7777:80 \
+        -p 7777:8080 \
         -d -t mapcentia/ckan
         
     docker run \

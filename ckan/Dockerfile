@@ -16,7 +16,7 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 ADD conf/ckan/production.ini /etc/ckan/default/
 
 # Expose standard ports for HTTP and HTTPS
-EXPOSE 80
+EXPOSE 8080
 
 VOLUME ["/etc/ckan", "/var/log"]
 
@@ -24,6 +24,4 @@ VOLUME ["/etc/ckan", "/var/log"]
 RUN . /usr/lib/ckan/default/bin/activate &&\
         pip install ckanext-geoview
 
-# Add Supervisor config and run the deamon
-ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/bin/bash", "-c", "source /etc/apache2/envvars && exec /usr/sbin/apache2 -D FOREGROUND"]
