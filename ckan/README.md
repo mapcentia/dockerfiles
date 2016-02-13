@@ -18,5 +18,5 @@
         --rm \
         --link solr:solr \
         --link postgis:postgres \
-        -v ~/ckan:/etc/ckan \
+        --volumes-from ckan \
         -i -t mapcentia/ckan bash

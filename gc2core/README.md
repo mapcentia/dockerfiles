@@ -63,13 +63,25 @@ If you are using SSL you can strip the password phrase from the key.
 Start a node.js deamon to keep the Elasticsearch indices up to date.
 
     sudo docker run \
-            --name gc2river \
+            --name elasticsearch_river \
             -e PGPASSWORD=xxxxxx \
             --link gc2core:gc2core \
             --link postgis:postgis \
+            --volumes-from gc2core \
             -i -t mapcentia/gc2core \
             nodejs /var/www/geocloud2/app/scripts/pg2es.js [database] --host postgis --user gc2 --es-host gc2core --key [API key]
-    
+
+
+Start a node.js deamon to keep the Ckan up to date.
+
+    sudo docker run \
+            --name ckan_river \
+            -e PGPASSWORD=xxxxxx \
+            --link gc2core:gc2core \
+            --link postgis:postgis \
+            --volumes-from gc2core \
+            -d -t mapcentia/gc2core \
+            nodejs /var/www/geocloud2/app/scripts/meta2ckan.js [database] --host postgis --user gc2 --ckan-host gc2core --key [API key]
     
 
 Update source and run database migrations.

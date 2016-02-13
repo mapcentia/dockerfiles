@@ -122,7 +122,6 @@ RUN apt-get update && \
 
 # Setup environment variables for initializing New Relic
 ENV NR_INSTALL_SILENT 1
-ENV NR_INSTALL_KEY **ChangeMe**
 ENV NR_APP_NAME "Default App Name"
 
 # Add the Nodejs proxy
