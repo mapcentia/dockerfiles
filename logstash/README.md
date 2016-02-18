@@ -6,19 +6,22 @@ Full ELK stack (Logstash 1.5.4, Elasticsearch 1.7.1 and Kibana 4.1.1) with a Nod
 
 Start a Logstash container like this:
 
-    sudo docker run \
+    docker run \
         --name logstash \
+        --restart=always \
+        --link elasticsearch:elasticsearch \
+        -v ~/logstash/certs:/certs \
         -p 5043:5043 \
-        -p 1337:1337 \
+        -p 1338:1338 \
         -e "LOGSTASH_DOMAIN=example.com" \
         -t -d \
-        mapcentia/logstash
+        mapcentia/logstash:apache
     
 Change the DNS hostname "example.com" to the hostname of your ELK server. You can also use "LOGSTASH_IP=1.2.3.4" but there is some issues with certificates based on IPs and Logstash. So better use a DNS hostname. 
 
-When a container is created a certificate is generated. Copy the certificate out from the container:
+When a container is created a certificate is generated in:
 
-    sudo docker cp logstash:/certs/logstash.crt ~/certs/
+    ~/logstash/certs:/certs
     
 Use the certificate for [Logstashforwarder](https://hub.docker.com/r/mapcentia/logstash-forwarder) on the GC2 servers.
 

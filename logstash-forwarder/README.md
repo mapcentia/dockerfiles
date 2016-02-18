@@ -6,13 +6,14 @@ Logstash-forwarder for shipping Apache access logs to Logstash.
 
 First make a folder on the host to hold the certificate (You get this when creating a [GC2 Logstash ELK container](https://registry.hub.docker.com/u/mapcentia/logstash/))
 
-    mkdir ~/certs
+    mkdir ~/logstash
+    mkdir ~/logstash/certs
 
 When copy the certificate (with the name "logstash.crt") to the folder.
 
 Set -e MASTER=LOGSTASHDOMAIN:PORT to the hostname of the Logstash server eg. -e MASTER=example.com:5043
 
-    sudo docker run \
+    docker run \
         --name logstashforwader \
         --restart=always \
         --volumes-from gc2 \
@@ -21,14 +22,14 @@ Set -e MASTER=LOGSTASHDOMAIN:PORT to the hostname of the Logstash server eg. -e 
         -t -d \
         mapcentia/logstash-forwarder:apache
         
-    sudo docker run \
-            --name logstashforwader \
-            --restart=always \
-            --volumes-from nginx \
-            -v ~/certs/:/certs \
-            -e "MASTER=example.com:5043" \
-            -t -d \
-            mapcentia/logstash-forwarder:nginx
+    docker run \
+        --name logstashforwader \
+        --restart=always \
+        --volumes-from nginx \
+        -v ~/certs/:/certs \
+        -e "MASTER=example.com:5043" \
+        -t -d \
+        mapcentia/logstash-forwarder:nginx
 
 
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
