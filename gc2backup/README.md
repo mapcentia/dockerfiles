@@ -35,6 +35,15 @@ Restore a backup. In this case the latest one. Notice: This command is using the
         -t -i \
         mapcentia/postgis pg_restore --clean --dbname [database] -U gc2 -h postgis /restore/[database].bak
         
+    
+    sudo docker run \
+            --rm=true \
+            -v ~/backups/postgis/latest:/restore \
+            --link postgis:postgis \
+            -t -i \
+            mapcentia/postgis /usr/share/postgresql/9.5/contrib/postgis-2.2/postgis_restore.pl /restore/[database].bak | psql  --dbname [database] --user gc2 --host postgis 
+    
+        
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
 
 [www.mapcentia.com/en/geocloud](http://www.mapcentia.com/en/geocloud/)

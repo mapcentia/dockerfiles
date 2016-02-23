@@ -1,6 +1,6 @@
 # MapCentia Logstash for GC2 Dockerfile
 
-Logstash 2.1 for indexing Apache ot Nginx access logs with client IP geo-location.
+Logstash 2.1 for indexing Apache or Nginx access logs with client IP geo-location.
 
 ## How to use this image
 

@@ -1,6 +1,6 @@
 # MapCentia Logstash-forwarder for GC2 Dockerfile
 
-Logstash-forwarder for shipping Apache access logs to Logstash.
+Logstash-forwarder for shipping Apache or Nginx access logs to Logstash.
 
 ## How to use this image
 
@@ -23,7 +23,7 @@ Set -e MASTER=LOGSTASHDOMAIN:PORT to the hostname of the Logstash server eg. -e 
         mapcentia/logstash-forwarder:apache
         
     docker run \
-        --name logstashforwader \
+        --name logstashforwader \   
         --restart=always \
         --volumes-from nginx \
         -v ~/certs/:/certs \
