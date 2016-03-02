@@ -1,0 +1,1 @@
+docker run --rm --link postgis:postgis --volumes-from=gc2core -i -t mapcentia/mssql2pgsql /mssql2pgsql -s CO11600T   -d CO11600T   -S public -c OIS2DB -u webgis -p W4qAchuP

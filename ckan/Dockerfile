@@ -24,4 +24,6 @@ VOLUME ["/etc/ckan", "/var/log"]
 RUN . /usr/lib/ckan/default/bin/activate &&\
         pip install ckanext-geoview
 
-CMD ["/bin/bash", "-c", "source /etc/apache2/envvars && exec /usr/sbin/apache2 -D FOREGROUND"]
+ADD run-apache.sh /
+
+CMD ["/bin/bash", "-c", "/run-apache.sh"]

@@ -11,7 +11,7 @@ RUN apt-get -y install wget curl apache2-mpm-event libfcgi-dev apache2-threaded-
     supervisor
 
 RUN cd ~ && \
-    git clone git://github.com/mapserver/mapcache.git
+    git clone http://github.com/mapserver/mapcache.git
 
 RUN cd ~ && \
     cd mapcache &&\
