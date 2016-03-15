@@ -25,5 +25,6 @@ RUN . /usr/lib/ckan/default/bin/activate &&\
         pip install ckanext-geoview
 
 ADD run-apache.sh /
+RUN chmod +x /run-apache.sh
 
 CMD ["/bin/bash", "-c", "/run-apache.sh"]

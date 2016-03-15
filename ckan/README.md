@@ -10,7 +10,7 @@
         --restart=always \
         --link solr:solr \
         --link postgis:postgres \
-        -v ~/ckan:/etc/ckan \
+        -v $PWD/ckan:/etc/ckan \
         -p 7777:8080 \
         -d -t mapcentia/ckan
         
