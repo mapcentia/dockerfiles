@@ -98,6 +98,9 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 
+# Add php5-fpm config file from Docker repo
+ADD conf/fpm/www.conf /etc/php5/fpm/pool.d/www.conf
+
 # Enable Apache2 modules
 RUN a2enmod rewrite headers expires include actions alias cgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi
 
