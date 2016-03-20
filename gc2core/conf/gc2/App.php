@@ -22,6 +22,18 @@ class App
         // Geoserver host for printing.
         "geoserverHost" => "http://eu1.mapcentia.com:8888",
 
+        // MapCache config
+        "mapCache" => [
+            // MapCache host URL.
+            "host" => "http://127.0.0.1:5555",
+
+            // WMS backend for MapCache. Define the WMS host seen from MapCache.
+            "wmsHost" => "http://127.0.0.1:80",
+
+            // MapCache API URL for reload and adding new configurations
+            "api" => "http://127.0.0.1:1337",
+        ],
+
         // Is MapServer >= 7 used?
         "mapserver_ver_7" => true,
 
