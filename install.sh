@@ -36,9 +36,9 @@ fi
 
 check () {
     flag=0
-    if [[ $(docker ps -a --filter="name=$1" | grep $1) ]]
+    if [[ $(docker ps -a --filter="name=$1" | grep $1$) ]]
         then
-                echo "Remove $1 [y/N]"
+                echo "Remove existing $1 container [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
                         docker rm -f $1
@@ -284,4 +284,4 @@ fi
 # Run Docker ps
 #
 
-docker ps
+docker ps -a
