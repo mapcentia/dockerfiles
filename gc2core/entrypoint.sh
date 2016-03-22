@@ -25,6 +25,12 @@ if [ $1 == "/usr/bin/supervisord" ]; then
     fi
 fi
 
+chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
+chown www-data:www-data /var/www/geocloud2/app/wms/mapfiles/ &&\
+chown www-data:www-data /var/www/geocloud2/app/wms/cfgfiles/ &&\
+chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
+chown www-data:www-data /var/www/geocloud2/public/logs/
+
 # Set time zone if passed
 if [ -n "$TIMEZONE" ]; then
     echo $TIMEZONE | tee /etc/timezone

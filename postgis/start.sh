@@ -6,6 +6,15 @@ export PGUSER=gc2
 # Start service so we can create GC2 system tables and users.
 service postgresql start
 
+if [ -n "$LOCALE" ]; then
+        locale=$LOCALE
+    else
+        locale=en_US.UTF-8
+    fi
+
+    locale-gen $locale
+    dpkg-reconfigure locales
+
 # But first we check if they are created. I.e. if the container is restarted
 if echo 'SELECT 1' | psql postgres >/dev/null 2>&1; then
     echo "GC2 system already initiated"
@@ -57,9 +66,6 @@ else
             ****************************************************
         '
     fi
-
-    locale-gen $locale
-    dpkg-reconfigure locales
 
     # Create template database and run latest migrations
     echo "Creating GC2 template database and user $PGUSER"
