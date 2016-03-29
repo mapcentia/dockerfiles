@@ -10,13 +10,9 @@
         --restart=always \
         --link solr:solr \
         --link postgis:postgres \
+        -e PGUSER=gc2 \
+        -e PGPASSWORD=1234 \
         -v $PWD/ckan:/etc/ckan \
         -p 7777:8080 \
         -d -t mapcentia/ckan
-        
-    docker run \
-        --rm \
-        --link solr:solr \
-        --link postgis:postgres \
-        --volumes-from ckan \
-        -i -t mapcentia/ckan bash
+      
