@@ -1,4 +1,4 @@
-FROM ubuntu:vivid
+FROM ubuntu:xenial
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
