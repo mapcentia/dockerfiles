@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install vim git php5-pgsql php5-cli wget curl postgis postgresql-9.5-postgis-2.2 postgresql-contrib-9.5 postgresql-9.5-pgrouting locales-all
+RUN apt-get -y install vim git php5-pgsql php5-cli wget curl postgis postgresql-9.5-postgis-2.2 postgresql-contrib-9.5 postgresql-9.5-pgrouting pgbouncer locales-all supervisor
 
 # Clone GC2 from GitHub
 RUN mkdir /var/www &&\
@@ -25,12 +25,21 @@ RUN cp /var/www/geocloud2/app/conf/Connection.php.dist /var/www/geocloud2/app/co
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
 
 # Expose standard for PostGreSQL
-EXPOSE 5432
+EXPOSE 5432 6432
 
 # Share volumes
-VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql", "/etc/pgbouncer"]
 
-# Use wrapper scripts to start Postgres
-ADD start.sh /root/
-RUN chmod 755 /root/start.sh
-CMD ["/root/start.sh"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+ADD conf/pgbouncer/pgbouncer.ini /etc/pgbouncer/pgbouncer.ini
+ADD conf/pgbouncer/userlist.txt /etc/pgbouncer/userlist.txt
+
+RUN chown postgres:postgres /etc/pgbouncer/pgbouncer.ini
+RUN chown postgres:postgres /etc/pgbouncer/userlist.txt
+
+# Add Supervisor config and run the deamon
+ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

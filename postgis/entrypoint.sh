@@ -32,7 +32,7 @@ else
     fi
 
     if [ -n "$GC2_PASSWORD" ]; then
-        exec "$@"
+        echo "Password set"
     else
         echo '
             ****************************************************
@@ -103,7 +103,8 @@ else
         cd /var/www/geocloud2 && git pull &&\
         cd /var/www/geocloud2/app/conf/migration/ && ./run &&\
         service postgresql stop
-fi
 
-# Start PGSQL in the foreground
-exec su postgres -c "/usr/lib/postgresql/9.5/bin/postgres -D /var/lib/postgresql/9.5/main -c config_file=/etc/postgresql/9.5/main/postgresql.conf"
+        #Add gc2 user to pgbouncer
+        echo "\"gc2\" \"$GC2_PASSWORD\"" >> /etc/pgbouncer/userlist.txt
+fi
+exec "$@"
