@@ -16,7 +16,7 @@ GC2conflict depends on the APIs of GC2 and GeoServer with Printing Plugin, so li
 
     sudo docker run \
         --name "gc2conflict" \
-        --link gc2:gc2 \
+        --link gc2core:gc2core \
         --link geoserver:geoserver \
         -v ~/gc2conflict/config:/root/gc2conflict/app/config \
         -v ~/gc2conflict/tmp:/root/gc2conflict/app/tmp \
