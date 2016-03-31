@@ -87,9 +87,7 @@ if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
                 echo "es-data already exists. Doing nothing."
         else
                 echo "Creating a persistence volume for elasticsearch...."
-                docker create --name es-data \
-                        -v /usr/share/elasticsearch/data \
-                        busybox
+                docker create --name es-data elasticsearch
 fi
 
 check elasticsearch
@@ -146,12 +144,7 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                 fi
                 #Create a persistence volume for GC2. Busybox based.
                 echo "Creating a persistence volume for gc2...."
-                docker create --name gc2-data \
-                        -v /var/www/geocloud2/app/tmp \
-                        -v /var/www/geocloud2/app/wms/mapcache \
-                        -v /var/www/geocloud2/app/wms/mapfiles \
-                        -v /var/www/geocloud2/app/wms/cfgfiles \
-                        busybox
+                docker create --name gc2-data mapcentia/gc2core
 fi
 
 check gc2core
