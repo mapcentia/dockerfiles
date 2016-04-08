@@ -29,7 +29,7 @@ if [ $1 == "/usr/bin/supervisord" ]; then
             dpkg-reconfigure -f noninteractive tzdata
 
             # PGSQL
-            echo "TimeZone = '$TIMEZONE'" >> /etc/postgresql/9.5/main/postgresql.conf
+            # echo "TimeZone = '$TIMEZONE'" >> /etc/postgresql/9.5/main/postgresql.conf
         fi
 
         if [ -n "$GC2_PASSWORD" ]; then
@@ -105,7 +105,7 @@ if [ $1 == "/usr/bin/supervisord" ]; then
             cd /var/www/geocloud2/app/conf/migration/ && ./run &&\
             service postgresql stop
 
-            #Add gc2 user to pgbouncer
+            #Add gc2 user to pgbouncer user list
             echo "\"gc2\" \"$GC2_PASSWORD\"" >> /etc/pgbouncer/userlist.txt
     fi
 fi

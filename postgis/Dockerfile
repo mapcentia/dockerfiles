@@ -24,7 +24,7 @@ RUN cp /var/www/geocloud2/app/conf/Connection.php.dist /var/www/geocloud2/app/co
 # Make config in PostGreSQL
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
 
-# Expose standard for PostGreSQL
+# Expose standard for PostGreSQL and pgboucer
 EXPOSE 5432 6432
 
 # Share volumes
