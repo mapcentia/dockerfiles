@@ -119,8 +119,9 @@ if [[ $? = 1 ]]
                         mapcentia/geoserver
 fi
 
+
 #
-# GC2
+# GC2 data
 #
 
 if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
@@ -146,6 +147,26 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                 echo "Creating a persistence volume for gc2...."
                 docker create --name gc2-data mapcentia/gc2core
 fi
+
+#
+# QGIS-server
+#
+
+check qgis-server
+if [[ $? = 1 ]]
+        then
+                echo "Running the qgis-server container...."
+                docker run \
+                        --name qgis-server \
+                        --link postgis:postgis \
+                        --volumes-from gc2-data \
+                        -v /vagrant/geocloud2:/var/www/geocloud2 \
+                        -td mapcentia/qgis-server
+fi
+
+#
+# GC2 data
+#
 
 check gc2core
 if [[ $? = 1 ]]

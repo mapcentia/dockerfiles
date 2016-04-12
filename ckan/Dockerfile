@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:wily
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install nginx apache2 libapache2-mod-wsgi libpq5 wget postgresql-client apg
+RUN apt-get -y install nginx apache2 libapache2-mod-wsgi libpq5 wget postgresql-client apg gettext
 
 RUN wget http://packaging.ckan.org/python-ckan_2.5-trusty_amd64.deb &&\
         dpkg -i python-ckan_2.5-trusty_amd64.deb

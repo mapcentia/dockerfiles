@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:wily
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install wget curl apache2-mpm-event libfcgi-dev apache2-threaded-dev cmake g++ build-essential \
+RUN apt-get -y install wget curl apache2 libfcgi-dev apache2-threaded-dev cmake g++ build-essential \
     libgdal-dev libgdal1-dev libgeos-dev libpng12-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff4-dev git \
     supervisor
 
