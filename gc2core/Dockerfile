@@ -1,4 +1,4 @@
-FROM ubuntu:vivid
+FROM ubuntu:wily
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -6,30 +6,10 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install vim wget php5-dev php-pear g++ build-essential apache2-mpm-event libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git php5-memcache memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
-	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev
+RUN apt-get -y install cgi-mapserver php5-mapscript qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
+	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
 
-# Install MapServer 7.0.0
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.0.tar.gz &&\
-	tar -zxvf mapserver-7.0.0.tar.gz &&\
-	cd mapserver-7.0.0 &&\
-	mkdir build &&\
-	cd build &&\
-	cmake -DCMAKE_INSTALL_PREFIX=/opt \
-    -DCMAKE_PREFIX_PATH=/usr/local/pgsql/94:/usr/local:/opt:/usr/include \
-    -DWITH_CLIENT_WFS=ON \
-    -DWITH_CLIENT_WMS=ON \
-    -DWITH_CURL=ON \
-    -DWITH_SOS=ON \
-    -DWITH_PHP=ON \
-    -DWITH_PYTHON=ON \
-    -DWITH_ORACLESPATIAL=0 \
-    -DPHP5_EXTENSION_DIR=/opt \
-    -DWITH_RSVG=ON \
-    -DWITH_SVGCAIRO=0 .. &&\
-    make && make install
-
-RUN cp /mapserver-7.0.0/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /usr/lib/cgi-bin/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
@@ -102,13 +82,14 @@ ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 ADD conf/fpm/www.conf /etc/php5/fpm/pool.d/www.conf
 
 # Enable Apache2 modules
-RUN a2enmod rewrite headers expires include actions alias cgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi
+RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi
+RUN a2enconf serve-cgi-bin
 
 # create dir for certs
 RUN mkdir /etc/apache2/ssl
 
 # Share dirs
-VOLUME  ["/var/www/geocloud2", "/var/log", "/usr/share/proj", "/var/spool/cron/crontabs"]
+VOLUME  ["/var/www/geocloud2","/etc/apache2","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs"]
 
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
