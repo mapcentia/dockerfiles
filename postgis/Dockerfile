@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install vim git php5-pgsql php5-cli wget curl postgis postgresql-9.5-postgis-2.2 postgresql-contrib-9.5 postgresql-9.5-pgrouting pgbouncer locales-all supervisor
+RUN apt-get -y install vim git php7.0-pgsql php7.0-cli wget curl postgis postgresql-9.5-postgis-2.2 postgresql-contrib-9.5 postgresql-9.5-pgrouting pgbouncer locales-all supervisor
 
 # Clone GC2 from GitHub
 RUN mkdir /var/www &&\
@@ -28,7 +28,7 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
 EXPOSE 5432 6432
 
 # Share volumes
-VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql", "/etc/pgbouncer"]
+VOLUME  ["/etc/postgresql", "/var/log", "/var/lib/postgresql", "/etc/pgbouncer"]
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
