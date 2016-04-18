@@ -90,7 +90,7 @@ RUN a2enconf serve-cgi-bin
 RUN mkdir /etc/apache2/ssl
 
 # Share dirs
-VOLUME  ["/var/www/geocloud2","/etc/apache2","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs"]
+VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php5/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs"]
 
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80

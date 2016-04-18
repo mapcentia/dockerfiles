@@ -68,7 +68,6 @@ if [[ $? = 1 ]]
                 echo "Running the postgis container...."
                 docker run \
                         --name postgis \
-                        --restart=always \
                         -p 5432:5432 \
                         --volumes-from postgis-data \
                         -e GC2_PASSWORD=$PG_PW \
@@ -96,7 +95,6 @@ if [[ $? = 1 ]]
                 echo "Running the elasticsearch container...."
                 docker run \
                         --name elasticsearch \
-                        --restart=always \
                         --volumes-from es-data \
                         -p 9200:9200 \
                         -t -d elasticsearch
@@ -112,7 +110,6 @@ if [[ $? = 1 ]]
                 echo "Running the geoserver container...."
                 docker run \
                         --name geoserver \
-                        --restart=always \
                         --link postgis \
                         -p 8080:8080 \
                         -d -t \
@@ -148,24 +145,9 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                 docker create --name gc2-data mapcentia/gc2core
 fi
 
-#
-# QGIS-server
-#
-
-check qgis-server
-if [[ $? = 1 ]]
-        then
-                echo "Running the qgis-server container...."
-                docker run \
-                        --name qgis-server \
-                        --link postgis:postgis \
-                        --volumes-from gc2-data \
-                        -v /vagrant/geocloud2:/var/www/geocloud2 \
-                        -td mapcentia/qgis-server
-fi
 
 #
-# GC2 data
+# GC2 core
 #
 
 check gc2core
@@ -174,7 +156,6 @@ if [[ $? = 1 ]]
                 echo "Running the GC2 container...."
                 docker run \
                         --name gc2core \
-                        --restart=always \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
                         --link geoserver:geoserver \
@@ -200,7 +181,6 @@ if [[ $? = 1 ]]
                 echo "Running the MapCache container...."
                 docker run \
                         --name mapcache \
-                        --restart=always \
                         --net container:gc2core \
                         --volumes-from gc2-data \
                         -d -t mapcentia/mapcache
@@ -221,7 +201,6 @@ if [[ $? = 1 ]]
                         echo "Running the Kibana container...."
                         docker run\
                                 --name kibana \
-                                --restart=always \
                                 --link elasticsearch:elasticsearch \
                                 -p 5601:5601 \
                                 -d kibana
@@ -246,7 +225,6 @@ if [[ $? = 1 ]]
                         echo "Running the Logstash container...."
                         docker run \
                                 --name logstash \
-                                --restart=always \
                                 --link elasticsearch:elasticsearch \
                                 -v $PWD/logstash/certs:/certs \
                                 -p 5043:5043 \
@@ -275,7 +253,6 @@ if [[ $? = 1 ]]
                                 docker run \
                                         --name logstashforwarder \
                                         --link logstash:logstash \
-                                        --restart=always \
                                         --volumes-from gc2core \
                                         -v $PWD/logstash/certs/:/certs \
                                         -e "MASTER=$CONF:5043" \
@@ -284,7 +261,6 @@ if [[ $? = 1 ]]
                         else
                                 docker run \
                                         --name logstashforwarder \
-                                        --restart=always \
                                         --volumes-from gc2core \
                                         -v $PWD/logstash/certs/:/certs \
                                         -e "MASTER=$CONF:5043" \
