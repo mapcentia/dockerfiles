@@ -66,21 +66,21 @@ check postgis
 if [[ $? = 1 ]]
         then
                 echo "Running the postgis container...."
-                docker run \
+                docker create \
                         --name postgis \
                         -p 5432:5432 \
                         --volumes-from postgis-data \
                         -e GC2_PASSWORD=$PG_PW \
                         -e LOCALE=$LOCALE \
                         -e TIMEZONE="$TIMEZONE" \
-                        -t -d mapcentia/postgis
+                        -t mapcentia/postgis
 fi
 
 #
 # Elasticsearch
 #
 
-#Create a persistence volume for elasticsearch. Busybox based.
+#Create a persistence volume for elasticsearch.
 if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
         then
                 echo "es-data already exists. Doing nothing."
@@ -93,11 +93,11 @@ check elasticsearch
 if [[ $? = 1 ]]
         then
                 echo "Running the elasticsearch container...."
-                docker run \
+                docker create \
                         --name elasticsearch \
                         --volumes-from es-data \
                         -p 9200:9200 \
-                        -t -d elasticsearch
+                        -t elasticsearch
 fi
 
 #
@@ -108,11 +108,11 @@ check geoserver
 if [[ $? = 1 ]]
         then
                 echo "Running the geoserver container...."
-                docker run \
+                docker create \
                         --name geoserver \
                         --link postgis \
                         -p 8080:8080 \
-                        -d -t \
+                        -t \
                         mapcentia/geoserver
 fi
 
@@ -142,7 +142,12 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                 fi
                 #Create a persistence volume for GC2. Busybox based.
                 echo "Creating a persistence volume for gc2...."
-                docker create --name gc2-data mapcentia/gc2core
+                docker create --name gc2-data \
+                        -v /var/www/geocloud2/app/tmp \
+                        -v /var/www/geocloud2/app/wms/mapcache \
+                        -v /var/www/geocloud2/app/wms/mapfiles \
+                        -v /var/www/geocloud2/app/wms/cfgfiles \
+                        busybox
 fi
 
 
@@ -154,7 +159,7 @@ check gc2core
 if [[ $? = 1 ]]
         then
                 echo "Running the GC2 container...."
-                docker run \
+                docker create \
                         --name gc2core \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
@@ -167,7 +172,7 @@ if [[ $? = 1 ]]
                         -e GC2_PASSWORD=$PG_PW \
                         -e TIMEZONE="$TIMEZONE" \
                         -p 80:80 -p 443:443 -p 1339:1339\
-                        -d -t \
+                        -t \
                         mapcentia/gc2core
                 fi
 
@@ -179,11 +184,11 @@ check mapcache
 if [[ $? = 1 ]]
         then
                 echo "Running the MapCache container...."
-                docker run \
+                docker create \
                         --name mapcache \
                         --net container:gc2core \
                         --volumes-from gc2-data \
-                        -d -t mapcentia/mapcache
+                        -t mapcentia/mapcache
 fi
 
 #The rest is optional.
@@ -199,11 +204,11 @@ if [[ $? = 1 ]]
                 read CONF
                 if [ "$CONF" = "y" ]; then
                         echo "Running the Kibana container...."
-                        docker run\
+                        docker create\
                                 --name kibana \
                                 --link elasticsearch:elasticsearch \
                                 -p 5601:5601 \
-                                -d kibana
+                                -t kibana
                 fi
 fi
 
@@ -223,14 +228,14 @@ if [[ $? = 1 ]]
                                 CONF=logstash
                         fi
                         echo "Running the Logstash container...."
-                        docker run \
+                        docker create \
                                 --name logstash \
                                 --link elasticsearch:elasticsearch \
                                 -v $PWD/logstash/certs:/certs \
                                 -p 5043:5043 \
                                 -p 1338:1338 \
                                 -e "LOGSTASH_DOMAIN=$CONF" \
-                                -t -d \
+                                -t \
                                 mapcentia/logstash
                 fi
 fi
@@ -250,21 +255,21 @@ if [[ $? = 1 ]]
                         echo "Running the Logstash-forwarder container...."
                         if [ "$CONF" = "" ]; then
                                 CONF=logstash
-                                docker run \
+                                docker create \
                                         --name logstashforwarder \
                                         --link logstash:logstash \
                                         --volumes-from gc2core \
                                         -v $PWD/logstash/certs/:/certs \
                                         -e "MASTER=$CONF:5043" \
-                                        -t -d \
+                                        -t \
                                         mapcentia/logstash-forwarder
                         else
-                                docker run \
+                                docker create \
                                         --name logstashforwarder \
                                         --volumes-from gc2core \
                                         -v $PWD/logstash/certs/:/certs \
                                         -e "MASTER=$CONF:5043" \
-                                        -t -d \
+                                        -t \
                                         mapcentia/logstash-forwarder
                         fi
                 fi
@@ -275,3 +280,6 @@ fi
 #
 
 docker ps -a
+
+my_dir=`dirname $0`
+$my_dir/start_gc2.sh

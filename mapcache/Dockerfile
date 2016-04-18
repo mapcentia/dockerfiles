@@ -7,7 +7,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 # Install packages
 RUN apt-get -y update  --fix-missing
 RUN apt-get -y install wget curl apache2 libfcgi-dev apache2-threaded-dev cmake g++ build-essential \
-    libgdal-dev libgdal1-dev libgeos-dev libpng12-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff4-dev git \
+    libgdal-dev libgdal1-dev libgeos-dev libpng12-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff5-dev git \
     supervisor
 
 RUN cd ~ && \
@@ -52,6 +52,9 @@ VOLUME  ["/var/log", "/etc/apache2/sites-enabled/", "/mapcache", "/tmp"]
 # Expose standard ports for HTTP
 EXPOSE 80
 EXPOSE 1337
+
+ADD conf/apache/run-apache.sh /
+RUN chmod +x /run-apache.sh
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
