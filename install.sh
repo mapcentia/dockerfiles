@@ -280,6 +280,3 @@ fi
 #
 
 docker ps -a
-
-my_dir=`dirname $0`
-$my_dir/start_gc2.sh
