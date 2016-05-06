@@ -6,10 +6,30 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install cgi-mapserver php5-mapscript qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
+RUN apt-get -y install qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
 	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
 
-RUN cp /usr/lib/cgi-bin/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+# Install MapServer 7.0.1
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz &&\
+	tar -zxvf mapserver-7.0.1.tar.gz &&\
+	cd mapserver-7.0.1 &&\
+	mkdir build &&\
+	cd build &&\
+	cmake -DCMAKE_INSTALL_PREFIX=/opt \
+    -DCMAKE_PREFIX_PATH=/usr/local/pgsql/94:/usr/local:/opt:/usr/include \
+    -DWITH_CLIENT_WFS=ON \
+    -DWITH_CLIENT_WMS=ON \
+    -DWITH_CURL=ON \
+    -DWITH_SOS=ON \
+    -DWITH_PHP=ON \
+    -DWITH_PYTHON=ON \
+    -DWITH_ORACLESPATIAL=0 \
+    -DPHP5_EXTENSION_DIR=/opt \
+    -DWITH_RSVG=ON \
+    -DWITH_SVGCAIRO=0 .. &&\
+    make && make install
+
+RUN cp /mapserver-7.0.1/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
@@ -27,10 +47,11 @@ RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &
 	patch -p1< ../libecwj2-3.3-wcharfix.patch &&\
 	./configure &&\
 	make &&\
-	make install &&\
-	echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu trusty main" >> /etc/apt/sources.list &&\
-	echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu raring main" >> /etc/apt/sources.list &&\
-	echo "deb-src http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu raring main" >> /etc/apt/sources.list &&\
+	make install
+
+RUN	echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu trusty main" >> /etc/apt/sources.list &&\
+	echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu precise main" >> /etc/apt/sources.list &&\
+	echo "deb-src http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu precise main" >> /etc/apt/sources.list &&\
 	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 314DF160 &&\
 	apt-get update -y &&\
 	apt-get install -y gdal-bin libgdal-ecw-src &&\
@@ -89,8 +110,12 @@ RUN a2enconf serve-cgi-bin
 # create dir for certs
 RUN mkdir /etc/apache2/ssl
 
+# Install letsencrypt
+RUN git clone https://github.com/letsencrypt/letsencrypt
+RUN cd letsencrypt && ./letsencrypt-auto --help
+
 # Share dirs
-VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php5/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs"]
+VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php5/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/letsencrypt"]
 
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80

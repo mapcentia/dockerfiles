@@ -16,7 +16,7 @@ ADD conf/ckan/production.ini /etc/ckan/default/
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 8080
 
-VOLUME ["/etc/ckan", "/var/log", "/usr/lib/ckan"]
+VOLUME ["/etc/ckan", "/var/log", "/usr/lib/ckan", "/etc/letsencrypt", "/etc/apache2"]
 
 # Install ckanext-geoview plugins
 RUN . /usr/lib/ckan/default/bin/activate &&\
