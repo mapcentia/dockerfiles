@@ -24,7 +24,7 @@ RUN cd ~/vidi &&\
 	npm install
 
 #Add config files from Git repo
-RUN cp ~/vidi/config/confing.js.dist ~/vidi/config/confing.js
+RUN cp ~/vidi/config/config.js.dist ~/vidi/config/config.js
 
 #Run Grunt
 RUN cd ~/vidi &&\
