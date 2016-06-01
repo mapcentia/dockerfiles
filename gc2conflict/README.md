@@ -6,7 +6,7 @@ GC2conflict is a web based tool for making spatial conflict queries in a PostGIS
 
     sudo docker run \
         --rm -i \
-        -v ~/gc2conflict:/tmp mapcentia/gc2conflict cp /root/gc2conflict/config /tmp -R
+        -v ~/gc2conflict:/tmp mapcentia/gc2conflict cp /root/gc2conflict/app/config /tmp -R
         
     sudo docker run \
         --rm -i \

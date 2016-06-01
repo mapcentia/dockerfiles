@@ -147,6 +147,7 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                         -v /var/www/geocloud2/app/wms/mapcache \
                         -v /var/www/geocloud2/app/wms/mapfiles \
                         -v /var/www/geocloud2/app/wms/cfgfiles \
+                        -v /var/www/geocloud2/app/wms/qgsfiles \
                         busybox
 fi
 
