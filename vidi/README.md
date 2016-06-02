@@ -9,6 +9,16 @@ Vidi (To See) is a new map viewer for GC2 and CartoDB
         -e TIMEZONE="Europe/Copenhagen" \
         -p 3000:3000 \
         -d -t mapcentia/vidi
+        
+## Configure
+
+    sudo docker run \
+            --rm \
+            -i -t mapcentia/vidi bash
+            
+Edit ~/vidi/config/config.js
+
+Set the external DNS or IP of your GC2 server
 
 
 ![MapCentia](https://geocloud.mapcentia.com/assets/images/MapCentia_geocloud_200.png)
