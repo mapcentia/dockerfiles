@@ -1,5 +1,16 @@
 #!/bin/bash
 
+daemonize=false
+
+while getopts ":d:" opt; do
+    case "$opt" in
+    d)  daemonize=$OPTARG
+        ;;
+    esac
+done
+
+echo $daemonize
+
 docker start postgis
 docker start elasticsearch
 docker start geoserver
@@ -11,6 +22,10 @@ docker start mapcache
 docker start kibana
 docker start logstash
 docker start logstashforwarder
+
+if [ $daemonize == true ]; then
+    exit 0
+fi
 
 check () {
     flag=0
