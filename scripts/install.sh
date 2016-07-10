@@ -162,6 +162,7 @@ if [[ $? = 1 ]]
                 echo "Running the GC2 container...."
                 docker create \
                         --name gc2core \
+                        --privileged \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
                         --link geoserver:geoserver \
@@ -275,6 +276,41 @@ if [[ $? = 1 ]]
                         fi
                 fi
 fi
+
+#
+# Vidi
+#
+check vidi
+if [[ $? = 1 ]]
+        then
+                echo "Install vidi [y/N]"
+                read CONF
+                if [ "$CONF" = "y" ]; then
+                    if [[ $(docker ps -a --filter="name=vidi-data" | grep vidi-data) ]]
+                            then
+                                    echo "vidi-data already exists. Doing nothing."
+                            else
+
+                                    docker run \
+                                            --rm -i \
+                                            -v $PWD/vidi/config:/tmp mapcentia/vidi cp /root/vidi/config/config.js /tmp -R
+
+                                    #Create a persistence volume for Vidi.
+                                    echo "Creating a persistence volume for vidi...."
+                                    docker create --name vidi-data mapcentia/vidi
+                    fi
+                    echo "Running the Vidi container...."
+                    docker create \
+                            --name vidi \
+                            --volumes-from vidi \
+                            -e TIMEZONE="$TIMEZONE" \
+                            -v $PWD/vidi/config:/root/vidi/config \
+                            -p 3000:3000 \
+                            -t mapcentia/vidi
+                fi
+fi
+
+
 
 #
 # Run Docker ps

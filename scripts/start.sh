@@ -22,6 +22,7 @@ docker start mapcache
 docker start kibana
 docker start logstash
 docker start logstashforwarder
+docker start vidi
 
 if [ $daemonize == true ]; then
     exit 0
@@ -73,6 +74,13 @@ while true; do
     if [[ $? = 0 ]]
         then
                 echo "mapcache stopped";
+                break;
+    fi
+
+    check vidi
+    if [[ $? = 0 ]]
+        then
+                echo "vidi stopped";
                 break;
     fi
 done

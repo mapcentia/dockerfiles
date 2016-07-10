@@ -1,4 +1,5 @@
-FROM ubuntu:xenial
+# Use trusty so we can use wkhtmltopdf deb
+FROM ubuntu:trusty
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -6,7 +7,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install ghostscript phantomjs curl vim git supervisor postgresql-client nodejs npm
+RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs npm
 
 # Fix
 RUN ln -s /usr/bin/nodejs /usr/bin/node
@@ -34,6 +35,12 @@ RUN cd ~/vidi &&\
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+# Install wkhtmltox
+RUN cd ~
+RUN wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb
+RUN dpkg -i --force-all  wkhtmltox-0.12.1_linux-trusty-amd64.deb
+RUN apt-get -y -f install
 
 EXPOSE 3000
 

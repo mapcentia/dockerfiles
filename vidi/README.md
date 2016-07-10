@@ -14,6 +14,7 @@ Vidi (To See) is a new map viewer for GC2 and CartoDB
 
     sudo docker run \
             --rm \
+            --volumes-from=vidi \
             -i -t mapcentia/vidi bash
             
 Edit ~/vidi/config/config.js
