@@ -6,10 +6,13 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
+RUN apt-get -y install qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl php5-sqlite gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
 	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
 
-# Install MapServer 7.0.1
+# Add SQLite3 module to php.ini
+RUN echo "extension=sqlite3.so" >> /etc/php5/fpm/php.ini
+
+# Install MapServer 7.0.1 from source
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz &&\
 	tar -zxvf mapserver-7.0.1.tar.gz &&\
 	cd mapserver-7.0.1 &&\
@@ -97,6 +100,7 @@ RUN sed 's/;daemonize = yes/daemonize = no/' -i /etc/php5/fpm/php-fpm.conf
 # Add MapScript module to php.ini
 RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 
+
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 
@@ -111,8 +115,7 @@ RUN a2enconf serve-cgi-bin
 RUN mkdir /etc/apache2/ssl
 
 # Install letsencrypt
-RUN git clone https://github.com/letsencrypt/letsencrypt
-RUN cd letsencrypt && ./letsencrypt-auto --help
+RUN git clone https://github.com/Neilpang/acme.sh.git
 
 # Share dirs
 VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php5/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/letsencrypt"]
