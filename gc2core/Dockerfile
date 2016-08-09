@@ -156,6 +156,11 @@ ENTRYPOINT ["/entrypoint.sh"]
 ADD conf/apache/run-apache.sh /
 RUN chmod +x /run-apache.sh
 
+# Install PostGIS tools only
+RUN apt-get download postgis && \
+    dpkg --force-all -i postgis_2.1.8+dfsg-4_amd64.deb
+
+
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
