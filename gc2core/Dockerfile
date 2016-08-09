@@ -52,9 +52,9 @@ RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &
 	make &&\
 	make install
 
-RUN	echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu trusty main" >> /etc/apt/sources.list &&\
-	echo "deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu precise main" >> /etc/apt/sources.list &&\
-	echo "deb-src http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu precise main" >> /etc/apt/sources.list &&\
+RUN	echo "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu trusty main" >> /etc/apt/sources.list &&\
+	echo "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu precise main" >> /etc/apt/sources.list &&\
+	echo "deb-src http://ppa.launchpad.net/ubuntugis/ppa/ubuntu precise main" >> /etc/apt/sources.list &&\
 	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 314DF160 &&\
 	apt-get update -y &&\
 	apt-get install -y gdal-bin libgdal-ecw-src &&\
@@ -75,7 +75,7 @@ RUN npm install -g grunt-cli &&\
 
 # Clone GC2 from GitHub
 RUN cd /var/www/ &&\
-	git clone http://github.com/mapcentia/geocloud2.git
+	 git clone http://github.com/mapcentia/geocloud2.git
 
 # Make dirs writeable for web server
 RUN chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
@@ -83,13 +83,13 @@ RUN chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/cfgfiles/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/qgsfiles/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/sqlite/ &&\
+	chown www-data:www-data /var/www/geocloud2/app/wms/sqlitefiles/ &&\
 	chown www-data:www-data /var/www/geocloud2/public/logs/
 
 # Install npm packages run Grunt
 RUN	cd /var/www/geocloud2 &&\
 	npm install &&\
-	grunt production
+	grunt production --force
 
 # Add the custom config files from the Docker repo.
 ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
