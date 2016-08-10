@@ -146,6 +146,7 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                         -v /etc/apache2 \
                         -v /etc/letsencrypt \
                         -v /var/www/geocloud2/app/tmp \
+                        -v /var/www/geocloud2/app/wms/files \
                         -v /var/www/geocloud2/app/wms/mapcache \
                         -v /var/www/geocloud2/app/wms/mapfiles \
                         -v /var/www/geocloud2/app/wms/cfgfiles \
