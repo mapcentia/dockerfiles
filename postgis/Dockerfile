@@ -28,7 +28,7 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.5/main/postgresql.conf
 EXPOSE 5432 6432
 
 # Share volumes
-VOLUME  ["/etc/postgresql", "/var/log", "/var/lib/postgresql", "/etc/pgbouncer"]
+VOLUME  ["/var/www/geocloud2", "/etc/postgresql", "/var/log", "/var/lib/postgresql", "/etc/pgbouncer"]
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
