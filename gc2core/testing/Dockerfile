@@ -28,7 +28,8 @@ RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip &&\
     cd gdal-2.1.1 &&\
     ./configure --with-python=yes --with-ecw=/usr/local/hexagon &&\
     make &&\
-    make install
+    make install &&\
+    ldconfig
 
 # Install MapServer 7.0.1 from source
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz &&\
@@ -98,6 +99,8 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
+ADD conf/apache/options-ssl-apache.conf /etc/apache2/ssl/
+
 
 # Add php5-fpm config file from Docker repo
 ADD conf/fpm/www.conf /etc/php5/fpm/pool.d/www.conf
