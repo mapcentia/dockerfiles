@@ -47,7 +47,7 @@ RUN mkdir /mapcache
 RUN cp /root/mapcache/mapcache.xml /mapcache/
 
 # Share dirs
-VOLUME  ["/var/log", "/etc/apache2/sites-enabled/", "/mapcache", "/tmp"]
+VOLUME  ["/var/log", "/etc/apache2", "/mapcache", "/tmp"]
 
 # Expose standard ports for HTTP
 EXPOSE 80
