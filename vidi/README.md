@@ -4,20 +4,25 @@ Vidi (To See) is a new map viewer for GC2 and CartoDB
 
 ## How to use this image
 
-    sudo docker run \
-        --name "vidi" \
-        -e TIMEZONE="Europe/Copenhagen" \
-        -p 3000:3000 \
-        -d -t mapcentia/vidi
+    docker run \
+            --rm -i \
+            -v $PWD/vidi/config:/tmp mapcentia/vidi cp /root/vidi/config/config.js /tmp -R
+    
+###Create a persistence volume for Vidi.
+
+    docker create --name vidi-data mapcentia/vidi
         
 ## Configure
 
-    sudo docker run \
-            --rm \
-            --volumes-from=vidi \
-            -i -t mapcentia/vidi bash
+    docker create \
+            --name vidi \
+            --volumes-from vidi-data \
+            -e TIMEZONE="UTC" \
+            -v $PWD/vidi/config:/root/vidi/config \
+            -p 3000:3000 \
+            -t mapcentia/vidi
             
-Edit ~/vidi/config/config.js
+Edit $PWD/vidi/config/config.js
 
 Set the external DNS or IP of your GC2 server
 

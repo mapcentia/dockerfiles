@@ -109,9 +109,6 @@ ADD conf/fpm/www.conf /etc/php5/fpm/pool.d/www.conf
 RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi
 RUN a2enconf serve-cgi-bin
 
-# create dir for certs
-RUN mkdir /etc/apache2/ssl
-
 # Share dirs
 VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php5/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/letsencrypt"]
 

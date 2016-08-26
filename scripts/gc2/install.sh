@@ -185,6 +185,15 @@ if [[ $? = 1 ]]
 # MapCache
 #
 
+#Create a persistence volume for MapCache.
+if [[ $(docker ps -a --filter="name=mapcache-data" | grep mapcache-data) ]]
+        then
+                echo "mapcache-data already exists. Doing nothing."
+        else
+                echo "Creating a persistence volume for mapcache...."
+                docker create --name mapcache-data mapcentia/mapcache
+fi
+
 check mapcache
 if [[ $? = 1 ]]
         then
@@ -193,6 +202,7 @@ if [[ $? = 1 ]]
                         --name mapcache \
                         --net container:gc2core \
                         --volumes-from gc2-data \
+                        --volumes-from mapcache-data \
                         -t mapcentia/mapcache
 fi
 
@@ -279,41 +289,6 @@ if [[ $? = 1 ]]
                         fi
                 fi
 fi
-
-#
-# Vidi
-#
-check vidi
-if [[ $? = 1 ]]
-        then
-                echo "Install vidi [y/N]"
-                read CONF
-                if [ "$CONF" = "y" ]; then
-                    if [[ $(docker ps -a --filter="name=vidi-data" | grep vidi-data) ]]
-                            then
-                                    echo "vidi-data already exists. Doing nothing."
-                            else
-
-                                    docker run \
-                                            --rm -i \
-                                            -v $PWD/vidi/config:/tmp mapcentia/vidi cp /root/vidi/config/config.js /tmp -R
-
-                                    #Create a persistence volume for Vidi.
-                                    echo "Creating a persistence volume for vidi...."
-                                    docker create --name vidi-data mapcentia/vidi
-                    fi
-                    echo "Running the Vidi container...."
-                    docker create \
-                            --name vidi \
-                            --volumes-from vidi \
-                            -e TIMEZONE="$TIMEZONE" \
-                            -v $PWD/vidi/config:/root/vidi/config \
-                            -p 3000:3000 \
-                            -t mapcentia/vidi
-                fi
-fi
-
-
 
 #
 # Run Docker ps
