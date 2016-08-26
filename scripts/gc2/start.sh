@@ -22,11 +22,6 @@ docker start mapcache
 docker start kibana
 docker start logstash
 docker start logstashforwarder
-until [ "`/usr/bin/docker inspect -f {{.State.Running}} vidi`" == "true" ]; do
-    sleep 0.1;
-done;
-docker exec vidi bash -c "cd /root/vidi && grunt"
-docker exec vidi bash -c "/usr/bin/supervisorctl -c /etc/supervisor/conf.d/supervisord.conf restart vidi"
 
 if [ $daemonize == true ]; then
     exit 0
