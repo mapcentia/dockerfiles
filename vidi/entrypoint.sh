@@ -1,9 +1,14 @@
 #!/bin/bash
 set -e
 
-# Set time zone if passed
-if [ -n "$TIMEZONE" ]; then
-    echo $TIMEZONE | tee /etc/timezone
-    dpkg-reconfigure -f noninteractive tzdata
+# If container is run without commando, then check if config settings is passed.
+if [ $1 == "/usr/bin/supervisord" ]; then
+    if [ -n "$BACKEND" ]; then
+      sed -i "s/WHAT_BACKEND/$BACKEND/g" /root/vidi/config/config.js
+      echo '
+            ****************************************************
+            INFO:    Backend set to $BACKEND.
+            ****************************************************
+            '
+    fi
 fi
-exec "$@"
