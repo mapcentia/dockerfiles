@@ -12,3 +12,4 @@ if [ $1 == "/usr/bin/supervisord" ]; then
             '
     fi
 fi
+exec "$@"

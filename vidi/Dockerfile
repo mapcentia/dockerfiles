@@ -31,11 +31,6 @@ RUN cp ~/vidi/config/config.dist.js ~/vidi/config/config.js
 RUN cd ~/vidi &&\
     grunt
 
-# Add entry point
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
 # Install wkhtmltox
 RUN cd ~
 RUN wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb
@@ -46,6 +41,11 @@ EXPOSE 3000
 
 # Share the source dir
 VOLUME  ["/root/vidi"]
+
+# Add entry point
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

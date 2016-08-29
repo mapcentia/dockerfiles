@@ -26,6 +26,16 @@ if [ "$CONF" != "" ]; then
     TIMEZONE=$CONF
 fi
 
+
+
+echo "Which backend?"
+select yn in "GC2" "CartoDB"; do
+    case $yn in
+        GC2 ) BACKEND="gc2"; break;;
+        CartoDB ) BACKEND="cartodb"; break;;
+    esac
+done
+
 check () {
     flag=0
     if [[ $(docker ps -a --filter="name=$1" | grep $1$) ]]
@@ -74,6 +84,7 @@ if [[ $? = 1 ]]
                 --name vidi \
                 --volumes-from vidi-data \
                 -e TIMEZONE="$TIMEZONE" \
+                -e BACKEND="$BACKEND" \
                 -v $PWD/vidi/config:/root/vidi/config \
                 -p 3000:3000 \
                 -t mapcentia/vidi
