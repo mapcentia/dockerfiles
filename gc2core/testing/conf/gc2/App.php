@@ -32,6 +32,9 @@ class App
 
             // MapCache API URL for reload and adding new configurations
             "api" => "http://127.0.0.1:1337",
+
+            // Type of cache back-end. "disk" or "sqlite"
+            "type" => "disk",
         ],
 
         // Is MapServer >= 7 used?

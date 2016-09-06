@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install vim git php7.0-pgsql php7.0-cli wget curl postgis postgresql-9.5-postgis-2.2 postgresql-contrib-9.5 postgresql-9.5-pgrouting pgbouncer locales-all supervisor
+RUN apt-get -y install vim git php7.0-pgsql php7.0-cli wget curl postgis postgresql-9.5-postgis-2.2 postgresql-contrib-9.5 postgresql-9.5-pgrouting pgbouncer locales-all osm2pgsql supervisor
 
 # Clone GC2 from GitHub
 RUN mkdir /var/www &&\

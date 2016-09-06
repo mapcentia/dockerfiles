@@ -7,7 +7,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs npm
+RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs npm default-jre
 
 # Fix
 RUN ln -s /usr/bin/nodejs /usr/bin/node
@@ -24,8 +24,12 @@ RUN cd ~/vidi &&\
 RUN cd ~/vidi &&\
 	npm install
 
+RUN cd ~/vidi/public/bower_components/bootstrap-material-design &&\
+	npm install
+
 #Add config files from Git repo
 RUN cp ~/vidi/config/config.dist.js ~/vidi/config/config.js
+RUN cp ~/vidi/public/bower_components/bootstrap-material-design/less/_variables.less ~/vidi/config/_variables.less
 
 #Run Grunt
 RUN cd ~/vidi &&\
