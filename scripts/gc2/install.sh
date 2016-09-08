@@ -134,6 +134,10 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
 
                         docker run \
                                 --rm -i \
+                                -v $PWD/apache2:/tmp mapcentia/gc2core cp /etc/apache2/ssl /tmp -R
+
+                        docker run \
+                                --rm -i \
                                 -v $PWD/:/tmp mapcentia/gc2core cp /etc/php5/fpm /tmp -R
 
                         docker run \
@@ -148,9 +152,7 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                         -v /var/www/geocloud2/app/wms/files \
                         -v /var/www/geocloud2/app/wms/mapcache \
                         -v /var/www/geocloud2/app/wms/mapfiles \
-                        -v /var/www/geocloud2/app/wms/cfgfiles \
                         -v /var/www/geocloud2/app/wms/qgsfiles \
-                        -v /var/www/geocloud2/app/wms/sqlitefiles \
                         busybox
 fi
 

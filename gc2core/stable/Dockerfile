@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl php5-sqlite gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor \
+RUN apt-get -y install qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl php5-sqlite gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor netcat \
 	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
 
 # Add SQLite3 module to php.ini
@@ -105,6 +105,7 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
+ADD conf/apache/000-default-le-ssl.conf /etc/apache2/sites-available/
 ADD conf/apache/options-ssl-apache.conf /etc/apache2/ssl/
 
 # Add php5-fpm config file from Docker repo
@@ -115,7 +116,7 @@ RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy p
 RUN a2enconf serve-cgi-bin
 
 # Install letsencrypt
-RUN git clone https://github.com/Neilpang/acme.sh.git
+RUN cd ~ && git clone https://github.com/Neilpang/acme.sh.git
 
 # Share dirs
 VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php5/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/letsencrypt"]
