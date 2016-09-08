@@ -14,7 +14,7 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # Clone Vidi from GitHub
 RUN cd  ~ &&\
-	git clone http://github.com/mapcentia/vidi.git
+	git  clone http://github.com/mapcentia/vidi.git
 
 # Install grunt
 RUN cd ~/vidi &&\
