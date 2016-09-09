@@ -1,16 +1,42 @@
-FROM ubuntu:wily
+FROM debian:jessie
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
 ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
+RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install qgis-server vim wget php5-dev php-pear g++ build-essential apache2 qgis-server libapache2-mod-python php5-fpm php5 php5-pgsql php5-curl php5-sqlite gdal-bin python-paste python-flup python-imaging git memcached php5-gd python-boto php5-cli unzip python-software-properties rng-tools apache2-utils npm postgresql-client supervisor netcat \
-	cmake librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev libgdal-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
+RUN apt-get -y install cron vim wget php5-dev php-pear g++ build-essential apache2-mpm-event php5-fpm php5 php5-pgsql php5-curl php5-sqlite git memcached php5-gd php5-cli unzip python-software-properties rng-tools apache2-utils postgresql-client supervisor netcat
+RUN apt-get -y install cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
+
+RUN apt-get -y -t jessie-backports install qgis-server
 
 # Add SQLite3 module to php.ini
 RUN echo "extension=sqlite3.so" >> /etc/php5/fpm/php.ini
+
+# Install ECW 3.3
+RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &&\
+	unzip libecwj2-3.3-2006-09-06.zip &&\
+	wget http://trac.osgeo.org/gdal/raw-attachment/ticket/3162/libecwj2-3.3-msvc90-fixes.patch &&\
+	patch -p0< libecwj2-3.3-msvc90-fixes.patch &&\
+	wget http://osgeo-org.1560.x6.nabble.com/attachment/5001530/0/libecwj2-3.3-wcharfix.patch &&\
+	wget http://trac.osgeo.org/gdal/raw-attachment/ticket/3366/libecwj2-3.3-NCSPhysicalMemorySize-Linux.patch &&\
+	cd libecwj2-3.3/ &&\
+	patch -p0< ../libecwj2-3.3-NCSPhysicalMemorySize-Linux.patch &&\
+	patch -p1< ../libecwj2-3.3-wcharfix.patch &&\
+	./configure &&\
+	make &&\
+	make install
+
+# Install GDAL 2.1.1 from source
+RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip &&\
+    unzip gdal211.zip &&\
+    cd gdal-2.1.1 &&\
+    ./configure --with-python=yes --with-ecw=/usr/local &&\
+    make &&\
+    make install &&\
+    ldconfig
 
 # Install MapServer 7.0.1 from source
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz &&\
@@ -38,40 +64,17 @@ RUN cp /mapserver-7.0.1/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 RUN pecl install rar &&\
 	echo "extension=rar.so" >> /etc/php5/fpm/php.ini
 
-# Install ECW support
-RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &&\
-	unzip libecwj2-3.3-2006-09-06.zip &&\
-	wget http://trac.osgeo.org/gdal/raw-attachment/ticket/3162/libecwj2-3.3-msvc90-fixes.patch &&\
-	patch -p0< libecwj2-3.3-msvc90-fixes.patch &&\
-	wget http://osgeo-org.1560.x6.nabble.com/attachment/5001530/0/libecwj2-3.3-wcharfix.patch &&\
-	wget http://trac.osgeo.org/gdal/raw-attachment/ticket/3366/libecwj2-3.3-NCSPhysicalMemorySize-Linux.patch &&\
-	cd libecwj2-3.3/ &&\
-	patch -p0< ../libecwj2-3.3-NCSPhysicalMemorySize-Linux.patch &&\
-	patch -p1< ../libecwj2-3.3-wcharfix.patch &&\
-	./configure &&\
-	make &&\
-	make install
-
-RUN	echo "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu trusty main" >> /etc/apt/sources.list &&\
-	echo "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu precise main" >> /etc/apt/sources.list &&\
-	echo "deb-src http://ppa.launchpad.net/ubuntugis/ppa/ubuntu precise main" >> /etc/apt/sources.list &&\
-	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 314DF160 &&\
-	apt-get update -y &&\
-	apt-get install -y gdal-bin libgdal-ecw-src &&\
-	gdal-ecw-build /usr/local &&\
-	ldconfig &&\
-	mkdir /usr/lib/gdalplugins/1.11 &&\
-	cp /usr/lib/gdalplugins/1.10/gdal_ECW_JP2ECW.so /usr/lib/gdalplugins/1.11
-
 # Add some projections to Proj4
 RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg && \
 	echo "<34004> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg && \
 	echo "<34005> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg
 
 # Install Node.js, Grunt and Forever
+RUN curl -sL https://deb.nodesource.com/setup_4.x |  bash - &&\
+    apt-get install -y nodejs
+
 RUN npm install -g grunt-cli &&\
-	npm install -g forever &&\
-	ln -s /usr/bin/nodejs /usr/bin/node
+	npm install -g forever
 
 # Clone GC2 from GitHub
 RUN cd /var/www/ &&\
@@ -81,10 +84,8 @@ RUN cd /var/www/ &&\
 RUN chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/files/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/mapfiles/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/cfgfiles/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/qgsfiles/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/sqlitefiles/ &&\
 	chown www-data:www-data /var/www/geocloud2/public/logs/
 
 # Install npm packages run Grunt
@@ -101,7 +102,6 @@ RUN sed 's/;daemonize = yes/daemonize = no/' -i /etc/php5/fpm/php-fpm.conf
 
 # Add MapScript module to php.ini
 RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
-
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
@@ -158,8 +158,7 @@ RUN chmod +x /run-apache.sh
 
 # Install PostGIS tools only
 RUN apt-get download postgis && \
-    dpkg --force-all -i postgis_2.1.8+dfsg-4_amd64.deb
-
+    dpkg --force-all -i postgis_2.1.4+dfsg-3_amd64.deb
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

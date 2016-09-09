@@ -15,6 +15,7 @@ RUN apt-get -y -t jessie-backports install qgis-server
 #Add SQLite3 module to php.ini
 RUN echo "extension=sqlite3.so" >> /etc/php5/fpm/php.ini
 
+# Install ECW 5.3.0
 RUN wget https://s3-eu-west-1.amazonaws.com/mapcentia-tmp/ERDAS-ECW_JPEG_2000_SDK-5.3.0.zip &&\
     unzip ERDAS-ECW_JPEG_2000_SDK-5.3.0.zip &&\
     mkdir /usr/local/hexagon &&\
@@ -23,6 +24,7 @@ RUN wget https://s3-eu-west-1.amazonaws.com/mapcentia-tmp/ERDAS-ECW_JPEG_2000_SD
     ln -s /usr/local/hexagon/lib/x64/release/libNCSEcw.so.5.3.0 /usr/local/lib/libNCSEcw.so.5.3.0 &&\
     ldconfig
 
+# Install GDAL 2.1.1 from source
 RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip &&\
     unzip gdal211.zip &&\
     cd gdal-2.1.1 &&\
@@ -65,6 +67,7 @@ RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=
 # Install Node.js, Grunt and Forever
 RUN curl -sL https://deb.nodesource.com/setup_4.x |  bash - &&\
     apt-get install -y nodejs
+
 RUN npm install -g grunt-cli &&\
 	npm install -g forever
 
@@ -76,10 +79,8 @@ RUN cd /var/www/ &&\
 RUN chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/files/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/mapfiles/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/cfgfiles/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
 	chown www-data:www-data /var/www/geocloud2/app/wms/qgsfiles/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/sqlitefiles/ &&\
 	chown www-data:www-data /var/www/geocloud2/public/logs/
 
 # Install npm packages run Grunt
@@ -99,8 +100,8 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
+ADD conf/apache/000-default-le-ssl.conf /etc/apache2/sites-available/
 ADD conf/apache/options-ssl-apache.conf /etc/apache2/ssl/
-
 
 # Add php5-fpm config file from Docker repo
 ADD conf/fpm/www.conf /etc/php5/fpm/pool.d/www.conf
@@ -108,6 +109,9 @@ ADD conf/fpm/www.conf /etc/php5/fpm/pool.d/www.conf
 # Enable Apache2 modules
 RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi
 RUN a2enconf serve-cgi-bin
+
+# Install letsencrypt
+RUN cd ~ && git clone https://github.com/Neilpang/acme.sh.git
 
 # Share dirs
 VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php5/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/letsencrypt"]
@@ -146,6 +150,10 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 ADD conf/apache/run-apache.sh /
 RUN chmod +x /run-apache.sh
+
+# Install PostGIS tools only
+RUN apt-get download postgis && \
+    dpkg --force-all -i postgis_2.1.8+dfsg-4_amd64.deb
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
