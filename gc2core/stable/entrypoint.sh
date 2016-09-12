@@ -27,9 +27,7 @@ fi
 
 chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/mapfiles/ &&\
-chown www-data:www-data /var/www/geocloud2/app/wms/cfgfiles/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
-chown www-data:www-data /var/www/geocloud2/app/wms/sqlitefiles/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/files/ &&\
 chown www-data:www-data /var/www/geocloud2/public/logs/
 
