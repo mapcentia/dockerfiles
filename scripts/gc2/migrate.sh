@@ -1,3 +1,5 @@
+#!/bin/bash
+
 docker run \
         --rm \
         --volumes-from=gc2core \
