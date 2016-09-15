@@ -63,8 +63,12 @@ if [[ $(docker ps -a --filter="name=vidi-data" | grep vidi-data) ]]
                 read CONF
                 if [ "$CONF" = "y" ]; then
                         docker run \
-                        --rm -i \
-                        -v $PWD/vidi/config:/tmp mapcentia/vidi cp /root/vidi/config/config.js /tmp -R
+                            --rm -i \
+                            -v $PWD/vidi/config:/tmp mapcentia/vidi cp /root/vidi/config/config.js /tmp -R
+
+                        docker run \
+                            --rm -i \
+                            -v $PWD/vidi/config:/tmp mapcentia/vidi cp /root/vidi/config/_variables.less /tmp -R
                 fi
 
                 #Create a persistence volume for Vidi.
