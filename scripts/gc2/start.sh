@@ -13,7 +13,6 @@ echo $daemonize
 
 docker start postgis
 docker start elasticsearch
-docker start geoserver
 docker start gc2core
 until [ "`/usr/bin/docker inspect -f {{.State.Running}} gc2core`" == "true" ]; do
     sleep 0.1;
@@ -52,13 +51,6 @@ while true; do
     if [[ $? = 0 ]]
         then
                 echo "elasticsearch stopped";
-                break;
-    fi
-
-    check geoserver
-    if [[ $? = 0 ]]
-        then
-                echo "geoserver stopped";
                 break;
     fi
 

@@ -34,6 +34,18 @@ if [ "$CONF" != "" ]; then
     TIMEZONE=$CONF
 fi
 
+echo "Enabling New Relic APM metrics? Input your New Relic install key. Blank for not enabling APM"
+echo "New Relic license key"
+read CONF
+if [ "$CONF" != "" ]; then
+    NR_INSTALL_KEY=$CONF
+    echo "Application name"
+        read CONF
+        if [ "$CONF" != "" ]; then
+            NR_APP_NAME=$CONF
+        fi
+fi
+
 check () {
     flag=0
     if [[ $(docker ps -a --filter="name=$1" | grep $1$) ]]
@@ -101,23 +113,6 @@ if [[ $? = 1 ]]
 fi
 
 #
-# Geoserver
-#
-
-check geoserver
-if [[ $? = 1 ]]
-        then
-                echo "Running the geoserver container...."
-                docker create \
-                        --name geoserver \
-                        --link postgis \
-                        -p 8080:8080 \
-                        -t \
-                        mapcentia/geoserver
-fi
-
-
-#
 # GC2 data
 #
 
@@ -170,7 +165,6 @@ if [[ $? = 1 ]]
                         --privileged \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
-                        --link geoserver:geoserver \
                         --volumes-from gc2-data \
                         -v $PWD/apache2/ssl:/etc/apache2/ssl \
                         -v $PWD/apache2/sites-enabled:/etc/apache2/sites-enabled \
@@ -178,6 +172,8 @@ if [[ $? = 1 ]]
                         -v $PWD/gc2/conf:/var/www/geocloud2/app/conf \
                         -e GC2_PASSWORD=$PG_PW \
                         -e TIMEZONE="$TIMEZONE" \
+                        -e NR_INSTALL_KEY="$NR_INSTALL_KEY" \
+                        -e NR_APP_NAME="$NR_APP_NAME" \
                         -p 80:80 -p 443:443 -p 1339:1339\
                         -t \
                         mapcentia/gc2core

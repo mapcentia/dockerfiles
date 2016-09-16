@@ -2,7 +2,6 @@
 
 docker stop postgis
 docker stop elasticsearch
-docker stop geoserver
 docker stop gc2core
 docker stop mapcache
 docker stop kibana
