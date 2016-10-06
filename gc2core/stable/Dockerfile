@@ -36,7 +36,8 @@ RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip &&\
     ./configure --with-python=yes --with-ecw=/usr/local &&\
     make &&\
     make install &&\
-    ldconfig
+    ldconfig &&\
+    ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
 # Install MapServer 7.0.1 from source
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz &&\
