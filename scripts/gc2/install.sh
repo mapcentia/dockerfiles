@@ -108,6 +108,7 @@ if [[ $? = 1 ]]
                 docker create \
                         --name elasticsearch \
                         --volumes-from es-data \
+                        -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
                         -p 9200:9200 \
                         -t elasticsearch
 fi

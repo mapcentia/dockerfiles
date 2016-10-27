@@ -7,7 +7,7 @@ RUN apt-get -y install supervisor
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC8548582C1A2699A9D27D666CD88E42B4
 
 # Logstash
-ENV LOGSTASH_MAJOR 2.3
+ENV LOGSTASH_MAJOR 5.0
 
 RUN echo "deb http://packages.elasticsearch.org/logstash/${LOGSTASH_MAJOR}/debian stable main" > /etc/apt/sources.list.d/logstash.list
 

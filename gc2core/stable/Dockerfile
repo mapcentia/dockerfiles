@@ -106,6 +106,7 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
+ADD conf/apache/gc2 /etc/apache2/sites-enabled/gc2
 ADD conf/apache/000-default-le-ssl.conf /etc/apache2/sites-available/
 ADD conf/apache/options-ssl-apache.conf /etc/apache2/ssl/
 

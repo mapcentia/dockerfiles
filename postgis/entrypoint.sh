@@ -81,7 +81,7 @@ if [ $1 == "/usr/bin/supervisord" ]; then
             # Create the gc2scheduler database
             createdb gc2scheduler -T template0 --encoding UTF-8 --locale $locale &&\
             psql gc2scheduler -c "CREATE TABLE jobs (
-                id serial,
+                id serial PRIMARY KEY,
                 name character varying(255),
                 url character varying(255),
                 cron character varying(255),
