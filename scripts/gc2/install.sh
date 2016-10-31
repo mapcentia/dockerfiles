@@ -109,6 +109,7 @@ if [[ $? = 1 ]]
                         --name elasticsearch \
                         --volumes-from es-data \
                         -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
+                        --ulimit nofile=98304:98304 \
                         -p 9200:9200 \
                         -t elasticsearch
 fi
@@ -292,5 +293,7 @@ fi
 #
 # Run Docker ps
 #
+
+sysctl -w vm.max_map_count=262144
 
 docker ps -a
