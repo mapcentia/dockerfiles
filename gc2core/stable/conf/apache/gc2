@@ -39,12 +39,6 @@ ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
     ExpiresDefault "access plus 2 day"
 </FilesMatch>
 
-<IfModule mod_python.c>
-    AddHandler python-program .py
-    PythonHandler TileCache.Service
-    PythonPath "['/var/www/geocloud2/public/cgi'] + sys.path"
-</IfModule>
-
 # Always rewrite GetLegendGraphic, GetFeatureInfo, DescribeFeatureType, format_options and all POST to WMS
 RewriteEngine On
 RewriteCond %{QUERY_STRING} (^|&)REQUEST=GetLegendGraphic($|&) [NC,OR]
