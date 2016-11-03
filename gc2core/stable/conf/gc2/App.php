@@ -85,7 +85,7 @@ class App
         "homepage" => "http://www.mapcentia.com/en/geocloud/geocloud.htm",
 
         // If true, low layer sort id puts the layer on top
-        "reverseLayerOrder" => true,
+        "reverseLayerOrder" => false,
 
         // Enable the Leaflet Draw plugin in viewer
         "leafletDraw" => false,
