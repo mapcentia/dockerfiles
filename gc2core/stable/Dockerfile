@@ -39,10 +39,10 @@ RUN unzip gdal211.zip &&\
     ldconfig &&\
     ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
-# Install MapServer 7.0.1 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz
-RUN	tar -zxvf mapserver-7.0.1.tar.gz &&\
-	cd mapserver-7.0.1 &&\
+# Install MapServer 7.0.2 from source
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.2.tar.gz
+RUN	tar -zxvf mapserver-7.0.2.tar.gz &&\
+	cd mapserver-7.0.2 &&\
 	mkdir build &&\
 	cd build &&\
 	cmake -DCMAKE_INSTALL_PREFIX=/opt \
@@ -57,9 +57,9 @@ RUN	tar -zxvf mapserver-7.0.1.tar.gz &&\
     -DPHP5_EXTENSION_DIR=/opt \
     -DWITH_RSVG=ON \
     -DWITH_SVGCAIRO=0 ..
-RUN make && make install
+RUN cd /mapserver-7.0.2/build && make && make install
 
-RUN cp /mapserver-7.0.1/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver-7.0.2/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
