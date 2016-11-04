@@ -59,7 +59,7 @@ RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.2.tar.gz &&\
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
 
-RUN cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver-7.0.2/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
