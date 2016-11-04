@@ -30,8 +30,8 @@ RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &
 	make install
 
 # Install GDAL 2.1.1 from source
-RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip
-RUN unzip gdal211.zip &&\
+RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip && \
+    unzip gdal211.zip &&\
     cd gdal-2.1.1 &&\
     ./configure --with-python=yes --with-ecw=/usr/local &&\
     make &&\
