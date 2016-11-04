@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install packages
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install cron vim wget php5-dev php-pear g++ build-essential apache2-mpm-event php5-fpm php5 php5-pgsql php5-curl php5-sqlite git memcached php5-gd php5-cli unzip python-software-properties rng-tools apache2-utils postgresql-client supervisor netcat \
+RUN apt-get -y install cron vim wget php5-dev=5.6.24+dfsg-0+deb8u1 php-pear g++ build-essential apache2-mpm-event php5-fpm php5 php5-pgsql php5-curl php5-sqlite git memcached php5-gd php5-cli unzip python-software-properties rng-tools apache2-utils postgresql-client supervisor netcat \
     cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
 
 RUN apt-get -y -t jessie-backports install qgis-server
@@ -40,8 +40,8 @@ RUN unzip gdal211.zip &&\
     ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
 # Install MapServer 7.0.2 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.2.tar.gz
-RUN	tar -zxvf mapserver-7.0.2.tar.gz &&\
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.2.tar.gz &&\
+	tar -zxvf mapserver-7.0.2.tar.gz &&\
 	cd mapserver-7.0.2 &&\
 	mkdir build &&\
 	cd build &&\
@@ -56,10 +56,10 @@ RUN	tar -zxvf mapserver-7.0.2.tar.gz &&\
     -DWITH_ORACLESPATIAL=0 \
     -DPHP5_EXTENSION_DIR=/opt \
     -DWITH_RSVG=ON \
-    -DWITH_SVGCAIRO=0 ..
-RUN cd /mapserver-7.0.2/build && make && make install
+    -DWITH_SVGCAIRO=0 .. &&\
+    make && make install
 
-RUN cp /mapserver-7.0.2/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
