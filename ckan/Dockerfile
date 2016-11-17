@@ -1,4 +1,4 @@
-FROM ubuntu:wily
+FROM ubuntu:trusty
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -8,8 +8,8 @@ ENV  DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update --fix-missing
 RUN apt-get -y install nginx apache2 libapache2-mod-wsgi libpq5 wget postgresql-client apg gettext
 
-RUN wget http://packaging.ckan.org/python-ckan_2.5-trusty_amd64.deb &&\
-        dpkg -i python-ckan_2.5-trusty_amd64.deb
+RUN wget http://packaging.ckan.org/python-ckan_2.6-trusty_amd64.deb &&\
+        dpkg -i python-ckan_2.6-trusty_amd64.deb
 
 ADD conf/ckan/production.ini /etc/ckan/default/
 
@@ -20,6 +20,7 @@ VOLUME ["/etc/ckan", "/var/log", "/usr/lib/ckan", "/etc/letsencrypt", "/etc/apac
 
 # Install ckanext-geoview plugins
 RUN . /usr/lib/ckan/default/bin/activate &&\
+        pip install --upgrade pip &&\
         pip install ckanext-geoview
 
 ADD run-apache.sh /
