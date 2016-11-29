@@ -212,15 +212,27 @@ fi
 # Kibana
 #
 
+
 check kibana
 if [[ $? = 1 ]]
         then
                 echo "Install kibana [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
+
+                        #Create a persistence volume for Kibana
+                        if [[ $(docker ps -a --filter="name=kibana-data" | grep kibana-data) ]]
+                                then
+                                        echo "kibana-data already exists. Doing nothing."
+                                else
+                                        echo "Creating a persistence volume for kibana...."
+                                        docker create --name kibana-data kibana
+                        fi
+
                         echo "Running the Kibana container...."
                         docker create\
                                 --name kibana \
+                                --volumes-from kibana-data \
                                 --link elasticsearch:elasticsearch \
                                 -p 5601:5601 \
                                 -t kibana

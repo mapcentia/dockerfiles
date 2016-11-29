@@ -7,12 +7,12 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install packages
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install cron vim wget php5-dev php-pear g++ build-essential apache2-mpm-event php5-fpm php5 php5-pgsql php5-curl php5-sqlite git memcached php5-gd php5-cli unzip python-software-properties rng-tools apache2-utils postgresql-client supervisor netcat
-RUN apt-get -y install cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
+RUN apt-get -y install cron vim wget php5-dev=5.6.24+dfsg-0+deb8u1 php-pear g++ build-essential apache2-mpm-event php5-fpm php5 php5-pgsql php5-curl php5-sqlite git memcached php5-gd php5-cli unzip python-software-properties rng-tools apache2-utils postgresql-client supervisor netcat \
+    cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf
 
 RUN apt-get -y -t jessie-backports install qgis-server
 
-#Add SQLite3 module to php.ini
+# Add SQLite3 module to php.ini
 RUN echo "extension=sqlite3.so" >> /etc/php5/fpm/php.ini
 
 # Install ECW 5.3.0
@@ -34,10 +34,10 @@ RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip &&\
     ldconfig &&\
     ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
-# Install MapServer 7.0.1 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz &&\
-	tar -zxvf mapserver-7.0.1.tar.gz &&\
-	cd mapserver-7.0.1 &&\
+# Install MapServer 7.0.2 from source
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.2.tar.gz &&\
+	tar -zxvf mapserver-7.0.2.tar.gz &&\
+	cd mapserver-7.0.2 &&\
 	mkdir build &&\
 	cd build &&\
 	cmake -DCMAKE_INSTALL_PREFIX=/opt \
@@ -54,7 +54,7 @@ RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.1.tar.gz &&\
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
 
-RUN cp /mapserver-7.0.1/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver-7.0.2/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
@@ -76,14 +76,6 @@ RUN npm install -g grunt-cli &&\
 RUN cd /var/www/ &&\
 	 git clone http://github.com/mapcentia/geocloud2.git
 
-# Make dirs writeable for web server
-RUN chown www-data:www-data /var/www/geocloud2/app/tmp/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/files/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/mapfiles/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
-	chown www-data:www-data /var/www/geocloud2/app/wms/qgsfiles/ &&\
-	chown www-data:www-data /var/www/geocloud2/public/logs/
-
 # Install npm packages run Grunt
 RUN	cd /var/www/geocloud2 &&\
 	npm install &&\
@@ -101,6 +93,7 @@ RUN echo "extension=php_mapscript.so" >> /etc/php5/fpm/php.ini
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
+ADD conf/apache/gc2 /etc/apache2/sites-enabled/gc2
 ADD conf/apache/000-default-le-ssl.conf /etc/apache2/sites-available/
 ADD conf/apache/options-ssl-apache.conf /etc/apache2/ssl/
 
@@ -154,7 +147,7 @@ RUN chmod +x /run-apache.sh
 
 # Install PostGIS tools only
 RUN apt-get download postgis && \
-    dpkg --force-all -i postgis_2.1.8+dfsg-4_amd64.deb
+    dpkg --force-all -i postgis_2.1.4+dfsg-3_amd64.deb
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

@@ -68,7 +68,7 @@ Start a node.js deamon to keep the Elasticsearch indices up to date.
             --link gc2core:gc2core \
             --link postgis:postgis \
             --volumes-from gc2core \
-            -i -t mapcentia/gc2core \
+            -d -t mapcentia/gc2core \
             nodejs /var/www/geocloud2/app/scripts/pg2es.js [database] --host postgis --user gc2 --es-host gc2core --key [API key]
 
 
