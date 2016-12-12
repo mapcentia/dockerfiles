@@ -7,10 +7,10 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs npm default-jre
+RUN apt-get -y install wget curl vim git supervisor postgresql-client npm default-jre
 
-# Fix
-RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN apt-get install -y nodejs
 
 # Clone Vidi from GitHub
 RUN cd  ~ &&\
