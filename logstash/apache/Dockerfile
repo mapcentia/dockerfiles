@@ -2,14 +2,13 @@ FROM java:8-jre
 
 # Install supervisor
 RUN apt-get -y update
-RUN apt-get -y install supervisor
+RUN apt-get -y install supervisor apt-transport-https
 
-RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC8548582C1A2699A9D27D666CD88E42B4
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 
 # Logstash
-ENV LOGSTASH_MAJOR 5.0
+RUN echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-5.x.list
 
-RUN echo "deb http://packages.elasticsearch.org/logstash/${LOGSTASH_MAJOR}/debian stable main" > /etc/apt/sources.list.d/logstash.list
 
 RUN set -x \
 	&& apt-get update \

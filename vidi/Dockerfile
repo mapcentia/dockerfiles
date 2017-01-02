@@ -35,6 +35,8 @@ RUN cp ~/vidi/public/bower_components/bootstrap-material-design/less/_variables.
 RUN cd ~/vidi &&\
     grunt
 
+RUN ln -s /root/vidi/public/bower_components/bootstrap/dist/fonts /root/vidi/public/css/fonts
+
 # Install wkhtmltox
 RUN cd ~
 RUN wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
