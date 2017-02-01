@@ -20,7 +20,7 @@ done;
 docker start mapcache
 docker start kibana
 docker start logstash
-docker start logstashforwarder
+docker start filebeat
 
 if [ $daemonize == true ]; then
     exit 0

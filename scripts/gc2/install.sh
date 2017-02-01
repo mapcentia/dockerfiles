@@ -81,6 +81,7 @@ if [[ $? = 1 ]]
                 docker create \
                         --name postgis \
                         -p 5432:5432 \
+                        -p 6432:6432 \
                         --volumes-from postgis-data \
                         -e GC2_PASSWORD=$PG_PW \
                         -e LOCALE=$LOCALE \
@@ -97,6 +98,13 @@ if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
         then
                 echo "es-data already exists. Doing nothing."
         else
+                echo "Create config files for Elasticsearch on host [y/N]"
+                read CONF
+                if [ "$CONF" = "y" ]; then
+                        docker run \
+                                --rm -i \
+                                -v $PWD/elasticsearch:/tmp elasticsearch cp /usr/share/elasticsearch/config /tmp -R
+                fi
                 echo "Creating a persistence volume for elasticsearch...."
                 docker create --name es-data elasticsearch
 fi
@@ -108,8 +116,11 @@ if [[ $? = 1 ]]
                 docker create \
                         --name elasticsearch \
                         --volumes-from es-data \
+                        -v $PWD/elasticsearch/config:/usr/share/elasticsearch/config \
                         -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
-                        --ulimit nofile=98304:98304 \
+                        --cap-add=IPC_LOCK \
+                        --ulimit memlock=-1:-1 \
+                        --ulimit nofile=65536:65536 \
                         -p 9200:9200 \
                         -t elasticsearch
 fi
@@ -125,6 +136,9 @@ if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
                 echo "Create Apache, PHP5-fpm and GC2 config files for GC2 on host [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
+
+                        mkdir $PWD/.well-known
+
                         docker run \
                                 --rm -i \
                                 -v $PWD/apache2:/tmp mapcentia/gc2core cp /etc/apache2/sites-enabled /tmp -R
@@ -172,6 +186,7 @@ if [[ $? = 1 ]]
                         -v $PWD/apache2/sites-enabled:/etc/apache2/sites-enabled \
                         -v $PWD/fpm:/etc/php5/fpm \
                         -v $PWD/gc2/conf:/var/www/geocloud2/app/conf \
+                        -v $PWD/.well-known:/var/www/geocloud2/public/.well-known \
                         -e GC2_PASSWORD=$PG_PW \
                         -e TIMEZONE="$TIMEZONE" \
                         -e NR_INSTALL_KEY="$NR_INSTALL_KEY" \
@@ -258,46 +273,42 @@ if [[ $? = 1 ]]
                         docker create \
                                 --name logstash \
                                 --link elasticsearch:elasticsearch \
-                                -v $PWD/logstash/certs:/certs \
                                 -p 5043:5043 \
                                 -p 1338:1338 \
-                                -e "LOGSTASH_DOMAIN=$CONF" \
                                 -t \
                                 mapcentia/logstash
                 fi
 fi
 
 #
-#Logstashforwader
+# Filebeat
 #
 
-check logstashforwarder
+check filebeat
 if [[ $? = 1 ]]
         then
-                echo "Install logstashforwarder [y/N]"
+                echo "Install filebeat [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
                         echo "Domain? [logstash]"
                         read CONF
-                        echo "Running the Logstash-forwarder container...."
+                        echo "Running the Filebeat container...."
                         if [ "$CONF" = "" ]; then
                                 CONF=logstash
                                 docker create \
-                                        --name logstashforwarder \
+                                        --name filebeat \
                                         --link logstash:logstash \
                                         --volumes-from gc2core \
-                                        -v $PWD/logstash/certs/:/certs \
-                                        -e "MASTER=$CONF:5043" \
+                                        -e "MASTER=$CONF" \
                                         -t \
-                                        mapcentia/logstash-forwarder
+                                        mapcentia/filebeat
                         else
                                 docker create \
-                                        --name logstashforwarder \
+                                        --name filebeat \
                                         --volumes-from gc2core \
-                                        -v $PWD/logstash/certs/:/certs \
-                                        -e "MASTER=$CONF:5043" \
+                                        -e "MASTER=$CONF" \
                                         -t \
-                                        mapcentia/logstash-forwarder
+                                        mapcentia/filebeat
                         fi
                 fi
 fi
