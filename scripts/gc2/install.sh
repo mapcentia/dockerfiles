@@ -12,6 +12,8 @@ else
     echo "Docker info: $VERSION"
 fi
 
+docker network create --subnet=172.18.0.0/16 gc2net
+
 #
 # Set PostGreSQL pwd
 #
@@ -80,6 +82,9 @@ if [[ $? = 1 ]]
                 echo "Running the postgis container...."
                 docker create \
                         --name postgis \
+                        --net gc2net \
+                        --ip 172.18.0.21 \
+                        --hostname postgis \
                         -p 5432:5432 \
                         -p 6432:6432 \
                         --volumes-from postgis-data \
@@ -115,6 +120,9 @@ if [[ $? = 1 ]]
                 echo "Running the elasticsearch container...."
                 docker create \
                         --name elasticsearch \
+                        --net gc2net \
+                        --ip 172.18.0.22 \
+                        --hostname elasticsearch \
                         --volumes-from es-data \
                         -v $PWD/elasticsearch/config:/usr/share/elasticsearch/config \
                         -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
@@ -178,7 +186,9 @@ if [[ $? = 1 ]]
                 echo "Running the GC2 container...."
                 docker create \
                         --name gc2core \
-                        --privileged \
+                        --net gc2net \
+                        --ip 172.18.0.23 \
+                        --hostname gc2core \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
                         --volumes-from gc2-data \
@@ -248,6 +258,9 @@ if [[ $? = 1 ]]
                         docker create\
                                 --name kibana \
                                 --volumes-from kibana-data \
+                                --net gc2net \
+                                --ip 172.18.0.24 \
+                                --hostname kibana \
                                 --link elasticsearch:elasticsearch \
                                 -p 5601:5601 \
                                 -t kibana
@@ -272,6 +285,9 @@ if [[ $? = 1 ]]
                         echo "Running the Logstash container...."
                         docker create \
                                 --name logstash \
+                                --net gc2net \
+                                --ip 172.18.0.25 \
+                                --hostname logstash \
                                 --link elasticsearch:elasticsearch \
                                 -p 5043:5043 \
                                 -p 1338:1338 \
@@ -297,6 +313,7 @@ if [[ $? = 1 ]]
                                 CONF=logstash
                                 docker create \
                                         --name filebeat \
+                                        --net gc2net \
                                         --link logstash:logstash \
                                         --volumes-from gc2core \
                                         -e "MASTER=$CONF" \
@@ -305,6 +322,7 @@ if [[ $? = 1 ]]
                         else
                                 docker create \
                                         --name filebeat \
+                                        --net gc2net \
                                         --volumes-from gc2core \
                                         -e "MASTER=$CONF" \
                                         -t \

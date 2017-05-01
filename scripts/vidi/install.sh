@@ -12,6 +12,9 @@ else
     echo "Docker info: $VERSION"
 fi
 
+docker network create --subnet=172.18.0.0/16 gc2net
+
+
 LOCALE=$(locale | grep LANG= | grep -o '[^=]*$')
 echo "Locale [$LOCALE]"
 read CONF
@@ -87,6 +90,9 @@ if [[ $? = 1 ]]
         docker create \
                 --name vidi \
                 --volumes-from vidi-data \
+                --net gc2net \
+                --ip 172.18.0.31 \
+                --hostname vidi \
                 -e TIMEZONE="$TIMEZONE" \
                 -e BACKEND="$BACKEND" \
                 -v $PWD/vidi/config:/root/vidi/config \
