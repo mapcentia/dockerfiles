@@ -25,8 +25,8 @@ if [ $1 == "/usr/bin/supervisord" ]; then
         if [ -n "$TIMEZONE" ]; then
 
             # OS
-            echo $TIMEZONE | tee /etc/timezone
-            dpkg-reconfigure -f noninteractive tzdata
+            ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+            echo $TIMEZONE > /etc/timezone
 
             # PGSQL
             # echo "TimeZone = '$TIMEZONE'" >> /etc/postgresql/9.5/main/postgresql.conf
