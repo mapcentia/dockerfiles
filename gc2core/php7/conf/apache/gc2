@@ -36,7 +36,7 @@ ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 </FilesMatch>
 
 <FilesMatch ".(ico|jpg|jpeg|png|gif|js|css|swf)$">
-    ExpiresDefault "access plus 1 day"
+    ExpiresDefault "access plus 2 day"
 </FilesMatch>
 
 # Always rewrite GetLegendGraphic, GetFeatureInfo, DescribeFeatureType, format_options and all POST to WMS

@@ -4,11 +4,11 @@ namespace app\conf;
 class Connection
 {
     static $param = array(
-        "postgishost" => "127.0.0.1",
+        "postgishost" => "postgis",
         "postgisdb" => "postgres",
-        "postgisuser" => "postgres",
+        "postgisuser" => "gc2",
         "postgisport" => "5432",
-        "postgispw" => "1234",
+        "postgispw" => "YOUR_PASSWORD",
         "pgbouncer" => false,
     );
 }

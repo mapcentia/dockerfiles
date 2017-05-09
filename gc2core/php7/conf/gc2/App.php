@@ -17,7 +17,28 @@ class App
         "databaseTemplate" => "template_geocloud",
 
         // The host of Elasticsearch
-        "esHost" => "127.0.0.1",
+        "esHost" => "elasticsearch",
+
+        // Geoserver host for printing.
+        "geoserverHost" => "http://eu1.mapcentia.com:8888",
+
+        // MapCache config
+        "mapCache" => [
+            // MapCache host URL.
+            "host" => "http://127.0.0.1:5555",
+
+            // WMS backend for MapCache. Define the WMS host seen from MapCache.
+            "wmsHost" => "http://127.0.0.1:80",
+
+            // MapCache API URL for reload and adding new configurations
+            "api" => "http://127.0.0.1:1337",
+
+            // Type of cache back-end. "disk" or "sqlite"
+            "type" => "disk",
+        ],
+
+        // Is MapServer >= 7 used?
+        "mapserver_ver_7" => true,
 
         // Encrypt api key in database
         "encryptSettings" => false,
@@ -64,7 +85,7 @@ class App
         "homepage" => "http://www.mapcentia.com/en/geocloud/geocloud.htm",
 
         // If true, low layer sort id puts the layer on top
-        "reverseLayerOrder" => true,
+        "reverseLayerOrder" => false,
 
         // Enable the Leaflet Draw plugin in viewer
         "leafletDraw" => false,
@@ -92,9 +113,27 @@ class App
         // Enable Elasticsearch indexing in GUI
         "esIndexingInGui" => true,
 
+        "enablePrint" => array(
+            "*" => true,
+        ),
+
+        //Show download options in Heron-mc
+        "showDownloadOtionsInHeron" => true,
+
+        "customPrintParams" => array(
+            "mapTitle" => "Map title",
+            "mapComment" => "Map comment",
+            "mapFooter" => "Map footer",
+        ),
+
+        //Show workflow options
+        "enableWorkflow" => array(
+            "*" => true,
+        ),
+
         // Enable gc2scheduler
         "gc2scheduler" => array(
-            "mydb" => false,
+            "test" => true,
         ),
 
         // Use API key for Elasticsearch Search API

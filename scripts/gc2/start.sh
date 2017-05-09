@@ -2,6 +2,8 @@
 
 daemonize=false
 
+sysctl -w vm.max_map_count=262144
+
 while getopts ":d:" opt; do
     case "$opt" in
     d)  daemonize=$OPTARG
