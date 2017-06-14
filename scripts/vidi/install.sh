@@ -96,7 +96,6 @@ if [[ $? = 1 ]]
                 -e TIMEZONE="$TIMEZONE" \
                 -e BACKEND="$BACKEND" \
                 -v $PWD/vidi/config:/root/vidi/config \
-                -v $PWD/.well-known:/root/vidi/public/.well-known \
                 -p 3000:3000 \
                 -t mapcentia/vidi
 
