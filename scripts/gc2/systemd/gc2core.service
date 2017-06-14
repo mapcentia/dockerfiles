@@ -1,0 +1,17 @@
+[Unit]
+Description=GC2Core
+Requires=docker.service
+After=docker.service postgis.service elasticsearch.service
+Before=mapcache.service
+
+[Service]
+ExecStart=/usr/bin/docker start -a gc2core
+ExecStop=/usr/bin/docker stop gc2core
+Restart=always
+RestartSec=3
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gc2core
+
+[Install]
+WantedBy=multi-user.target

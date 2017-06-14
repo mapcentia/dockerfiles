@@ -1,0 +1,15 @@
+[Unit]
+Description=Mapcache
+Requires=docker.service gc2core.service
+
+[Service]
+ExecStart=/usr/bin/docker start -a mapcache
+ExecStop=/usr/bin/docker stop mapcache
+Restart=always
+RestartSec=3
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=mapcache
+
+[Install]
+WantedBy=gc2core.service

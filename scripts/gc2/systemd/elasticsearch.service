@@ -1,0 +1,17 @@
+[Unit]
+Description=Elasticsearch
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStartPre=/sbin/sysctl -w vm.max_map_count=262144
+ExecStart=/usr/bin/docker start -a elasticsearch
+ExecStop=/usr/bin/docker stop elasticsearch
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=elasticsearch
+
+[Install]
+WantedBy=multi-user.target

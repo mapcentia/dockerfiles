@@ -1,0 +1,16 @@
+[Unit]
+Description=Vidi
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStart=/usr/bin/docker start -a vidi
+ExecStop=/usr/bin/docker stop vidi
+Restart=always
+RestartSec=3
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=vidi
+
+[Install]
+WantedBy=multi-user.target

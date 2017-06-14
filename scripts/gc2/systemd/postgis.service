@@ -1,0 +1,16 @@
+[Unit]
+Description=Postgis
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStart=/usr/bin/docker start -a postgis
+ExecStop=/usr/bin/docker stop postgis
+Restart=always
+RestartSec=3
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=postgis
+
+[Install]
+WantedBy=multi-user.target
