@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN export DEBIAN_FRONTEND=noninteractive
@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install packages
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install cron vim wget php5-dev php-pear g++ build-essential apache2-mpm-event php5-fpm php5 php5-pgsql php5-curl php5-sqlite git memcached php5-gd php5-cli unzip python-software-properties rng-tools apache2-utils postgresql-client supervisor netcat \
+RUN apt-get -y install sudo cron vim wget php5-dev php-pear g++ build-essential apache2-mpm-event php5-fpm php5 php5-pgsql php5-curl php5-sqlite git memcached php5-gd php5-cli unzip python-software-properties rng-tools apache2-utils postgresql-client supervisor netcat \
     cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev libgeos++-dev swig libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf \
     osm2pgsql
 
