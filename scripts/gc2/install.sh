@@ -22,6 +22,13 @@ echo "Password for new GC2 PostGreSQL user? This is only needed the first time y
 read CONF
 export PG_PW=$CONF
 
+PREFIX=""
+echo "Prefix"
+read CONF
+if [ "$CONF" != "" ]; then
+    PREFIX=$CONF"_"
+fi
+
 LOCALE=$(locale | grep LANG= | grep -o '[^=]*$')
 echo "Locale [$LOCALE]"
 read CONF
@@ -108,10 +115,10 @@ if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
                 if [ "$CONF" = "y" ]; then
                         docker run \
                                 --rm -i \
-                                -v $PWD/elasticsearch:/tmp elasticsearch cp /usr/share/elasticsearch/config /tmp -R
+                                -v $PWD/elasticsearch:/tmp docker.elastic.co/elasticsearch/elasticsearch:5.4.0 cp /usr/share/elasticsearch/config /tmp -R
                 fi
                 echo "Creating a persistence volume for elasticsearch...."
-                docker create --name es-data elasticsearch
+                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:5.4.0
 fi
 
 check elasticsearch
@@ -130,42 +137,40 @@ if [[ $? = 1 ]]
                         --ulimit memlock=-1:-1 \
                         --ulimit nofile=65536:65536 \
                         -p 9200:9200 \
-                        -t elasticsearch
+                        -t docker.elastic.co/elasticsearch/elasticsearch:5.4.0
 fi
 
 #
 # GC2 data
 #
 
-if [[ $(docker ps -a --filter="name=gc2-data" | grep gc2-data) ]]
+if [[ $(docker ps -a --filter="name=${PREFIX}gc2-data" | grep ${PREFIX}gc2-data) ]]
         then
-                echo "gc2-data already exists. Doing nothing."
+                echo "${PREFIX}gc2-data already exists. Doing nothing."
         else
                 echo "Create Apache, PHP5-fpm and GC2 config files for GC2 on host [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
 
-                        mkdir $PWD/.well-known
+                        docker run \
+                                --rm -i \
+                                -v $PWD/${PREFIX}/apache2:/tmp mapcentia/gc2core cp /etc/apache2/sites-enabled /tmp -R
 
                         docker run \
                                 --rm -i \
-                                -v $PWD/apache2:/tmp mapcentia/gc2core cp /etc/apache2/sites-enabled /tmp -R
+                                -v $PWD/${PREFIX}/apache2:/tmp mapcentia/gc2core cp /etc/apache2/ssl /tmp -R
 
                         docker run \
                                 --rm -i \
-                                -v $PWD/apache2:/tmp mapcentia/gc2core cp /etc/apache2/ssl /tmp -R
+                                -v $PWD/${PREFIX}:/tmp mapcentia/gc2core cp /etc/php5/fpm /tmp -R
 
                         docker run \
                                 --rm -i \
-                                -v $PWD/:/tmp mapcentia/gc2core cp /etc/php5/fpm /tmp -R
-
-                        docker run \
-                                --rm -i \
-                                -v $PWD/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
+                                -v $PWD/${PREFIX}/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
                 fi
                 #Create a persistence volume for GC2. Busybox based.
                 echo "Creating a persistence volume for gc2...."
-                docker create --name gc2-data \
+                docker create --name ${PREFIX}gc2-data \
                         -v /etc/letsencrypt \
                         -v /var/www/geocloud2/app/tmp \
                         -v /var/www/geocloud2/app/wms/files \
@@ -180,28 +185,26 @@ fi
 # GC2 core
 #
 
-check gc2core
+check ${PREFIX}gc2core
 if [[ $? = 1 ]]
         then
                 echo "Running the GC2 container...."
                 docker create \
-                        --name gc2core \
+                        --name ${PREFIX}gc2core \
                         --net gc2net \
-                        --ip 172.18.0.23 \
                         --hostname gc2core \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
                         --volumes-from gc2-data \
-                        -v $PWD/apache2/ssl:/etc/apache2/ssl \
-                        -v $PWD/apache2/sites-enabled:/etc/apache2/sites-enabled \
-                        -v $PWD/fpm:/etc/php5/fpm \
-                        -v $PWD/gc2/conf:/var/www/geocloud2/app/conf \
-                        -v $PWD/.well-known:/var/www/geocloud2/public/.well-known \
+                        -v $PWD/${PREFIX}/apache2/ssl:/etc/apache2/ssl \
+                        -v $PWD/${PREFIX}/apache2/sites-enabled:/etc/apache2/sites-enabled \
+                        -v $PWD/${PREFIX}/fpm:/etc/php5/fpm \
+                        -v $PWD/${PREFIX}gc2/conf:/var/www/geocloud2/app/conf \
                         -e GC2_PASSWORD=$PG_PW \
                         -e TIMEZONE="$TIMEZONE" \
                         -e NR_INSTALL_KEY="$NR_INSTALL_KEY" \
                         -e NR_APP_NAME="$NR_APP_NAME" \
-                        -p 80:80 -p 443:443 -p 1339:1339\
+                        -p 81:80 -p 443:443 -p 1339:1339\
                         -t \
                         mapcentia/gc2core
                 fi
@@ -211,23 +214,23 @@ if [[ $? = 1 ]]
 #
 
 #Create a persistence volume for MapCache.
-if [[ $(docker ps -a --filter="name=mapcache-data" | grep mapcache-data) ]]
+if [[ $(docker ps -a --filter="name=${PREFIX}mapcache-data" | grep ${PREFIX}mapcache-data) ]]
         then
-                echo "mapcache-data already exists. Doing nothing."
+                echo "${PREFIX}mapcache-data already exists. Doing nothing."
         else
                 echo "Creating a persistence volume for mapcache...."
-                docker create --name mapcache-data mapcentia/mapcache
+                docker create --name ${PREFIX}mapcache-data mapcentia/mapcache
 fi
 
-check mapcache
+check ${PREFIX}mapcache
 if [[ $? = 1 ]]
         then
                 echo "Running the MapCache container...."
                 docker create \
-                        --name mapcache \
-                        --net container:gc2core \
-                        --volumes-from gc2-data \
-                        --volumes-from mapcache-data \
+                        --name ${PREFIX}mapcache \
+                        --net container:${PREFIX}gc2core \
+                        --volumes-from ${PREFIX}gc2-data \
+                        --volumes-from ${PREFIX}mapcache-data \
                         -t mapcentia/mapcache
 fi
 
