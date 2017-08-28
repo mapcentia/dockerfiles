@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stable
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN export DEBIAN_FRONTEND=noninteractive
@@ -7,19 +7,16 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install packages
 RUN apt-get -y update  --fix-missing
 RUN apt-get -y install cron vim wget  g++ build-essential git memcached unzip rng-tools apache2-utils postgresql-client supervisor netcat
-RUN apt-get -y install apache2 php php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev
+RUN apt-get -y install apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev
 RUN apt-get -y install cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev
-RUN apt-get -y install libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf qgis-server
+RUN apt-get -y install libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf nodejs
+
+RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list
+RUN apt-get -y update
+RUN apt-get -y -t stretch-backports install qgis-server
 
 # Add SQLite3 module to php.ini
 RUN echo "extension=sqlite3.so" >> /etc/php/7.0/fpm/php.ini
-
-# Install SWIG
-RUN wget https://downloads.sourceforge.net/project/swig/swig/swig-3.0.12/swig-3.0.12.tar.gz &&\
-    tar -zxvf swig-3.0.12.tar.gz &&\
-    cd swig-3.0.12 &&\
-    ./configure &&\
-    make && make install
 
 # Install ECW 3.3
 RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &&\
@@ -35,40 +32,39 @@ RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &
 	make &&\
 	make install
 
-# Install GDAL 2.1.3 from source
-RUN wget http://download.osgeo.org/gdal/2.1.3/gdal213.zip && \
-    unzip gdal213.zip &&\
-    cd gdal-2.1.3 &&\
+# TODO Upgrade to 2.1.3
+# Install GDAL 2.1.1 from source
+RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip && \
+    unzip gdal211.zip &&\
+    cd gdal-2.1.1 &&\
     ./configure --with-python=yes --with-ecw=/usr/local &&\
     make &&\
     make install &&\
     ldconfig &&\
     ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
-RUN cp /usr/include/php/20151012/main/php.h /usr/include
+RUN apt-get -y install swig
 
 # Install MapServer 7.0.4 from source
-RUN cp /usr/include/php/20151012/* /usr/include/php -R
-
-RUN wget https://github.com/jmckenna/mapserver/archive/phpmapscript-swig.zip &&\
-	unzip phpmapscript-swig.zip &&\
-	cd mapserver-phpmapscript-swig &&\
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.4.tar.gz &&\
+	tar -zxvf mapserver-7.0.4.tar.gz &&\
+	cd mapserver-7.0.4 &&\
 	mkdir build &&\
 	cd build &&\
 	cmake -DCMAKE_INSTALL_PREFIX=/opt \
+    -DCMAKE_PREFIX_PATH=/usr/local/pgsql/94:/usr/local:/opt:/usr/include \
     -DWITH_CLIENT_WFS=ON \
     -DWITH_CLIENT_WMS=ON \
     -DWITH_CURL=ON \
     -DWITH_SOS=ON \
-    -DWITH_PHP=ON \
+    -DWITH_PHP=OFF \
     -DWITH_PYTHON=ON \
     -DWITH_ORACLESPATIAL=0 \
-    -DPHP_EXTENSION_DIR=/opt \
     -DWITH_RSVG=ON \
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
 
-RUN cp /mapserver-phpmapscript-swig/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver-7.0.4/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\
@@ -80,20 +76,19 @@ RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=
 	echo "<34005> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg
 
 # Install Node.js, Grunt and Forever
-#RUN curl -sL https://deb.nodesource.com/setup_4.x |  bash - &&\
-#    apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_4.x |  bash - &&\
+    apt-get install -y nodejs
 
-#RUN npm install -g grunt-cli &&\
-#	npm install -g forever
+RUN npm install -g grunt-cli
 
 # Clone GC2 from GitHub
 RUN cd /var/www/ &&\
 	 git clone http://github.com/mapcentia/geocloud2.git
 
 # Install npm packages run Grunt
-#RUN	cd /var/www/geocloud2 &&\
-#	npm install &&\
-#	grunt production --force
+RUN	cd /var/www/geocloud2 &&\
+	npm install &&\
+	grunt production --force
 
 # Add the custom config files from the Docker repo.
 ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
@@ -142,11 +137,11 @@ EXPOSE 1339
 #ENV NR_APP_NAME "Default App Name"
 
 # Add the Nodejs proxy
-#ADD nodejs/* /root/server/
+ADD nodejs/* /root/server/
 
 # Install packages
-#RUN cd /root/server &&\
-#	npm install
+RUN cd /root/server &&\
+	npm install
 
 # Add the check-if-fpm-is-alive script
 COPY check-fpm.sh /check-fpm.sh
@@ -162,10 +157,8 @@ RUN chmod +x /run-apache.sh
 # Startrt fpm, so dirs are created
 RUN service php7.0-fpm start
 
-
 # Install PostGIS tools only
-#RUN apt-get download postgis && \
-#    dpkg --force-all -i postgis_2.1.4+dfsg-3_amd64.deb
+RUN apt-get -y install postgis
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
