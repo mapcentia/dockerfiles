@@ -1,5 +1,4 @@
-# Use trusty so we can use wkhtmltopdf deb
-FROM ubuntu:trusty
+FROM debian:stable
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -7,9 +6,9 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install wget curl vim git supervisor postgresql-client npm default-jre
+RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs default-jre gnupg2
 
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
 RUN apt-get install -y nodejs
 
 # Clone Vidi from GitHub
@@ -39,9 +38,8 @@ RUN ln -s /root/vidi/public/bower_components/bootstrap/dist/fonts /root/vidi/pub
 
 # Install wkhtmltox
 RUN cd ~
-RUN wget https://downloads.wkhtmltopdf.org/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
-RUN dpkg -i --force-all wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
-RUN apt-get -y -f install
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+RUN tar xvfJ wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 
 EXPOSE 3000
 
