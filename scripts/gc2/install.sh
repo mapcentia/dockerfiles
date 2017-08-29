@@ -192,6 +192,7 @@ if [[ $? = 1 ]]
                 docker create \
                         --name ${PREFIX}gc2core \
                         --net gc2net \
+                        --ip 172.18.0.23 \
                         --hostname gc2core \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
