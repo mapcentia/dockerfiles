@@ -29,7 +29,7 @@ if [ $1 == "/usr/bin/supervisord" ]; then
             echo $TIMEZONE > /etc/timezone
 
             # PGSQL
-            echo "timezone = '$TIMEZONE'" >> /etc/postgresql/9.5/main/postgresql.conf
+            echo "timezone = '$TIMEZONE'" >> /etc/postgresql/9.6/main/postgresql.conf
         fi
 
         if [ -n "$GC2_PASSWORD" ]; then
