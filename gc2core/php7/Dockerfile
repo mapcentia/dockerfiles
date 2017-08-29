@@ -32,11 +32,10 @@ RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &
 	make &&\
 	make install
 
-# TODO Upgrade to 2.1.3
-# Install GDAL 2.1.1 from source
-RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip && \
-    unzip gdal211.zip &&\
-    cd gdal-2.1.1 &&\
+# Install GDAL 2.2.1 from source
+RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
+    unzip gdal221.zip &&\
+    cd gdal-2.2.1 &&\
     ./configure --with-python=yes --with-ecw=/usr/local &&\
     make &&\
     make install &&\
@@ -45,10 +44,10 @@ RUN wget http://download.osgeo.org/gdal/2.1.1/gdal211.zip && \
 
 RUN apt-get -y install swig
 
-# Install MapServer 7.0.4 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.4.tar.gz &&\
-	tar -zxvf mapserver-7.0.4.tar.gz &&\
-	cd mapserver-7.0.4 &&\
+# Install MapServer 7.0.6 from source
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.6.tar.gz &&\
+	tar -zxvf mapserver-7.0.6.tar.gz &&\
+	cd mapserver-7.0.6 &&\
 	mkdir build &&\
 	cd build &&\
 	cmake -DCMAKE_INSTALL_PREFIX=/opt \
@@ -64,7 +63,7 @@ RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.4.tar.gz &&\
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
 
-RUN cp /mapserver-7.0.4/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver-7.0.6/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install rar
 RUN pecl install rar &&\

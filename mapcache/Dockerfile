@@ -1,4 +1,4 @@
-FROM ubuntu:wily
+FROM debian:stable
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
