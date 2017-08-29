@@ -42,8 +42,6 @@ RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
     ldconfig &&\
     ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
-RUN apt-get -y install swig
-
 # Install MapServer 7.0.6 from source
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.6.tar.gz &&\
 	tar -zxvf mapserver-7.0.6.tar.gz &&\
