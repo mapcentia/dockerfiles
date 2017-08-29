@@ -6,8 +6,8 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install sudo wget curl apache2 libfcgi-dev apache2-threaded-dev cmake g++ build-essential \
-    libgdal-dev libgdal1-dev libgeos-dev libpng12-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff5-dev git \
+RUN apt-get -y install sudo wget curl apache2 libfcgi-dev apache2-dev cmake g++ build-essential \
+    libgdal-dev libgdal-dev libgeos-dev libpng-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff5-dev git \
     supervisor
 
 RUN cd ~ && \
@@ -33,8 +33,8 @@ ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 ADD conf/apache/mapcache.conf /etc/apache2/sites-enabled/
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_0.12 | bash -
-RUN apt-get -y install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_4.x |  bash - &&\
+    apt-get install -y nodejs
 
 # Add the Nodejs proxy
 ADD nodejs/* /root/server/
