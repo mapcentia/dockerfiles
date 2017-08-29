@@ -205,7 +205,7 @@ if [[ $? = 1 ]]
                         -e TIMEZONE="$TIMEZONE" \
                         -e NR_INSTALL_KEY="$NR_INSTALL_KEY" \
                         -e NR_APP_NAME="$NR_APP_NAME" \
-                        -p 81:80 -p 443:443 -p 1339:1339\
+                        -p 80:80 -p 443:443 -p 1339:1339\
                         -t \
                         mapcentia/gc2core
                 fi
