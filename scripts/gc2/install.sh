@@ -115,10 +115,10 @@ if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
                 if [ "$CONF" = "y" ]; then
                         docker run \
                                 --rm -i \
-                                -v $PWD/elasticsearch:/tmp docker.elastic.co/elasticsearch/elasticsearch:5.4.0 cp /usr/share/elasticsearch/config /tmp -R
+                                -v $PWD/elasticsearch:/tmp docker.elastic.co/elasticsearch/elasticsearch:5.5.2 cp /usr/share/elasticsearch/config /tmp -R
                 fi
                 echo "Creating a persistence volume for elasticsearch...."
-                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:5.4.0
+                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:5.5.2
 fi
 
 check elasticsearch
@@ -137,7 +137,7 @@ if [[ $? = 1 ]]
                         --ulimit memlock=-1:-1 \
                         --ulimit nofile=65536:65536 \
                         -p 9200:9200 \
-                        -t docker.elastic.co/elasticsearch/elasticsearch:5.4.0
+                        -t docker.elastic.co/elasticsearch/elasticsearch:5.5.2
 fi
 
 #
