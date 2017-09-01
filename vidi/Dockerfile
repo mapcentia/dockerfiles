@@ -1,12 +1,12 @@
 FROM debian:stable
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
-RUN  export DEBIAN_FRONTEND=noninteractive
-ENV  DEBIAN_FRONTEND noninteractive
+RUN export DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs default-jre gnupg2 locales
+RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs default-jre gnupg2 locales libssl1.0-dev
 
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
 RUN apt-get install -y nodejs
