@@ -107,7 +107,7 @@ ADD conf/apache/options-ssl-apache.conf /etc/apache2/ssl/
 ADD conf/fpm/www.conf /etc/php/7.0/fpm/pool.d/www.conf
 
 # Enable Apache2 modules
-RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi
+RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi http2
 RUN a2enconf serve-cgi-bin
 
 # Install letsencrypt
