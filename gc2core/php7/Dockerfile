@@ -6,10 +6,10 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install cron vim wget  g++ build-essential git memcached unzip rng-tools apache2-utils postgresql-client supervisor netcat
-RUN apt-get -y install apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev
-RUN apt-get -y install cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev
-RUN apt-get -y install libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf nodejs osm2pgsql  postgis sudo
+RUN apt-get -y install cron vim wget  g++ build-essential git memcached unzip rng-tools apache2-utils postgresql-client supervisor netcat &&\
+    apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev &&\
+    cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev &&\
+    libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf nodejs osm2pgsql postgis swig sudo
 
 RUN echo "deb http://ftp.debian.org/debian stretch-backports main" >> /etc/apt/sources.list
 RUN apt-get -y update

@@ -110,13 +110,6 @@ if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
         then
                 echo "es-data already exists. Doing nothing."
         else
-                echo "Create config files for Elasticsearch on host [y/N]"
-                read CONF
-                if [ "$CONF" = "y" ]; then
-                        docker run \
-                                --rm -i \
-                                -v $PWD/elasticsearch:/tmp docker.elastic.co/elasticsearch/elasticsearch:5.5.2 cp /usr/share/elasticsearch/config /tmp -R
-                fi
                 echo "Creating a persistence volume for elasticsearch...."
                 docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:5.5.2
 fi
@@ -133,6 +126,7 @@ if [[ $? = 1 ]]
                         --volumes-from es-data \
                         -v $PWD/elasticsearch/config:/usr/share/elasticsearch/config \
                         -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
+                        -e "xpack.security.enabled=false" \
                         --cap-add=IPC_LOCK \
                         --ulimit memlock=-1:-1 \
                         --ulimit nofile=65536:65536 \

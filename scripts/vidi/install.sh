@@ -95,6 +95,7 @@ if [[ $? = 1 ]]
                 --hostname vidi \
                 -e TIMEZONE="$TIMEZONE" \
                 -e BACKEND="$BACKEND" \
+                -e LOCALE="$LOCALE" \
                 -v $PWD/vidi/config:/root/vidi/config \
                 -p 3000:3000 \
                 -t mapcentia/vidi
