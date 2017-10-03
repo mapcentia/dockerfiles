@@ -124,7 +124,6 @@ if [[ $? = 1 ]]
                         --ip 172.18.0.22 \
                         --hostname elasticsearch \
                         --volumes-from es-data \
-                        -v $PWD/elasticsearch/config:/usr/share/elasticsearch/config \
                         -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
                         -e "xpack.security.enabled=false" \
                         --cap-add=IPC_LOCK \
