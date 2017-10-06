@@ -12,6 +12,17 @@ else
     echo "Docker info: $VERSION"
 fi
 
+#
+# Set the maximum number of memory map area for Elasticsearch
+# Only root can do this
+#
+
+sudo sysctl -w vm.max_map_count=262144
+
+#
+# Create a subnet, so each container gets a fixed IP 
+#
+
 docker network create --subnet=172.18.0.0/16 gc2net
 
 #
@@ -331,7 +342,5 @@ fi
 #
 # Run Docker ps
 #
-
-sysctl -w vm.max_map_count=262144
 
 docker ps -a
