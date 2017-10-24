@@ -33,6 +33,7 @@ echo "Password for new GC2 PostGreSQL user? This is only needed the first time y
 read CONF
 export PG_PW=$CONF
 
+echo "Leave PREFIX blank"
 PREFIX=""
 echo "Prefix"
 read CONF
