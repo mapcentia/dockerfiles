@@ -47,7 +47,7 @@ if [ "$CONF" != "" ]; then
     LOCALE=$CONF
 fi
 
-TIMEZONE=$(date +%Z)
+TIMEZONE="UTC"
 echo "Timezone [$TIMEZONE]"
 read CONF
 if [ "$CONF" != "" ]; then
