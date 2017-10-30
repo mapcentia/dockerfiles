@@ -12,6 +12,17 @@ else
     echo "Docker info: $VERSION"
 fi
 
+#
+# Set the maximum number of memory map area for Elasticsearch
+# Only root can do this
+#
+
+sudo sysctl -w vm.max_map_count=262144
+
+#
+# Create a subnet, so each container gets a fixed IP 
+#
+
 docker network create --subnet=172.18.0.0/16 gc2net
 
 #
@@ -22,6 +33,7 @@ echo "Password for new GC2 PostGreSQL user? This is only needed the first time y
 read CONF
 export PG_PW=$CONF
 
+echo "Leave PREFIX blank"
 PREFIX=""
 echo "Prefix"
 read CONF
@@ -36,7 +48,7 @@ if [ "$CONF" != "" ]; then
     LOCALE=$CONF
 fi
 
-TIMEZONE=$(date +%Z)
+TIMEZONE="UTC"
 echo "Timezone [$TIMEZONE]"
 read CONF
 if [ "$CONF" != "" ]; then
@@ -331,7 +343,5 @@ fi
 #
 # Run Docker ps
 #
-
-sysctl -w vm.max_map_count=262144
 
 docker ps -a
