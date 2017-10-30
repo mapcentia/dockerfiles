@@ -2,6 +2,8 @@ DocumentRoot /var/www/geocloud2/public
 FileETag none
 ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 
+CustomLog ${APACHE_LOG_DIR}/gc2_access.log combined
+
 <Directory />
     AllowOverride All
     Require all granted
