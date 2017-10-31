@@ -8,8 +8,9 @@ ENV  DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update --fix-missing
 RUN apt-get -y install postgresql-client
 
-RUN apt-get -y install build-essential git libfuse-dev libcurl4-openssl-dev libxml2-dev mime-support automake libtool pkg-config libssl-dev fuse &&\
-    git clone https://github.com/s3fs-fuse/s3fs-fuse &&\
+RUN apt-get -y install build-essential git libfuse-dev libcurl4-openssl-dev libxml2-dev mime-support automake libtool pkg-config libssl-dev fuse
+
+RUN git clone https://github.com/s3fs-fuse/s3fs-fuse &&\
     cd s3fs-fuse/ &&\
     ./autogen.sh &&\
     ./configure --prefix=/usr --with-openssl &&\
