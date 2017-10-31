@@ -5,7 +5,7 @@ RUN  export DEBIAN_FRONTEND=noninteractive
 ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
-RUN apt-get -y update
+RUN apt-get -y update --fix-missing
 RUN apt-get -y install postgresql-client
 
 RUN apt-get -y install build-essential git libfuse-dev libcurl4-openssl-dev libxml2-dev mime-support automake libtool pkg-config libssl-dev fuse &&\
