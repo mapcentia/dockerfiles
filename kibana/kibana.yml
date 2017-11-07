@@ -1,0 +1,8 @@
+server.name: kibana
+server.host: "0"
+elasticsearch.url: http://elasticsearch:9200
+elasticsearch.username: elastic
+elasticsearch.password: changeme
+xpack.monitoring.ui.container.elasticsearch.enabled: false
+tilemap.url: http://a.tile.openstreetmap.org/{z}/{x}/{y}.png
+tilemap.options.maxZoom: 18

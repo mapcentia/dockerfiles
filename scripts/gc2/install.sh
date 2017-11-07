@@ -25,6 +25,8 @@ sudo sysctl -w vm.max_map_count=262144
 
 docker network create --subnet=172.18.0.0/16 gc2net
 
+git clone https://github.com/mapcentia/dockerfiles.git
+
 #
 # Set PostGreSQL pwd
 #
@@ -117,13 +119,15 @@ fi
 # Elasticsearch
 #
 
+ELASTIC_VERSION=5.6.3
+
 #Create a persistence volume for elasticsearch.
 if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
         then
                 echo "es-data already exists. Doing nothing."
         else
                 echo "Creating a persistence volume for elasticsearch...."
-                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
 fi
 
 check elasticsearch
@@ -142,7 +146,7 @@ if [[ $? = 1 ]]
                         --ulimit memlock=-1:-1 \
                         --ulimit nofile=65536:65536 \
                         -p 9200:9200 \
-                        -t docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+                        -t docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
 fi
 
 #
@@ -246,7 +250,6 @@ fi
 # Kibana
 #
 
-
 check kibana
 if [[ $? = 1 ]]
         then
@@ -260,19 +263,22 @@ if [[ $? = 1 ]]
                                         echo "kibana-data already exists. Doing nothing."
                                 else
                                         echo "Creating a persistence volume for kibana...."
-                                        docker create --name kibana-data kibana
+                                        docker create --name kibana-data docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
                         fi
 
                         echo "Running the Kibana container...."
+                        mkdir kibana
+                        sudo cp $PWD/dockerfiles/kibana/kibana.yml ./kibana
                         docker create\
                                 --name kibana \
                                 --volumes-from kibana-data \
                                 --net gc2net \
                                 --ip 172.18.0.24 \
                                 --hostname kibana \
+                                -v $PWD/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
                                 --link elasticsearch:elasticsearch \
                                 -p 5601:5601 \
-                                -t kibana
+                                -t docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
                 fi
 fi
 
@@ -286,22 +292,20 @@ if [[ $? = 1 ]]
                 echo "Install logstash [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
-                        echo "Domain? [logstash]"
-                        read CONF
-                        if [ "$CONF" = "" ]; then
-                                CONF=logstash
-                        fi
-                        echo "Running the Logstash container...."
-                        docker create \
-                                --name logstash \
-                                --net gc2net \
-                                --ip 172.18.0.25 \
-                                --hostname logstash \
-                                --link elasticsearch:elasticsearch \
-                                -p 5043:5043 \
-                                -p 1338:1338 \
-                                -t \
-                                mapcentia/logstash
+                    mkdir logstash && mkdir logstash/pipeline
+                    sudo cp $PWD/dockerfiles/logstash/logstash.conf ./filebeat
+                    echo "Running the Logstash container...."
+                    docker create \
+                            --name logstash \
+                            --net gc2net \
+                            --ip 172.18.0.25 \
+                            --hostname logstash \
+                            -v $PWD/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf \
+                            --link elasticsearch:elasticsearch \
+                            -p 5043:5043 \
+                            -p 1338:1338 \
+                            -t \
+                             docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
                 fi
 fi
 
@@ -315,28 +319,15 @@ if [[ $? = 1 ]]
                 echo "Install filebeat [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
-                        echo "Domain? [logstash]"
-                        read CONF
-                        echo "Running the Filebeat container...."
-                        if [ "$CONF" = "" ]; then
-                                CONF=logstash
-                                docker create \
-                                        --name filebeat \
-                                        --net gc2net \
-                                        --link logstash:logstash \
-                                        --volumes-from gc2core \
-                                        -e "MASTER=$CONF" \
-                                        -t \
-                                        mapcentia/filebeat
-                        else
-                                docker create \
-                                        --name filebeat \
-                                        --net gc2net \
-                                        --volumes-from gc2core \
-                                        -e "MASTER=$CONF" \
-                                        -t \
-                                        mapcentia/filebeat
-                        fi
+                    mkdir filebeat
+                    sudo cp $PWD/dockerfiles/filebeat/filebeat.yml ./filebeat
+                    docker create \
+                            --name filebeat \
+                            -v $PWD/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml \
+                            --link logstash:logstash \
+                            --volumes-from gc2core \
+                            -t \
+                            docker.elastic.co/beats/filebeat:${ELASTIC_VERSION}
                 fi
 fi
 
