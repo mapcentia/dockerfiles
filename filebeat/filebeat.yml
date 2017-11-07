@@ -277,7 +277,7 @@ output:
   ### Logstash as output
   logstash:
     # The Logstash hosts
-    hosts: ["MASTER:5043"]
+    hosts: ["logstash:5043"]
 
     # Number of workers per Logstash host.
     #worker: 1
