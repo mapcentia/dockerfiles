@@ -136,9 +136,9 @@ if [[ $? = 1 ]]
                 echo "Running the elasticsearch container...."
                 docker create \
                         --name elasticsearch \
+                        --hostname elasticsearch \
                         --net gc2net \
                         --ip 172.18.0.22 \
-                        --hostname elasticsearch \
                         --volumes-from es-data \
                         -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
                         -e "xpack.security.enabled=false" \
@@ -256,7 +256,6 @@ if [[ $? = 1 ]]
                 echo "Install kibana [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
-
                         #Create a persistence volume for Kibana
                         if [[ $(docker ps -a --filter="name=kibana-data" | grep kibana-data) ]]
                                 then
@@ -272,10 +271,10 @@ if [[ $? = 1 ]]
                         docker create\
                                 --name kibana \
                                 --volumes-from kibana-data \
-                                --net gc2net \
-                                --ip 172.18.0.24 \
                                 --hostname kibana \
-                                -v $PWD/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+                                --net gc2net \
+                                --ip 172.18.0.30 \
+                                -v $PWD/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml \
                                 --link elasticsearch:elasticsearch \
                                 -p 5601:5601 \
                                 -t docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
@@ -293,14 +292,14 @@ if [[ $? = 1 ]]
                 read CONF
                 if [ "$CONF" = "y" ]; then
                     mkdir logstash && mkdir logstash/pipeline
-                    sudo cp $PWD/dockerfiles/logstash/logstash.conf ./filebeat
+                    sudo cp $PWD/dockerfiles/logstash/logstash.conf ./logstash/pipeline
                     echo "Running the Logstash container...."
                     docker create \
                             --name logstash \
-                            --net gc2net \
-                            --ip 172.18.0.25 \
                             --hostname logstash \
-                            -v $PWD/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf \
+                            --net gc2net \
+                            --ip 172.18.0.31 \
+                            -v $PWD/logstash/piplogstash.conf:/usr/share/logstash/pipeline/logstash.conf \
                             --link elasticsearch:elasticsearch \
                             -p 5043:5043 \
                             -p 1338:1338 \
@@ -323,8 +322,8 @@ if [[ $? = 1 ]]
                     sudo cp $PWD/dockerfiles/filebeat/filebeat.yml ./filebeat
                     docker create \
                             --name filebeat \
+                            --net gc2net \
                             -v $PWD/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml \
-                            --link logstash:logstash \
                             --volumes-from gc2core \
                             -t \
                             docker.elastic.co/beats/filebeat:${ELASTIC_VERSION}
