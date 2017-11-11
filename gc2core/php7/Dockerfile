@@ -7,9 +7,9 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install packages
 RUN apt-get -y update  --fix-missing
 RUN apt-get -y install cron vim wget  g++ build-essential git memcached unzip rng-tools apache2-utils postgresql-client supervisor netcat \
-    apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev \
+    apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev php7.0-zip \
     cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev \
-    libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf nodejs osm2pgsql postgis swig sudo
+    libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb wkhtmltopdf nodejs osm2pgsql postgis sudo
 
 # Install QGIS-server 2.18
 RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
@@ -97,9 +97,6 @@ ADD conf/gc2/Connection.php /var/www/geocloud2/app/conf/
 
 # Make php-fpm run in the foreground
 RUN sed 's/;daemonize = yes/daemonize = no/' -i /etc/php/7.0/fpm/php-fpm.conf
-
-# Add MapScript module to php.ini
-#RUN echo "extension=php_mapscript.so" >> /etc/php/fpm/php.ini
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/

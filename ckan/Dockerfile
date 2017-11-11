@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -8,8 +8,8 @@ ENV  DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update --fix-missing
 RUN apt-get -y install nginx apache2 libapache2-mod-wsgi libpq5 wget postgresql-client apg gettext
 
-RUN wget http://packaging.ckan.org/python-ckan_2.6-trusty_amd64.deb &&\
-        dpkg -i python-ckan_2.6-trusty_amd64.deb
+RUN wget http://packaging.ckan.org/python-ckan_2.7-xenial_amd64.deb &&\
+        dpkg -i python-ckan_2.6-xenial_amd64.deb
 
 ADD conf/ckan/production.ini /etc/ckan/default/
 
