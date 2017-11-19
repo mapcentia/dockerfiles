@@ -23,8 +23,6 @@ sudo sysctl -w vm.max_map_count=262144
 # Create a subnet, so each container gets a fixed IP 
 #
 
-docker network create --subnet=172.18.0.0/16 gc2net
-
 git clone https://github.com/mapcentia/dockerfiles.git
 
 #
@@ -35,13 +33,13 @@ echo "Password for new GC2 PostGreSQL user? This is only needed the first time y
 read CONF
 export PG_PW=$CONF
 
-echo "Leave PREFIX blank"
+#echo "Leave PREFIX blank"
 PREFIX=""
-echo "Prefix"
-read CONF
-if [ "$CONF" != "" ]; then
-    PREFIX=$CONF"_"
-fi
+#echo "Prefix"
+#read CONF
+#if [ "$CONF" != "" ]; then
+#    PREFIX=$CONF"_"
+#fi
 
 LOCALE=$(locale | grep LANG= | grep -o '[^=]*$')
 echo "Locale [$LOCALE]"
@@ -57,16 +55,16 @@ if [ "$CONF" != "" ]; then
     TIMEZONE=$CONF
 fi
 
-echo "Enabling New Relic APM metrics? Input your New Relic install key. Blank for not enabling APM"
-echo "New Relic license key"
+echo "Hostname (e.g. example.com,www.example.com)"
 read CONF
 if [ "$CONF" != "" ]; then
-    NR_INSTALL_KEY=$CONF
-    echo "Application name"
-        read CONF
-        if [ "$CONF" != "" ]; then
-            NR_APP_NAME=$CONF
-        fi
+    VIRTUAL_HOST=$CONF
+fi
+
+echo "Let's encrypt email"
+read CONF
+if [ "$CONF" != "" ]; then
+    LETSENCRYPT_EMAIL=$CONF
 fi
 
 check () {
@@ -84,6 +82,33 @@ check () {
     fi
 }
 
+check nginx-proxy
+if [[ $? = 1 ]]
+    then
+        echo "Creating the nginx-proxy container...."
+        docker create -d -p 80:80 -p 443:443 \
+            --name nginx-proxy \
+            -v $PWD/certs:/etc/nginx/certs:ro \
+            -v /etc/nginx/vhost.d \
+            -v /usr/share/nginx/html \
+            -v /var/run/docker.sock:/tmp/docker.sock:ro \
+            --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
+            jwilder/nginx-proxy:alpine
+fi
+
+
+check nginx-letsencrypt
+if [[ $? = 1 ]]
+    then
+        echo "Creating the nginx-letsencrypt container...."
+            docker run -d \
+                --name nginx-letsencrypt \
+                -v $PWD/certs:/etc/nginx/certs:rw \
+                -v /var/run/docker.sock:/var/run/docker.sock:ro \
+                --volumes-from nginx-proxy \
+                jrcs/letsencrypt-nginx-proxy-companion
+fi
+
 #
 # PostGIS
 #
@@ -100,12 +125,9 @@ fi
 check postgis
 if [[ $? = 1 ]]
         then
-                echo "Running the postgis container...."
+                echo "Creating the postgis container...."
                 docker create \
                         --name postgis \
-                        --net gc2net \
-                        --ip 172.18.0.21 \
-                        --hostname postgis \
                         -p 5432:5432 \
                         -p 6432:6432 \
                         --volumes-from postgis-data \
@@ -133,12 +155,9 @@ fi
 check elasticsearch
 if [[ $? = 1 ]]
         then
-                echo "Running the elasticsearch container...."
+                echo "Creating the elasticsearch container...."
                 docker create \
                         --name elasticsearch \
-                        --hostname elasticsearch \
-                        --net gc2net \
-                        --ip 172.18.0.22 \
                         --volumes-from es-data \
                         -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
                         -e "xpack.security.enabled=false" \
@@ -157,7 +176,7 @@ if [[ $(docker ps -a --filter="name=${PREFIX}gc2-data" | grep ${PREFIX}gc2-data)
         then
                 echo "${PREFIX}gc2-data already exists. Doing nothing."
         else
-                echo "Create Apache, PHP5-fpm and GC2 config files for GC2 on host [y/N]"
+                echo "Create Apache and GC2 config files for GC2 on host [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
 
@@ -168,10 +187,6 @@ if [[ $(docker ps -a --filter="name=${PREFIX}gc2-data" | grep ${PREFIX}gc2-data)
                         docker run \
                                 --rm -i \
                                 -v $PWD/${PREFIX}/apache2:/tmp mapcentia/gc2core cp /etc/apache2/ssl /tmp -R
-
-                        docker run \
-                                --rm -i \
-                                -v $PWD/${PREFIX}:/tmp mapcentia/gc2core cp /etc/php5/fpm /tmp -R
 
                         docker run \
                                 --rm -i \
@@ -197,23 +212,20 @@ fi
 check ${PREFIX}gc2core
 if [[ $? = 1 ]]
         then
-                echo "Running the GC2 container...."
+                echo "Creating the GC2 container...."
                 docker create \
                         --name ${PREFIX}gc2core \
-                        --net gc2net \
-                        --ip 172.18.0.23 \
-                        --hostname gc2core \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
                         --volumes-from gc2-data \
                         -v $PWD/${PREFIX}/apache2/ssl:/etc/apache2/ssl \
                         -v $PWD/${PREFIX}/apache2/sites-enabled:/etc/apache2/sites-enabled \
-                        -v $PWD/${PREFIX}/fpm:/etc/php5/fpm \
                         -v $PWD/${PREFIX}gc2/conf:/var/www/geocloud2/app/conf \
                         -e GC2_PASSWORD=$PG_PW \
                         -e TIMEZONE="$TIMEZONE" \
-                        -e NR_INSTALL_KEY="$NR_INSTALL_KEY" \
-                        -e NR_APP_NAME="$NR_APP_NAME" \
+                        -e "VIRTUAL_HOST=${VIRTUAL_HOST}" \
+                        -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
+                        -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
                         -p 80:80 -p 443:443 -p 1339:1339\
                         -t \
                         mapcentia/gc2core
@@ -235,7 +247,7 @@ fi
 check ${PREFIX}mapcache
 if [[ $? = 1 ]]
         then
-                echo "Running the MapCache container...."
+                echo "Creating the MapCache container...."
                 docker create \
                         --name ${PREFIX}mapcache \
                         --net container:${PREFIX}gc2core \
@@ -265,15 +277,12 @@ if [[ $? = 1 ]]
                                         docker create --name kibana-data docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
                         fi
 
-                        echo "Running the Kibana container...."
+                        echo "Creating the Kibana container...."
                         mkdir kibana
                         sudo cp $PWD/dockerfiles/kibana/kibana.yml ./kibana
                         docker create\
                                 --name kibana \
                                 --volumes-from kibana-data \
-                                --hostname kibana \
-                                --net gc2net \
-                                --ip 172.18.0.30 \
                                 -v $PWD/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml \
                                 --link elasticsearch:elasticsearch \
                                 -p 5601:5601 \
@@ -293,12 +302,9 @@ if [[ $? = 1 ]]
                 if [ "$CONF" = "y" ]; then
                     mkdir logstash && mkdir logstash/pipeline
                     sudo cp $PWD/dockerfiles/logstash/logstash.conf ./logstash/pipeline
-                    echo "Running the Logstash container...."
+                    echo "Creating the Logstash container...."
                     docker create \
                             --name logstash \
-                            --hostname logstash \
-                            --net gc2net \
-                            --ip 172.18.0.31 \
                             -v $PWD/logstash/piplogstash.conf:/usr/share/logstash/pipeline/logstash.conf \
                             --link elasticsearch:elasticsearch \
                             -p 5043:5043 \
@@ -322,7 +328,6 @@ if [[ $? = 1 ]]
                     sudo cp $PWD/dockerfiles/filebeat/filebeat.yml ./filebeat
                     docker create \
                             --name filebeat \
-                            --net gc2net \
                             -v $PWD/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml \
                             --volumes-from gc2core \
                             -t \

@@ -12,9 +12,6 @@ else
     echo "Docker info: $VERSION"
 fi
 
-docker network create --subnet=172.18.0.0/16 gc2net
-
-
 LOCALE=$(locale | grep LANG= | grep -o '[^=]*$')
 echo "Locale [$LOCALE]"
 read CONF
@@ -22,22 +19,24 @@ if [ "$CONF" != "" ]; then
     LOCALE=$CONF
 fi
 
-TIMEZONE=$(date +%Z)
+TIMEZONE="UTC"
 echo "Timezone [$TIMEZONE]"
 read CONF
 if [ "$CONF" != "" ]; then
     TIMEZONE=$CONF
 fi
 
+echo "Hostname (e.g. example.com,www.example.com)"
+read CONF
+if [ "$CONF" != "" ]; then
+    VIRTUAL_HOST=$CONF
+fi
 
-
-echo "Which backend?"
-select yn in "GC2" "CartoDB"; do
-    case $yn in
-        GC2 ) BACKEND="gc2"; break;;
-        CartoDB ) BACKEND="cartodb"; break;;
-    esac
-done
+echo "Let's encrypt email"
+read CONF
+if [ "$CONF" != "" ]; then
+    LETSENCRYPT_EMAIL=$CONF
+fi
 
 check () {
     flag=0
@@ -90,13 +89,14 @@ if [[ $? = 1 ]]
         docker create \
                 --name vidi \
                 --volumes-from vidi-data \
-                --net gc2net \
-                --ip 172.18.0.31 \
-                --hostname vidi \
                 -e TIMEZONE="$TIMEZONE" \
-                -e BACKEND="$BACKEND" \
+                -e BACKEND="gc2" \
                 -e LOCALE="$LOCALE" \
                 -v $PWD/vidi/config:/root/vidi/config \
+                -e TIMEZONE="$TIMEZONE" \
+                -e "VIRTUAL_HOST=${VIRTUAL_HOST}" \
+                -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
+                -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
                 -p 3000:3000 \
                 -t mapcentia/vidi
 
