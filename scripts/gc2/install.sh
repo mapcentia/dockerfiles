@@ -86,8 +86,9 @@ check nginx-proxy
 if [[ $? = 1 ]]
     then
         echo "Creating the nginx-proxy container...."
-        docker create -d -p 80:80 -p 443:443 \
+        docker create \
             --name nginx-proxy \
+            -p 80:80 -p 443:443 \
             -v $PWD/certs:/etc/nginx/certs:ro \
             -v /etc/nginx/vhost.d \
             -v /usr/share/nginx/html \
@@ -101,7 +102,7 @@ check nginx-letsencrypt
 if [[ $? = 1 ]]
     then
         echo "Creating the nginx-letsencrypt container...."
-            docker run -d \
+            docker create \
                 --name nginx-letsencrypt \
                 -v $PWD/certs:/etc/nginx/certs:rw \
                 -v /var/run/docker.sock:/var/run/docker.sock:ro \
@@ -141,7 +142,7 @@ fi
 # Elasticsearch
 #
 
-ELASTIC_VERSION=5.6.3
+ELASTIC_VERSION=6.0.0
 
 #Create a persistence volume for elasticsearch.
 if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
