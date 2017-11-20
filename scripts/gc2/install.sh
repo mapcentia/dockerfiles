@@ -216,7 +216,7 @@ if [[ $? = 1 ]]
                         -e "VIRTUAL_HOST=${VIRTUAL_HOST}" \
                         -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
                         -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
-                        -p 80:80 -p 443:443 -p 1339:1339\
+                        -p 1339:1339\
                         -t \
                         mapcentia/gc2core
                 fi
