@@ -176,18 +176,9 @@ if [[ $(docker ps -a --filter="name=${PREFIX}gc2-data" | grep ${PREFIX}gc2-data)
         then
                 echo "${PREFIX}gc2-data already exists. Doing nothing."
         else
-                echo "Create Apache and GC2 config files for GC2 on host [y/N]"
+                echo "Create GC2 config files on host [y/N]"
                 read CONF
                 if [ "$CONF" = "y" ]; then
-
-                        docker run \
-                                --rm -i \
-                                -v $PWD/${PREFIX}/apache2:/tmp mapcentia/gc2core cp /etc/apache2/sites-enabled /tmp -R
-
-                        docker run \
-                                --rm -i \
-                                -v $PWD/${PREFIX}/apache2:/tmp mapcentia/gc2core cp /etc/apache2/ssl /tmp -R
-
                         docker run \
                                 --rm -i \
                                 -v $PWD/${PREFIX}/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
@@ -218,8 +209,6 @@ if [[ $? = 1 ]]
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
                         --volumes-from gc2-data \
-                        -v $PWD/${PREFIX}/apache2/ssl:/etc/apache2/ssl \
-                        -v $PWD/${PREFIX}/apache2/sites-enabled:/etc/apache2/sites-enabled \
                         -v $PWD/${PREFIX}gc2/conf:/var/www/geocloud2/app/conf \
                         -e GC2_PASSWORD=$PG_PW \
                         -e TIMEZONE="$TIMEZONE" \
