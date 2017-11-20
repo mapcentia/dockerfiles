@@ -97,7 +97,6 @@ if [[ $? = 1 ]]
                 -e "VIRTUAL_HOST=${VIRTUAL_HOST}" \
                 -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
                 -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
-                -p 3000:3000 \
                 -t mapcentia/vidi
 
 fi
