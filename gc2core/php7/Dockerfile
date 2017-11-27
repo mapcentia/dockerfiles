@@ -1,40 +1,8 @@
-FROM debian:stable
+FROM mapcentia/gc2core:base
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
-
-# Install packages
-RUN apt-get -y update  --fix-missing
-RUN apt-get -y install cron vim wget  g++ build-essential git unzip rng-tools apache2-utils postgresql-client supervisor netcat \
-    apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev php7.0-zip \
-    cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev \
-    libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb nodejs osm2pgsql postgis swig sudo
-
-# Install QGIS-server 2.18
-RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
-    wget -O - http://qgis.org/downloads/qgis-2017.gpg.key | gpg --import &&\
-    gpg --fingerprint CAEB3DC3BDF7FB45 &&\
-    gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add - &&\
-    apt-get -y update &&\
-    apt-get -y install qgis-server
-
-# Add SQLite3 module to php.ini
-RUN echo "extension=sqlite3.so" >> /etc/php/7.0/fpm/php.ini
-
-# Install ECW 3.3
-RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &&\
-	unzip libecwj2-3.3-2006-09-06.zip &&\
-	wget http://trac.osgeo.org/gdal/raw-attachment/ticket/3162/libecwj2-3.3-msvc90-fixes.patch &&\
-	patch -p0< libecwj2-3.3-msvc90-fixes.patch &&\
-	wget http://osgeo-org.1560.x6.nabble.com/attachment/5001530/0/libecwj2-3.3-wcharfix.patch &&\
-	wget http://trac.osgeo.org/gdal/raw-attachment/ticket/3366/libecwj2-3.3-NCSPhysicalMemorySize-Linux.patch &&\
-	cd libecwj2-3.3/ &&\
-	patch -p0< ../libecwj2-3.3-NCSPhysicalMemorySize-Linux.patch &&\
-	patch -p1< ../libecwj2-3.3-wcharfix.patch &&\
-	./configure &&\
-	make &&\
-	make install
 
 # Install GDAL 2.2.1 from source
 RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
@@ -111,9 +79,6 @@ ADD conf/fpm/www.conf /etc/php/7.0/fpm/pool.d/www.conf
 RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi http2
 RUN a2enconf serve-cgi-bin
 
-# Install letsencrypt
-RUN cd ~ && git clone https://github.com/Neilpang/acme.sh.git
-
 # Share dirs
 VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php/7.0/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/letsencrypt"]
 
@@ -121,17 +86,6 @@ VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php/7.0/fpm","/var/log", "/us
 EXPOSE 80
 EXPOSE 443
 EXPOSE 1339
-
-# Install New Relic daemon
-#RUN wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
-#    echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list
-
-#RUN apt-get update && \
-#    apt-get -yq install newrelic-php7
-
-# Setup environment variables for initializing New Relic
-#ENV NR_INSTALL_SILENT 1
-#ENV NR_APP_NAME "Default App Name"
 
 # Add the Nodejs proxy
 ADD nodejs/* /root/server/
