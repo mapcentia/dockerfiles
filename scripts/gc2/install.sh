@@ -218,7 +218,7 @@ if [[ $? = 1 ]]
                         -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
                         -p 1339:1339\
                         -t \
-                        mapcentia/gc2core
+                        mapcentia/gc2core:php7
                 fi
 
 #
