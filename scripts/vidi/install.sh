@@ -53,6 +53,34 @@ check () {
     fi
 }
 
+check nginx-proxy
+if [[ $? = 1 ]]
+    then
+        echo "Creating the nginx-proxy container...."
+        docker create \
+            --name nginx-proxy \
+            -p 80:80 -p 443:443 \
+            -v $PWD/certs:/etc/nginx/certs:ro \
+            -v /etc/nginx/vhost.d \
+            -v /usr/share/nginx/html \
+            -v /var/run/docker.sock:/tmp/docker.sock:ro \
+            --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
+            jwilder/nginx-proxy:alpine
+fi
+
+
+check nginx-letsencrypt
+if [[ $? = 1 ]]
+    then
+        echo "Creating the nginx-letsencrypt container...."
+            docker create \
+                --name nginx-letsencrypt \
+                -v $PWD/certs:/etc/nginx/certs:rw \
+                -v /var/run/docker.sock:/var/run/docker.sock:ro \
+                --volumes-from nginx-proxy \
+                jrcs/letsencrypt-nginx-proxy-companion
+fi
+
 #
 # Vidi data
 #
