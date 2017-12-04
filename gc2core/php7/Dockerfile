@@ -8,9 +8,11 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
     unzip gdal221.zip &&\
     cd gdal-2.2.1 &&\
-    ./configure --with-python=yes --with-ecw=/usr/local &&\
-    make &&\
-    make install &&\
+    ./configure --with-python=yes --with-ecw=/usr/local
+
+RUN make
+
+RUN make install &&\
     ldconfig &&\
     ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
