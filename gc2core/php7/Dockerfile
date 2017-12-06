@@ -10,7 +10,7 @@ RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
     cd gdal-2.2.1 &&\
     ./configure --with-python=yes --with-ecw=/usr/local
 
-RUN make
+RUN cd gdal-2.2.1 && make
 
 RUN make install &&\
     ldconfig &&\
