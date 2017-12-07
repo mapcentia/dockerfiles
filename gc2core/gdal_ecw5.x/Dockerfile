@@ -14,8 +14,8 @@ RUN wget https://s3-eu-west-1.amazonaws.com/mapcentia-tmp/ERDAS-ECW_JPEG_2000_SD
     ldconfig
 
 # Install GDAL 2.2.1 from source
-RUN wget http://download.osgeo.org/gdal/2.2.1/gdal211.zip &&\
-    unzip gdal211.zip &&\
+RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip &&\
+    unzip gdal221.zip &&\
     cd gdal-2.2.1 &&\
     ./configure --with-python=yes --with-ecw=/usr/local/hexagon &&\
     make &&\
