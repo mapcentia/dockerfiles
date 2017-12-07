@@ -125,6 +125,7 @@ if [[ $? = 1 ]]
                 -e "VIRTUAL_HOST=${VIRTUAL_HOST}" \
                 -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
                 -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
+                -e "HTTPS_METHOD=noredirect" \
                 -t mapcentia/vidi
 
 fi

@@ -1,22 +1,8 @@
-FROM mapcentia/gc2core:base
+FROM mapcentia/gc2core:gdal
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
-
-# Install GDAL 2.2.1 from source
-RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
-    unzip gdal221.zip &&\
-    cd gdal-2.2.1 &&\
-    ./configure --with-python=yes --with-ecw=/usr/local
-
-RUN cd gdal-2.2.1 &&\
-    make
-
-RUN cd gdal-2.2.1 &&\
-    make install &&\
-    ldconfig &&\
-    ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
 # Install MapServer 7.0.6 from source
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.6.tar.gz &&\
@@ -49,8 +35,9 @@ RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=
 	echo "<34005> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg
 
 # Install Node.js, Grunt and Forever
-RUN curl -sL https://deb.nodesource.com/setup_4.x |  bash - &&\
-    apt-get install -y nodejs
+RUN apt-get install apt-transport-https ca-certificates -y
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
+RUN apt-get install -y nodejs
 
 RUN npm install -g grunt-cli
 
@@ -89,14 +76,6 @@ VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php/7.0/fpm","/var/log", "/us
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
 EXPOSE 443
-EXPOSE 1339
-
-# Add the Nodejs proxy
-ADD nodejs/* /root/server/
-
-# Install packages
-RUN cd /root/server &&\
-	npm install
 
 # Add the check-if-fpm-is-alive script
 COPY check-fpm.sh /check-fpm.sh

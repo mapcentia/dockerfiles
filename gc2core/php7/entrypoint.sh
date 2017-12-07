@@ -1,14 +1,6 @@
 #!/bin/bash
 set -e
 
-if [ -n "$NR_INSTALL_KEY" ]; then
-    echo "Enabling APM metrics for ${NR_APP_NAME}"
-    newrelic-install install
-
-    # Update the application name
-    sed -i "s/newrelic.appname = \"PHP Application\"/newrelic.appname = \"${NR_APP_NAME}\"/" /etc/php5/fpm/conf.d/newrelic.ini
-fi
-
 # If container is run without commando, then check if pgsql pw for gc2 is passed.
 if [ $1 == "/usr/bin/supervisord" ]; then
     if [ -n "$GC2_PASSWORD" ]; then
