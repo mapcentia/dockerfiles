@@ -10,9 +10,11 @@ RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
     cd gdal-2.2.1 &&\
     ./configure --with-python=yes --with-ecw=/usr/local
 
-RUN cd gdal-2.2.1 && make
+RUN cd gdal-2.2.1 &&\
+    make
 
-RUN make install &&\
+RUN cd gdal-2.2.1 &&\
+    make install &&\
     ldconfig &&\
     ln -s /usr/local/bin/ogr2ogr /usr/bin/ogr2ogr
 
