@@ -12,4 +12,4 @@ curl  https://raw.githubusercontent.com/mapcentia/dockerfiles/master/scripts/vid
 curl  https://raw.githubusercontent.com/mapcentia/dockerfiles/master/scripts/vidi/start.sh --create-dirs -o $PWD/scripts/vidi/start.sh
 curl  https://raw.githubusercontent.com/mapcentia/dockerfiles/master/scripts/vidi/stop.sh --create-dirs -o $PWD/scripts/vidi/stop.sh
 curl  https://raw.githubusercontent.com/mapcentia/dockerfiles/master/scripts/vidi/build.sh --create-dirs -o $PWD/scripts/vidi/build.sh
-curl  https://raw.githubusercontent.com/mapcentia/dockerfiles/master/scripts/vidi/pull.sh --create-dirs -o $PWD/scripts/vidi/build.sh
+curl  https://raw.githubusercontent.com/mapcentia/dockerfiles/master/scripts/vidi/pull.sh --create-dirs -o $PWD/scripts/vidi/pull.sh
