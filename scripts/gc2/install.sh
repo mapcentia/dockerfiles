@@ -177,13 +177,12 @@ if [[ $(docker ps -a --filter="name=${PREFIX}gc2-data" | grep ${PREFIX}gc2-data)
         then
                 echo "${PREFIX}gc2-data already exists. Doing nothing."
         else
-                echo "Create GC2 config files on host [y/N]"
-                read CONF
-                if [ "$CONF" = "y" ]; then
-                        docker run \
-                                --rm -i \
-                                -v $PWD/${PREFIX}/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
-                fi
+                echo "Creating GC2 config files on host...."
+
+                docker run \
+                        --rm -i \
+                        -v $PWD/${PREFIX}/gc2:/tmp mapcentia/gc2core:php7 cp /var/www/geocloud2/app/conf /tmp -R
+
                 #Create a persistence volume for GC2. Busybox based.
                 echo "Creating a persistence volume for gc2...."
                 docker create --name ${PREFIX}gc2-data \
@@ -216,6 +215,7 @@ if [[ $? = 1 ]]
                         -e "VIRTUAL_HOST=${VIRTUAL_HOST}" \
                         -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
                         -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
+                        -e "HTTPS_METHOD=noredirect" \
                         -p 1339:1339\
                         -t \
                         mapcentia/gc2core:php7
