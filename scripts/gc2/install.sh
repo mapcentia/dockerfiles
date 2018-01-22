@@ -181,7 +181,7 @@ if [[ $(docker ps -a --filter="name=${PREFIX}gc2-data" | grep ${PREFIX}gc2-data)
 
                 docker run \
                         --rm -i \
-                        -v $PWD/${PREFIX}/gc2:/tmp mapcentia/gc2core:php7 cp /var/www/geocloud2/app/conf /tmp -R
+                        -v $PWD/${PREFIX}/gc2:/tmp mapcentia/gc2core cp /var/www/geocloud2/app/conf /tmp -R
 
                 #Create a persistence volume for GC2. Busybox based.
                 echo "Creating a persistence volume for gc2...."
@@ -218,7 +218,7 @@ if [[ $? = 1 ]]
                         -e "HTTPS_METHOD=noredirect" \
                         -p 1339:1339\
                         -t \
-                        mapcentia/gc2core:php7
+                        mapcentia/gc2core
                 fi
 
 #
