@@ -13,6 +13,8 @@ done
 
 echo $daemonize
 
+docker start nginx-proxy
+docker start nginx-letsencrypt
 docker start postgis
 docker start elasticsearch
 docker start gc2core

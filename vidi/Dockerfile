@@ -37,9 +37,9 @@ RUN cd ~/vidi &&\
 RUN ln -s /root/vidi/public/bower_components/bootstrap/dist/fonts /root/vidi/public/css/fonts
 
 # Install wkhtmltox
-RUN cd ~
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-RUN tar xvfJ wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+RUN cd ~ &&\
+    wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz &&\
+    tar xvfJ wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 
 EXPOSE 3000
 
