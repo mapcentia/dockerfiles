@@ -19,10 +19,6 @@ fi
 
 sudo sysctl -w vm.max_map_count=262144
 
-#
-# Create a subnet, so each container gets a fixed IP 
-#
-
 git clone https://github.com/mapcentia/dockerfiles.git
 
 #
@@ -86,11 +82,15 @@ check nginx-proxy
 if [[ $? = 1 ]]
     then
         echo "Creating the nginx-proxy container...."
+        sudo mkdir nginx
+        sudo cp $PWD/dockerfiles/nginx/proxy.conf ./nginx
+
         docker create \
             --name nginx-proxy \
             -p 80:80 -p 443:443 \
-            -v $PWD/certs:/etc/nginx/certs:ro \
-            -v /etc/nginx/vhost.d \
+            -v $PWD/nginx/certs:/etc/nginx/certs:ro \
+            -v $PWD/nginx/vhost.d:/etc/nginx/vhost.d:ro \
+            -v $PWD/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro \
             -v /usr/share/nginx/html \
             -v /var/run/docker.sock:/tmp/docker.sock:ro \
             --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
