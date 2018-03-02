@@ -70,7 +70,7 @@ RUN a2enmod rewrite headers expires include actions alias cgid fcgid ssl proxy p
 RUN a2enconf serve-cgi-bin
 
 # Share dirs
-VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php/7.0/fpm","/var/log", "/usr/share/proj", "/var/spool/cron/crontabs", "/etc/letsencrypt"]
+VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php/7.0/fpm","/var/log", "/usr/share/proj"]
 
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
