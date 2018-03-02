@@ -104,7 +104,7 @@ if [[ $? = 1 ]]
         echo "Creating the nginx-letsencrypt container...."
             docker create \
                 --name nginx-letsencrypt \
-                -v $PWD/certs:/etc/nginx/certs:rw \
+                -v $PWD/nginx/certs:/etc/nginx/certs:rw \
                 -v /var/run/docker.sock:/var/run/docker.sock:ro \
                 --volumes-from nginx-proxy \
                 jrcs/letsencrypt-nginx-proxy-companion
@@ -186,7 +186,6 @@ if [[ $(docker ps -a --filter="name=${PREFIX}gc2-data" | grep ${PREFIX}gc2-data)
                 #Create a persistence volume for GC2. Busybox based.
                 echo "Creating a persistence volume for gc2...."
                 docker create --name ${PREFIX}gc2-data \
-                        -v /etc/letsencrypt \
                         -v /var/www/geocloud2/app/tmp \
                         -v /var/www/geocloud2/app/wms/files \
                         -v /var/www/geocloud2/app/wms/mapcache \
@@ -206,6 +205,7 @@ if [[ $? = 1 ]]
                 echo "Creating the GC2 container...."
                 docker create \
                         --name ${PREFIX}gc2core \
+                        --privileged \
                         --link postgis:postgis \
                         --link elasticsearch:elasticsearch \
                         --volumes-from gc2-data \
