@@ -26,7 +26,7 @@ CustomLog ${APACHE_LOG_DIR}/gc2_access.log combined
     Allow from 127.0.0.1 localhost
 </Directory>
 
-<Proxy "unix:///var/run/php5-fpm.sock|fcgi://localhost">
+<Proxy "unix:///var/run/php-fpm.sock|fcgi://localhost">
     ProxySet timeout=3600
 </Proxy>
 

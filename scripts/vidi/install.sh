@@ -121,7 +121,6 @@ if [[ $? = 1 ]]
                 -e BACKEND="gc2" \
                 -e LOCALE="$LOCALE" \
                 -v $PWD/vidi/config:/root/vidi/config \
-                -e TIMEZONE="$TIMEZONE" \
                 -e "VIRTUAL_HOST=${VIRTUAL_HOST}" \
                 -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
                 -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \

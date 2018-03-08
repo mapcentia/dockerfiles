@@ -87,6 +87,9 @@ ENTRYPOINT ["/entrypoint.sh"]
 ADD conf/apache/run-apache.sh /
 RUN chmod +x /run-apache.sh
 
+ADD conf/apache/run-fpm.sh /
+RUN chmod +x /run-fpm.sh
+
 # Startrt fpm, so dirs are created
 RUN service php7.0-fpm start
 
