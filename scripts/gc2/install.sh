@@ -162,6 +162,7 @@ if [[ $? = 1 ]]
                         --volumes-from es-data \
                         -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
                         -e "xpack.security.enabled=false" \
+                        -e "bootstrap.memory_lock=true" \
                         --cap-add=IPC_LOCK \
                         --ulimit memlock=-1:-1 \
                         --ulimit nofile=65536:65536 \
