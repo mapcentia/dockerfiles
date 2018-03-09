@@ -142,7 +142,7 @@ fi
 # Elasticsearch
 #
 
-ELASTIC_VERSION=6.0.0
+ELASTIC_VERSION=6.2.2
 
 #Create a persistence volume for elasticsearch.
 if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
@@ -160,7 +160,7 @@ if [[ $? = 1 ]]
                 docker create \
                         --name elasticsearch \
                         --volumes-from es-data \
-                        -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
+                        -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
                         -e "xpack.security.enabled=false" \
                         --cap-add=IPC_LOCK \
                         --ulimit memlock=-1:-1 \
