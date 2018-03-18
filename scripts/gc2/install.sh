@@ -88,11 +88,11 @@ if [[ $? = 1 ]]
         docker create \
             --name nginx-proxy \
             -p 80:80 -p 443:443 \
-            -v $PWD/nginx/certs:/etc/nginx/certs:ro \
-            -v $PWD/nginx/vhost.d:/etc/nginx/vhost.d:ro \
-            -v $PWD/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro \
+            -v $PWD/nginx/certs:/etc/nginx/certs:rw \
+            -v $PWD/nginx/vhost.d:/etc/nginx/vhost.d:rw \
+            -v $PWD/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf:rw \
             -v /usr/share/nginx/html \
-            -v /var/run/docker.sock:/tmp/docker.sock:ro \
+            -v /var/run/docker.sock:/tmp/docker.sock:rw \
             --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
             jwilder/nginx-proxy:alpine
 fi
@@ -105,7 +105,7 @@ if [[ $? = 1 ]]
             docker create \
                 --name nginx-letsencrypt \
                 -v $PWD/nginx/certs:/etc/nginx/certs:rw \
-                -v /var/run/docker.sock:/var/run/docker.sock:ro \
+                -v /var/run/docker.sock:/var/run/docker.sock:rw \
                 --volumes-from nginx-proxy \
                 jrcs/letsencrypt-nginx-proxy-companion
 fi
@@ -163,6 +163,7 @@ if [[ $? = 1 ]]
                         -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
                         -e "xpack.security.enabled=false" \
                         -e "bootstrap.memory_lock=true" \
+                        -e "cluster.name=docker-cluster" \
                         --cap-add=IPC_LOCK \
                         --ulimit memlock=-1:-1 \
                         --ulimit nofile=65536:65536 \
