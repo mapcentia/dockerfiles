@@ -49,7 +49,7 @@ RewriteCond %{QUERY_STRING} (^|&)REQUEST=GetLegendGraphic($|&) [NC,OR]
 RewriteCond %{QUERY_STRING} (^|&)REQUEST=GetFeatureInfo($|&) [NC,OR]
 RewriteCond %{QUERY_STRING} (^|&)REQUEST=DescribeFeatureType($|&) [NC,OR]
 RewriteCond %{REQUEST_METHOD} POST
-RewriteRule /mapcache/(.*)/wms/(.*) /ows/$1/$2 [L]
+RewriteRule /mapcache/(.*)/wms/(.*)/?$ /ows/$1/$2 [L,QSA]
 
 ProxyPreserveHost On
 ProxyPass /mapcache/ http://127.0.0.1:5555/mapcache/ retry=0

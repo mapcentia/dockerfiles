@@ -297,9 +297,9 @@ if [[ $? = 1 ]]
                     echo "Creating the Logstash container...."
                     docker create \
                             --name logstash \
-                            -v $PWD/logstash/piplogstash.conf:/usr/share/logstash/pipeline/logstash.conf \
+                            -v $PWD/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf \
                             --link elasticsearch:elasticsearch \
-                            -p 5043:5043 \
+                            -p 5044:5044 \
                             -p 1338:1338 \
                             -t \
                              docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
@@ -320,6 +320,8 @@ if [[ $? = 1 ]]
                     sudo cp $PWD/dockerfiles/filebeat/filebeat.yml ./filebeat
                     docker create \
                             --name filebeat \
+                            --user root \
+                            --privileged \
                             -v $PWD/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml \
                             --volumes-from gc2core \
                             -t \
