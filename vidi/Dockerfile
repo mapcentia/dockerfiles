@@ -24,18 +24,13 @@ RUN cd ~/vidi &&\
 RUN cd ~/vidi &&\
 	npm install
 
-RUN cd ~/vidi/public/bower_components/bootstrap-material-design &&\
-	npm install
-
 #Add config files from Git repo
 RUN cp ~/vidi/config/config.dist.js ~/vidi/config/config.js
-RUN cp ~/vidi/public/bower_components/bootstrap-material-design/less/_variables.less ~/vidi/config/_variables.less
+RUN cp ~/vidi/public/js/lib/bootstrap-material-design/less/_variables.less ~/vidi/config/_variables.less
 
 #Run Grunt
 RUN cd ~/vidi &&\
     grunt
-
-RUN ln -s /root/vidi/public/bower_components/bootstrap/dist/fonts /root/vidi/public/css/fonts
 
 # Install wkhtmltox
 RUN cd ~ &&\
