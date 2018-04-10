@@ -88,11 +88,11 @@ if [[ $? = 1 ]]
         docker create \
             --name nginx-proxy \
             -p 80:80 -p 443:443 \
-            -v $PWD/nginx/certs:/etc/nginx/certs:rw \
-            -v $PWD/nginx/vhost.d:/etc/nginx/vhost.d:rw \
-            -v $PWD/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf:rw \
+            -v $PWD/nginx/certs:/etc/nginx/certs:ro \
+            -v $PWD/nginx/vhost.d:/etc/nginx/vhost.d \
+            -v $PWD/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf \
             -v /usr/share/nginx/html \
-            -v /var/run/docker.sock:/tmp/docker.sock:rw \
+            -v /var/run/docker.sock:/tmp/docker.sock:ro \
             --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
             jwilder/nginx-proxy:alpine
 fi
