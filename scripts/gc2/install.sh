@@ -18,6 +18,8 @@ fi
 #
 
 sudo sysctl -w vm.max_map_count=262144
+sudo sysctl -w net.core.somaxconn=65536
+sudo sysctl -w net.core.netdev_max_backlog=16384
 
 git clone https://github.com/mapcentia/dockerfiles.git
 
@@ -91,6 +93,7 @@ if [[ $? = 1 ]]
             -v $PWD/nginx/certs:/etc/nginx/certs:ro \
             -v $PWD/nginx/vhost.d:/etc/nginx/vhost.d \
             -v $PWD/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf \
+            --ulimit nofile=65536:65536 \
             -v /usr/share/nginx/html \
             -v /var/run/docker.sock:/tmp/docker.sock:ro \
             --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \

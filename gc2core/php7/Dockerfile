@@ -58,9 +58,6 @@ RUN sed 's/;daemonize = yes/daemonize = no/' -i /etc/php/7.0/fpm/php-fpm.conf
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
-ADD conf/apache/gc2 /etc/apache2/sites-enabled/gc2
-ADD conf/apache/000-default-le-ssl.conf /etc/apache2/sites-available/
-ADD conf/apache/options-ssl-apache.conf /etc/apache2/ssl/
 
 # Add php-fpm config file from Docker repo
 ADD conf/fpm/www.conf /etc/php/7.0/fpm/pool.d/www.conf
@@ -92,6 +89,8 @@ RUN chmod +x /run-fpm.sh
 
 # Startrt fpm, so dirs are created
 RUN service php7.0-fpm start
+
+ENV LD_LIBRARY_PATH /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server
 
 # Add Supervisor config and run the deamon
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

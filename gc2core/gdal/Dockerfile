@@ -4,6 +4,19 @@ MAINTAINER Martin Høgh<mh@mapcentia.com>
 RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN apt-get -y update  --fix-missing
+RUN apt-get -y install default-jre default-jdk
+
+RUN cd ~ &&\
+    wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mdb-sqlite/mdb-sqlite-1.0.2.tar.bz2 &&\
+    tar -vxjf mdb-sqlite-1.0.2.tar.bz2
+
+RUN cd ~ &&\
+    cp mdb-sqlite-1.0.2/lib/jackcess-1.1.14.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/ &&\
+    cp mdb-sqlite-1.0.2/lib/commons-logging-1.1.1.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/ &&\
+    cp mdb-sqlite-1.0.2/lib/commons-lang-2.4.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/
+
+
 # Install ECW 3.3
 RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &&\
 	unzip libecwj2-3.3-2006-09-06.zip &&\
@@ -18,11 +31,18 @@ RUN wget http://www.kyngchaos.com/files/macosxport/libecwj2-3.3-2006-09-06.zip &
 	make &&\
 	make install
 
+
 # Install GDAL 2.2.1 from source
 RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
     unzip gdal221.zip &&\
     cd gdal-2.2.1 &&\
-    ./configure --with-python=yes --with-ecw=/usr/local
+    ./configure \
+    --with-python=yes \
+    --with-ecw=/usr/local \
+    --with-java=yes \
+    --with-mdb=yes \
+    --with-jvm-lib-add-rpath=yes
+
 
 RUN cd gdal-2.2.1 &&\
     make

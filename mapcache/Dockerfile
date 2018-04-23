@@ -10,6 +10,8 @@ RUN apt-get -y install sudo wget curl apache2 libfcgi-dev apache2-dev cmake g++ 
     libgdal-dev libgdal-dev libgeos-dev libpng-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff5-dev git \
     supervisor
 
+RUN apt-get -y install libdb5.3 libdb5.3++ libdb5.3++-dev
+
 RUN cd ~ && \
     git clone http://github.com/mapserver/mapcache.git
 
@@ -17,7 +19,7 @@ RUN cd ~ && \
     cd mapcache &&\
     mkdir build &&\
     cd build &&\
-    cmake .. &&\
+    cmake -DWITH_BERKELEY_DB=ON .. &&\
     make &&\
     make install &&\
     ldconfig
