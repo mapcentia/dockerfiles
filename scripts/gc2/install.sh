@@ -90,12 +90,12 @@ if [[ $? = 1 ]]
         docker create \
             --name nginx-proxy \
             -p 80:80 -p 443:443 \
-            -v $PWD/nginx/certs:/etc/nginx/certs:ro \
+            -v $PWD/nginx/certs:/etc/nginx/certs \
             -v $PWD/nginx/vhost.d:/etc/nginx/vhost.d \
             -v $PWD/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf \
             --ulimit nofile=65536:65536 \
             -v /usr/share/nginx/html \
-            -v /var/run/docker.sock:/tmp/docker.sock:ro \
+            -v /var/run/docker.sock:/tmp/docker.sock \
             --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
             jwilder/nginx-proxy:alpine
 fi
@@ -107,8 +107,8 @@ if [[ $? = 1 ]]
         echo "Creating the nginx-letsencrypt container...."
             docker create \
                 --name nginx-letsencrypt \
-                -v $PWD/nginx/certs:/etc/nginx/certs:rw \
-                -v /var/run/docker.sock:/var/run/docker.sock:rw \
+                -v $PWD/nginx/certs:/etc/nginx/certs \
+                -v /var/run/docker.sock:/var/run/docker.sock \
                 --volumes-from nginx-proxy \
                 jrcs/letsencrypt-nginx-proxy-companion
 fi
@@ -148,31 +148,31 @@ fi
 ELASTIC_VERSION=6.2.2
 
 #Create a persistence volume for elasticsearch.
-if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
-        then
-                echo "es-data already exists. Doing nothing."
-        else
-                echo "Creating a persistence volume for elasticsearch...."
-                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-fi
+#if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
+#        then
+#                echo "es-data already exists. Doing nothing."
+#       else
+#                echo "Creating a persistence volume for elasticsearch...."
+#                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+#fi
 
-check elasticsearch
-if [[ $? = 1 ]]
-        then
-                echo "Creating the elasticsearch container...."
-                docker create \
-                        --name elasticsearch \
-                        --volumes-from es-data \
-                        -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
-                        -e "xpack.security.enabled=false" \
-                        -e "bootstrap.memory_lock=true" \
-                        -e "cluster.name=docker-cluster" \
-                        --cap-add=IPC_LOCK \
-                        --ulimit memlock=-1:-1 \
-                        --ulimit nofile=65536:65536 \
-                        -p 9200:9200 \
-                        -t docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-fi
+#check elasticsearch
+#if [[ $? = 1 ]]
+#        then
+#                echo "Creating the elasticsearch container...."
+#                docker create \
+#                        --name elasticsearch \
+#                        --volumes-from es-data \
+#                        -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+#                        -e "xpack.security.enabled=false" \
+#                        -e "bootstrap.memory_lock=true" \
+#                        -e "cluster.name=docker-cluster" \
+#                        --cap-add=IPC_LOCK \
+#                        --ulimit memlock=-1:-1 \
+#                        --ulimit nofile=65536:65536 \
+#                        -p 9200:9200 \
+#                       -t docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+#fi
 
 #
 # GC2 data
