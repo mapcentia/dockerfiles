@@ -145,34 +145,34 @@ fi
 # Elasticsearch
 #
 
-ELASTIC_VERSION=6.2.2
+ELASTIC_VERSION=6.2.4
 
 #Create a persistence volume for elasticsearch.
-#if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
-#        then
-#                echo "es-data already exists. Doing nothing."
-#       else
-#                echo "Creating a persistence volume for elasticsearch...."
-#                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-#fi
+if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
+        then
+                echo "es-data already exists. Doing nothing."
+       else
+                echo "Creating a persistence volume for elasticsearch...."
+                docker create --name es-data -v /usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+fi
 
-#check elasticsearch
-#if [[ $? = 1 ]]
-#        then
-#                echo "Creating the elasticsearch container...."
-#                docker create \
-#                        --name elasticsearch \
-#                        --volumes-from es-data \
-#                        -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
-#                        -e "xpack.security.enabled=false" \
-#                        -e "bootstrap.memory_lock=true" \
-#                        -e "cluster.name=docker-cluster" \
-#                        --cap-add=IPC_LOCK \
-#                        --ulimit memlock=-1:-1 \
-#                        --ulimit nofile=65536:65536 \
-#                        -p 9200:9200 \
-#                       -t docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-#fi
+check elasticsearch
+if [[ $? = 1 ]]
+        then
+                echo "Creating the elasticsearch container...."
+                docker create \
+                        --name elasticsearch \
+                        --volumes-from es-data \
+                        -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+                        -e "xpack.security.enabled=false" \
+                        -e "bootstrap.memory_lock=true" \
+                        -e "cluster.name=docker-cluster" \
+                        --cap-add=IPC_LOCK \
+                        --ulimit memlock=-1:-1 \
+                        --ulimit nofile=65536:65536 \
+                        -p 9200:9200 \
+                       -t docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+fi
 
 #
 # GC2 data
@@ -221,6 +221,7 @@ if [[ $? = 1 ]]
                         -e "LETSENCRYPT_HOST=${VIRTUAL_HOST}" \
                         -e "LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}" \
                         -e "HTTPS_METHOD=noredirect" \
+                        -P \
                         -p 1339:1339\
                         -t \
                         mapcentia/gc2core
