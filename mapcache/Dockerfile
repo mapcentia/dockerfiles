@@ -27,6 +27,8 @@ RUN cd ~ && \
 # Change default port
 RUN sed 's/Listen 80/Listen 5555/' -i /etc/apache2/ports.conf
 
+RUN a2enmod headers
+
 # Start httpd with apache2ctl, so the lock file is created
 RUN apache2ctl start
 

@@ -1,12 +1,12 @@
 #Solr
 
-    sudo docker create --name solr-data mapcentia/solr
+    docker create --name solr-data mapcentia/solr
     
-    sudo docker run \
+    docker run \
         --rm -i \
         -v $PWD/solr:/tmp mapcentia/solr cp /opt/solr/solr/ckan/conf /tmp -R
         
-    sudo docker run \
+    docker run \
         --name solr \
         --volumes-from solr-data \
         -v $PWD/solr/conf:/opt/solr/solr/ckan/conf \

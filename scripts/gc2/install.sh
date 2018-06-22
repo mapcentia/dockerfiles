@@ -212,7 +212,6 @@ if [[ $? = 1 ]]
                         --name ${PREFIX}gc2core \
                         --privileged \
                         --link postgis:postgis \
-                        --link elasticsearch:elasticsearch \
                         --volumes-from gc2-data \
                         -v $PWD/${PREFIX}gc2/conf:/var/www/geocloud2/app/conf \
                         -e GC2_PASSWORD=$PG_PW \
