@@ -42,7 +42,7 @@ RUN npm install -g grunt-cli
 
 # Clone GC2 from GitHub
 RUN cd /var/www/ &&\
-	git clone http://github.com/mapcentia/geocloud2.git --branch php7
+	git clone http://github.com/mapcentia/geocloud2.git --branch master
 
 # Install npm packages run Grunt
 RUN	cd /var/www/geocloud2 &&\
