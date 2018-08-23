@@ -10,7 +10,15 @@ RUN apt-get -y install cron vim wget  g++ build-essential git unzip rng-tools ap
     apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev php7.0-zip \
     cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev \
     libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb nodejs osm2pgsql postgis swig sudo \
-    apt-transport-https ca-certificates
+    apt-transport-https ca-certificates default-jre default-jdk
+
+# Get libs for MS Access support in GDAL
+RUN cd ~ &&\
+    wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mdb-sqlite/mdb-sqlite-1.0.2.tar.bz2 &&\
+    tar -vxjf mdb-sqlite-1.0.2.tar.bz2 &&\
+    cp mdb-sqlite-1.0.2/lib/jackcess-1.1.14.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/ &&\
+    cp mdb-sqlite-1.0.2/lib/commons-logging-1.1.1.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/ &&\
+    cp mdb-sqlite-1.0.2/lib/commons-lang-2.4.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/
 
 # Install QGIS-server 2.18
 RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
