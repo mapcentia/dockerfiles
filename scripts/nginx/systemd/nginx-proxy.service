@@ -1,0 +1,16 @@
+[Unit]
+Description=Nginx-proxy
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStart=/usr/bin/docker start -a nginx-proxy
+ExecStop=/usr/bin/docker stop nginx-proxy
+Restart=always
+RestartSec=3
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nginx-proxy
+
+[Install]
+WantedBy=multi-user.target

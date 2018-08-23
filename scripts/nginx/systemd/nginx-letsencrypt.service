@@ -1,0 +1,16 @@
+[Unit]
+Description=Nginx-letsencrypt
+Requires=docker.service
+After=docker.service nginx-proxy.service
+
+[Service]
+ExecStart=/usr/bin/docker start -a nginx-letsencrypt
+ExecStop=/usr/bin/docker stop nginx-letsencrypt
+Restart=always
+RestartSec=3
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nginx-letsencrypt
+
+[Install]
+WantedBy=multi-user.target
