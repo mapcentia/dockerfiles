@@ -1,7 +1,8 @@
 [Unit]
 Description=GC2Core
 Requires=docker.service
-After=docker.service postgis.service elasticsearch.service
+After=docker.service postgis.service
+#After=docker.service postgis.service elasticsearch.service
 Before=mapcache.service
 
 [Service]
