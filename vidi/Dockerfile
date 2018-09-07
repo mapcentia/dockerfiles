@@ -35,11 +35,6 @@ RUN cp ~/vidi/public/js/lib/bootstrap-material-design/less/_variables.less ~/vid
 RUN cd ~/vidi &&\
     grunt env gitreset browserify:publish less hogan shell uglify processhtml cssmin cacheBust
 
-# Install wkhtmltox
-RUN cd ~ &&\
-    wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz &&\
-    tar xvfJ wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-
 EXPOSE 3000
 
 # Share the source dir
