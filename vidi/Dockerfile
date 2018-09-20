@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update --fix-missing
-RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs default-jre gnupg2 locales libssl1.0-dev
+RUN apt-get -y install wget curl vim git supervisor postgresql-client nodejs default-jre gnupg2 locales libssl1.0-dev libxss-dev
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
@@ -27,7 +27,7 @@ RUN cd ~/vidi &&\
 RUN cd ~/vidi/public/js/lib/bootstrap-material-design &&\
 	npm install
 
-RUN cd ~/vidi/public/extensions/keplergl/browser &&\
+RUN cd ~/vidi/extensions/keplergl/browser &&\
 	npm install
 
 #Add config files from Git repo
