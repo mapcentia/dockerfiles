@@ -145,7 +145,7 @@ fi
 # Elasticsearch
 #
 
-ELASTIC_VERSION=6.2.2
+ELASTIC_VERSION=6.4.2
 
 #Create a persistence volume for elasticsearch.
 #if [[ $(docker ps -a --filter="name=es-data" | grep es-data) ]]
