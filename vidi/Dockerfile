@@ -14,7 +14,7 @@ RUN apt-get install -y nodejs
 
 # Clone Vidi from GitHub
 RUN cd  ~ &&\
-	git  clone http://github.com/mapcentia/vidi.git --branch develop
+	git  clone http://github.com/mapcentia/vidi.git --branch master
 
 # Install grunt
 RUN cd ~/vidi &&\
