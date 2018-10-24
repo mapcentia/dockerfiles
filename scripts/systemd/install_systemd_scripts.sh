@@ -42,6 +42,17 @@ if [[ $? = 1 ]]
         echo "postgis container doesn't exist"
 fi
 
+check elasticsearch
+if [[ $? = 1 ]]
+    then
+        echo "elasticsearch container exists..."
+        cp $PWD/dockerfiles/scripts/systemd/elasticsearch.service /lib/systemd/system
+        systemctl enable elasticsearch.service
+        service elasticsearch start
+    else
+        echo "elasticsearch container doesn't exist"
+fi
+
 check gc2core
 if [[ $? = 1 ]]
     then
