@@ -36,12 +36,13 @@ RUN cp ~/vidi/public/js/lib/bootstrap-material-design/less/_variables.less ~/vid
 
 #Run Grunt
 RUN cd ~/vidi &&\
-    grunt env gitreset browserify:publish less hogan shell uglify processhtml cssmin cacheBust
+    grunt production
 
 EXPOSE 3000
 
 # Share the source dir
 VOLUME  ["/root/vidi"]
+
 
 # Add entry point
 COPY entrypoint.sh /entrypoint.sh
