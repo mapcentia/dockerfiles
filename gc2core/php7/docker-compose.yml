@@ -27,14 +27,13 @@ services:
       - postgis_etc_pgbouncer:/etc/pgbouncer
     env_file:
       - gc2.env
-    network_mode: bridge
 
   gc2core:
     #build: .
     image: mapcentia/gc2core
     privileged: true
-    #ports:
-      #- "80:80"
+    ports:
+      - "8080:80"
       #- "443:443"
       #- "1339:1339"
     environment:
@@ -42,26 +41,21 @@ services:
       #- LETSENCRYPT_HOST=example.com
       #- LETSENCRYPT_EMAIL=your@email.com
       #- HTTPS_METHOD=noredirect
-    links:
-      - postgis:postgis
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
       - gc2core_var_log:/var/log
     env_file:
       - gc2.env
-    network_mode: bridge
 
   mapcache:
     #build: ../../mapcache/.
     image: mapcentia/mapcache
-    network_mode: service:gc2core
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
 
   vidi:
     build: ../../vidi/.
     image: mapcentia/vidi
-    network_mode: bridge
     volumes:
       - root_vidi:/root/vidi
 
