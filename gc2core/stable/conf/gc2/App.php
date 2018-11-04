@@ -17,21 +17,18 @@ class App
         "databaseTemplate" => "template_geocloud",
 
         // The host of Elasticsearch
-        "esHost" => "elasticsearch",
-
-        // Geoserver host for printing.
-        "geoserverHost" => "http://eu1.mapcentia.com:8888",
+        //"esHost" => "elasticsearch",
 
         // MapCache config
         "mapCache" => [
             // MapCache host URL.
-            "host" => "http://127.0.0.1:5555",
+            "host" => "http://mapcache:5555",
 
             // WMS backend for MapCache. Define the WMS host seen from MapCache.
-            "wmsHost" => "http://127.0.0.1:80",
+            "wmsHost" => "http://gc2core:80",
 
             // MapCache API URL for reload and adding new configurations
-            "api" => "http://127.0.0.1:1337",
+            "api" => "http://mapcache:1337",
 
             // Type of cache back-end. "disk" or "sqlite"
             "type" => "disk",

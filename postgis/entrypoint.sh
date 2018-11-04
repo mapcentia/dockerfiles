@@ -10,12 +10,11 @@ if [ $1 == "/usr/bin/supervisord" ]; then
     # But first we check if they are created. I.e. if the container is restarted
     if echo 'SELECT 1' | psql postgres >/dev/null 2>&1; then
         echo "GC2 system already initiated"
-        echo '
-                ****************************************************
-                INFO:   GC2 system already initiated.
-                        Doing nothing else than start the service.
-                ****************************************************
-            '
+        echo "
+****************************************************
+INFO:   GC2 system already initiated.
+        Doing nothing else than start the service.
+****************************************************"
         # Stop the service, so it can be started in foreground.
         service postgresql stop
     else
@@ -35,13 +34,11 @@ if [ $1 == "/usr/bin/supervisord" ]; then
         if [ -n "$GC2_PASSWORD" ]; then
             echo "Password set"
         else
-            echo '
-                ****************************************************
-                ERROR:   No password has been set for the GC2 user.
-                         Use "-e GC2_PASSWORD=password" to set
-                         it in "docker run".
-                ****************************************************
-            '
+            echo "
+****************************************************
+ERROR:   No password has been set for the GC2 user.
+         Use "-e GC2_PASSWORD=password" to set it.
+****************************************************"
             exit 1
         fi
 
@@ -49,14 +46,12 @@ if [ $1 == "/usr/bin/supervisord" ]; then
             locale=$LOCALE
         else
             locale=en_US.UTF-8
-            echo '
-                ****************************************************
-                WARNING: No locale has been set for the GC2
-                         template db. Setting it to en_US.UTF-8.
-                         Use "-e locale=your_locale" to set
-                         it in "docker run".
-                ****************************************************
-            '
+            echo "
+****************************************************
+WARNING: No locale has been set for the GC2
+         template db. Setting it to en_US.UTF-8.
+         Use "-e locale=your_locale" to set it.
+****************************************************"
         fi
 
         # Create template database and run latest migrations

@@ -15,9 +15,10 @@
 # 'docker-compose down -v' will remove the volumes!!!
 
 version: '3'
+
 services:
+
   postgis:
-    #build: ../../postgis/.
     image: mapcentia/postgis
     volumes:
       - postgis_var_www_geocloud2:/var/www/geocloud2
@@ -29,18 +30,12 @@ services:
       - gc2.env
 
   gc2core:
-    #build: .
     image: mapcentia/gc2core
     privileged: true
     ports:
       - "8080:80"
-      #- "443:443"
-      #- "1339:1339"
-    environment:
-      - VIRTUAL_HOST=localhost
-      #- LETSENCRYPT_HOST=example.com
-      #- LETSENCRYPT_EMAIL=your@email.com
-      #- HTTPS_METHOD=noredirect
+      - "443:443"
+      - "1339:1339"
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
       - gc2core_var_log:/var/log
@@ -48,39 +43,9 @@ services:
       - gc2.env
 
   mapcache:
-    #build: ../../mapcache/.
     image: mapcentia/mapcache
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
-
-  vidi:
-    build: ../../vidi/.
-    image: mapcentia/vidi
-    volumes:
-      - root_vidi:/root/vidi
-
-#  nginx-proxy:
-#    image: jwilder/nginx-proxy:alpine
-#    ports:
-#      - 80:80
-#      - 443:443
-#    volumes:
-#      - /var/run/docker.sock:/tmp/docker.sock:ro
-#      - nginx-certs:/etc/nginx/certs:ro
-#      - nginx-vhosts:/etc/nginx/vhost.d
-#      - nginx-letsencrypt-challenge:/usr/share/nginx/html
-#    labels:
-#      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
-#    network_mode: bridge
-
-
-#  letsencrypt:
-#    image: jrcs/letsencrypt-nginx-proxy-companion
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock:ro
-#      - nginx-certs:/etc/nginx/certs
-#      - nginx-vhosts:/etc/nginx/vhost.d
-#      - nginx-letsencrypt-challenge:/usr/share/nginx/html
 
 volumes:
     gc2core_var_www_geocloud2:
@@ -90,10 +55,6 @@ volumes:
     postgis_etc_postgresql:
     postgis_var_lib_postgresql:
     postgis_etc_pgbouncer:
-    root_vidi:
-#    nginx-certs:
-#    nginx-vhosts:
-#    nginx-letsencrypt-challenge:
 
 
 

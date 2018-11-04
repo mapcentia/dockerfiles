@@ -1,0 +1,44 @@
+# The run following commands:
+#
+# docker-compose build
+# docker-compose up
+#
+# There will be created named volumes for persistence.
+#
+# 'docker-compose down' will not remove data
+# 'docker-compose down -v' will remove the volumes!!!
+
+version: '3'
+
+services:
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - nginx-certs:/etc/nginx/certs:ro
+      - nginx-vhosts:/etc/nginx/vhost.d
+      - nginx-letsencrypt-challenge:/usr/share/nginx/html
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+    network_mode: bridge
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx-certs:/etc/nginx/certs
+      - nginx-vhosts:/etc/nginx/vhost.d
+      - nginx-letsencrypt-challenge:/usr/share/nginx/html
+    network_mode: bridge
+
+volumes:
+  nginx-certs:
+  nginx-vhosts:
+  nginx-letsencrypt-challenge:
+
+
+
