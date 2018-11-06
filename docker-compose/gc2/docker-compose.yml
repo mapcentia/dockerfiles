@@ -39,6 +39,7 @@ services:
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
       - gc2core_var_log:/var/log
+      - gc2core_var_lib_php_sessions:/var/lib/php/sessions	
     env_file:
       - gc2.env
 
@@ -46,15 +47,20 @@ services:
     image: mapcentia/mapcache
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - mapcache__etc_apache2_sites-enabled:/etc/apache2/sites-enabled
 
 volumes:
     gc2core_var_www_geocloud2:
     gc2core_var_log:
+    gc2core_var_lib_php_sessions:
+
     postgis_var_log:
     postgis_var_www_geocloud2:
     postgis_etc_postgresql:
     postgis_var_lib_postgresql:
     postgis_etc_pgbouncer:
+
+    mapcache__etc_apache2_sites-enabled:
 
 
 
