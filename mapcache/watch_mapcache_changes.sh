@@ -1,7 +1,2 @@
 #!/bin/bash
-
-while true;
-	do
-		ls /var/www/geocloud2/app/wms/mapcache/*.xml | entr -d node reload.js /_;
-	sleep 0.3
-done
+inotify-hookable --no-r -d --watch-directories /var/www/geocloud2/app/wms/mapcache -c '/usr/bin/node reload.js'
