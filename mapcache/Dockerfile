@@ -6,7 +6,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update  --fix-missing
-RUN apt-get -y install sudo wget curl apache2 libfcgi-dev apache2-dev cmake g++ build-essential \
+RUN apt-get -y install sudo wget curl apache2 libfcgi-dev apache2-dev cmake g++ build-essential entr \
     libgdal-dev libgdal-dev libgeos-dev libpng-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff5-dev git \
     supervisor
 
@@ -36,26 +36,22 @@ RUN apache2ctl start
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 ADD conf/apache/mapcache.conf /etc/apache2/sites-enabled/
 
-# Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_4.x |  bash - &&\
+# Add the watch_mapcache_changes.sh
+COPY watch_mapcache_changes.sh /watch_mapcache_changes.sh
+RUN chmod +x /watch_mapcache_changes.sh
+
+# Add the reload.js
+COPY reload.js /reload.js
+
+RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh &&\
+    bash nodesource_setup.sh &&\
     apt-get install -y nodejs
-
-# Add the Nodejs proxy
-ADD nodejs/* /root/server/
-
-# Install packages
-RUN cd /root/server &&\
-	npm install
 
 RUN mkdir /mapcache
 RUN cp /root/mapcache/mapcache.xml /mapcache/
 
 # Share dirs
 VOLUME  ["/var/log", "/etc/apache2", "/mapcache", "/tmp"]
-
-# Expose standard ports for HTTP
-EXPOSE 80
-EXPOSE 1337
 
 ADD conf/apache/run-apache.sh /
 RUN chmod +x /run-apache.sh
