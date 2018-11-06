@@ -34,8 +34,6 @@ services:
     privileged: true
     ports:
       - "8080:80"
-      - "443:443"
-      - "1339:1339"
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
       - gc2core_var_log:/var/log
@@ -47,7 +45,7 @@ services:
     image: mapcentia/mapcache
     volumes:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
-      - mapcache__etc_apache2_sites-enabled:/etc/apache2/sites-enabled
+      - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
 
 volumes:
     gc2core_var_www_geocloud2:
@@ -60,7 +58,7 @@ volumes:
     postgis_var_lib_postgresql:
     postgis_etc_pgbouncer:
 
-    mapcache__etc_apache2_sites-enabled:
+    mapcache_etc_apache2_sites-enabled:
 
 
 
