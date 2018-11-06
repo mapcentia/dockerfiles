@@ -1,10 +1,8 @@
 var exec = require('child_process').exec;
 var fs = require("fs");
+var path = require('path');
 
 var file = "/etc/apache2/sites-enabled/mapcache.conf";
-
-var dbFile = process.argv[2];
-var db = process.argv[2].split('/')[7].split('.')[0];
 
 fs.exists(file, function (exists) {
     if (exists) {
@@ -23,28 +21,35 @@ function callback() {
             console.log(err);
         }
         console.log(data.toString('utf-8'));
-        if (data.toString('utf-8').indexOf('/mapcache/' + db) === -1) {
-            exec('echo "MapCacheAlias /mapcache/' + db + ' ' + dbFile + '" >> ' + file, function (error, stdout, stderr) {
-                if (error !== null) {
-                    console.log(error);
-                }
-                exec("service apache2 reload", function (error, stdout, stderr) {
+
+        fs.readdir("/var/www/geocloud2/app/wms/mapcache/", function (err, files) {
+            var targetFiles = files.filter(function (file) {
+                return path.extname(file).toLowerCase() === ".xml";
+            });
+
+            console.log(targetFiles)
+
+            var length = targetFiles.length;
+            var count = 0;
+            exec('echo "" > ' + file);
+            targetFiles.forEach(function (targetFile) {
+                var db = targetFile.split('.')[0];
+
+                exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + targetFile + '" >> ' + file, function (error, stdout, stderr) {
+                    count++;
                     if (error !== null) {
                         console.log(error);
                     }
-                    console.log(stdout);
+                    if (count === length)
+                        exec("service apache2 reload", function (error, stdout, stderr) {
+                            if (error !== null) {
+                                console.log(error);
+                            }
+                            console.log(stdout);
 
+                        });
                 });
             });
-        } else {
-            console.log("Already there");
-            exec("service apache2 reload", function (error, stdout, stderr) {
-                if (error !== null) {
-                    console.log(error);
-                } else {
-                    console.log(stdout);
-                }
-            });
-        }
+        })
     });
 }
