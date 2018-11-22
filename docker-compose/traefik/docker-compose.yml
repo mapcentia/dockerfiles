@@ -1,0 +1,33 @@
+version: '3.3'
+
+networks:
+  traefik-net:
+    external: true
+
+configs:
+  traefik.toml:
+    file: ./traefik.toml
+
+services:
+
+  traefik:
+    image: traefik
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/docker/acme.json:/acme.json
+    configs:
+      - source: traefik.toml
+        target: /etc/traefik/traefik.toml
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - traefik-net
+
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
