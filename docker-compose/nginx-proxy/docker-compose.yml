@@ -21,10 +21,11 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
       - nginx-certs:/etc/nginx/certs:ro
       - nginx-vhosts:/etc/nginx/vhost.d
       - nginx-letsencrypt-challenge:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./proxy.conf:/etc/nginx/conf.d/proxy.conf
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
     network_mode: bridge
@@ -32,10 +33,10 @@ services:
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - nginx-certs:/etc/nginx/certs
       - nginx-vhosts:/etc/nginx/vhost.d
       - nginx-letsencrypt-challenge:/usr/share/nginx/html
+     - /var/run/docker.sock:/var/run/docker.sock:ro
     network_mode: bridge
 
 volumes:
