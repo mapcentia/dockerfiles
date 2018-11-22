@@ -27,9 +27,6 @@ RUN cd ~/vidi &&\
 RUN cd ~/vidi/public/js/lib/bootstrap-material-design &&\
 	npm install
 
-RUN cd ~/vidi/extensions/keplergl/browser &&\
-	npm install
-
 #Add config files from Git repo
 RUN cp ~/vidi/config/config.dist.js ~/vidi/config/config.js
 RUN cp ~/vidi/public/js/lib/bootstrap-material-design/less/_variables.less ~/vidi/config/_variables.less
