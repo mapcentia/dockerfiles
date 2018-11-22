@@ -1,0 +1,63 @@
+# This is for running GC2 in a Docker Swarm at AWS
+# All volumes must shared. Here is Cloudstor used.
+# No PostgreSQL. Run and scale that on AWS RDS.
+
+version: '3'
+
+networks:
+  traefik-net:
+    external: true
+  internal:
+    external: false
+
+services:
+
+  gc2core:
+    image: mapcentia/gc2core
+    privileged: true
+    volumes:
+      - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - gc2core_var_log:/var/log
+      - gc2core_var_lib_php_sessions:/var/lib/php/sessions    
+    env_file:
+      - gc2.env
+    deploy:
+     labels:
+      - traefik.backend=swarm.gc2.io
+      - traefik.frontend.rule=Host:swarm.gc2.io
+      - traefik.port=80    
+      - traefik.backend.loadbalancer.swarm=true
+      - traefik.docker.network=traefik-net
+      - traefik.frontend.passHostHeader=true
+    networks:
+      - internal
+      - traefik-net
+
+  mapcache:
+    image: mapcentia/mapcache
+    networks:
+      - internal
+    volumes:
+      - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
+
+volumes:
+    gc2core_var_www_geocloud2:
+      driver: cloudstor:aws
+      driver_opts:
+        backing: shared
+
+    gc2core_var_log:
+      driver: cloudstor:aws
+      driver_opts:
+        backing: shared
+
+    gc2core_var_lib_php_sessions:
+      driver: cloudstor:aws                         
+      driver_opts:                                  
+        backing: shared 
+
+    mapcache_etc_apache2_sites-enabled:
+      driver: cloudstor:aws      
+      driver_opts:               
+        backing: shared

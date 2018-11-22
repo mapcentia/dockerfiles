@@ -7,6 +7,9 @@
 #
 # 'docker-compose down' will not remove data
 # 'docker-compose down -v' will remove the volumes!!!
+#
+# Remember to add the NGINX container to the network of the GC2 container
+# docker network connect my-other-network my-nginx-proxy
 
 version: '3'
 
