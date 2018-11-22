@@ -1,6 +1,14 @@
 # This is for running GC2 in a Docker Swarm at AWS
 # All volumes must shared. Here is Cloudstor used.
 # No PostgreSQL. Run and scale that on AWS RDS.
+#
+# Use Traefik to reverse-proxy
+#
+# Create a overlay network:
+# docker network create --driver overlay traefik-net
+#
+# Remember to change traefik.frontend.rule
+# Remember to change the email in traefik.toml
 
 version: '3'
 
