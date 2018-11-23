@@ -23,9 +23,9 @@ services:
     volumes:
       - nginx-certs:/etc/nginx/certs:ro
       - nginx-vhosts:/etc/nginx/vhost.d
+      - nginx-confs:/etc/nginx/conf.d
       - nginx-letsencrypt-challenge:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./proxy.conf:/etc/nginx/conf.d/proxy.conf
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
     network_mode: bridge
@@ -42,6 +42,7 @@ services:
 volumes:
   nginx-certs:
   nginx-vhosts:
+  nginx-confs:
   nginx-letsencrypt-challenge:
 
 
