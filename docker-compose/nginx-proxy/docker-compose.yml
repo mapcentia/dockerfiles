@@ -36,7 +36,7 @@ services:
       - nginx-certs:/etc/nginx/certs
       - nginx-vhosts:/etc/nginx/vhost.d
       - nginx-letsencrypt-challenge:/usr/share/nginx/html
-     - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     network_mode: bridge
 
 volumes:
