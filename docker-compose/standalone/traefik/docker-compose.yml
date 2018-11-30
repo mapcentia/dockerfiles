@@ -4,7 +4,7 @@
 version: '3.3'
 
 networks:
-  traefik-net:
+  web:
     external: true
 
 services:
@@ -20,6 +20,6 @@ services:
       - ./acme.json:/acme.json # SET THE RIGHT PATH
       - ./traefik.toml:/traefik.toml # SET THE RIGHT PATH
     networks:
-      - traefik-net
+      - web
     labels:
       - "traefik.enable=false"

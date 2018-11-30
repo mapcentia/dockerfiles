@@ -15,16 +15,29 @@
 
 version: '3'
 
+networks:
+  web:
+    external: true
+
 services:
 
   vidi:
     image: mapcentia/vidi
     ports:
-      - "3000:3000"
+      - "3000:3000" # Remove if using Traefik
     volumes:
       - vidi_root_vidi:/root/vidi
     env_file:
       - vidi.env
+    networks:
+      - web
+    labels:
+      - traefik.backend=vidi
+      - traefik.frontend.rule=Host:vidi.test # SET HOST
+      - traefik.port=3000
+      - traefik.backend.loadbalancer.swarm=false
+      - traefik.docker.network=web
+      - traefik.frontend.passHostHeader=true
 
 volumes:
     vidi_root_vidi:

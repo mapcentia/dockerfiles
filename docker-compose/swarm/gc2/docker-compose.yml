@@ -4,7 +4,7 @@
 #
 # Use Traefik as reverse-proxy:
 # Create a overlay network:
-# docker network create --driver overlay traefik-net
+# docker network create --driver overlay web
 #
 # Remember to change traefik.frontend.rule
 # Remember to change the email in traefik.toml
@@ -12,7 +12,7 @@
 version: '3'
 
 networks:
-  traefik-net:
+  web:
     external: true
   internal:
     external: false
@@ -34,11 +34,11 @@ services:
       - traefik.frontend.rule=Host:gc2.io # SET HOST
       - traefik.port=80
       - traefik.backend.loadbalancer.swarm=true
-      - traefik.docker.network=traefik-net
+      - traefik.docker.network=web
       - traefik.frontend.passHostHeader=true
     networks:
       - internal
-      - traefik-net
+      - web
 
   mapcache:
     image: mapcentia/mapcache

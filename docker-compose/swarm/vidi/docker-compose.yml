@@ -13,7 +13,7 @@
 version: '3'
 
 networks:
-  traefik-net:
+  web:
     external: true
 
 services:
@@ -29,9 +29,9 @@ services:
       - traefik.frontend.rule=Host:vidi.gc2.io # SET HOST
       - traefik.port=3000
       - traefik.backend.loadbalancer.swarm=true
-      - traefik.docker.network=traefik-net
+      - traefik.docker.network=web
       - traefik.frontend.passHostHeader=true
     networks:
-      - traefik-net
+      - web
 volumes:
     vidi_root_vidi:

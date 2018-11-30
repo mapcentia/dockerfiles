@@ -47,7 +47,7 @@ services:
       - web
       - internal
     ports:
-      - "80:80"
+      - "8080:80" # Remove if using Traefik
 
 
   mapcache:

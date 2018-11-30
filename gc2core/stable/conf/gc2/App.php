@@ -115,6 +115,11 @@ class App
         // Use API key for Elasticsearch Search API
         "useKeyForSearch" => false,
 
+        // Allowed origins for CORS
+        "AccessControlAllowOrigin" => [
+            "*"
+        ],
+
         // Meta properties
         "metaConfig" => [
             [
