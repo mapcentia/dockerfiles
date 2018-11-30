@@ -1,3 +1,6 @@
+# Create a acme.json file on the host:
+# $ touch acme.json && chmod 600 acme.json
+
 version: '3.3'
 
 networks:
@@ -18,7 +21,7 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/docker/acme.json:/acme.json
+      - /home/docker/acme.json:/acme.json # SET THE RIGHT PATH
     configs:
       - source: traefik.toml
         target: /etc/traefik/traefik.toml

@@ -4,6 +4,10 @@ MAINTAINER Martin Høgh<mh@mapcentia.com>
 RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN sed -i "s#deb http://deb.debian.org/debian stable main#deb http://deb.debian.org/debian stable main contrib non-free#g" /etc/apt/sources.list &&\
+    sed -i "s#deb http://security.debian.org/debian-security stable/updates main#deb http://security.debian.org/debian-security stable/updates main contrib non-free#g" /etc/apt/sources.list &&\
+    sed -i "s#deb http://deb.debian.org/debian stable-updates main#deb http://deb.debian.org/debian stable-updates main contrib non-free#g" /etc/apt/sources.list
+
 # Install packages
 RUN apt-get -y update  --fix-missing
 RUN apt-get -y install cron vim wget  g++ build-essential git unzip rng-tools apache2-utils postgresql-client supervisor netcat \
@@ -20,13 +24,16 @@ RUN cd ~ &&\
     cp mdb-sqlite-1.0.2/lib/commons-logging-1.1.1.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/ &&\
     cp mdb-sqlite-1.0.2/lib/commons-lang-2.4.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/
 
-# Install QGIS-server 2.18
+# Install QGIS-server
 RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
     wget -O - http://qgis.org/downloads/qgis-2017.gpg.key | gpg --import &&\
     gpg --fingerprint CAEB3DC3BDF7FB45 &&\
     gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add - &&\
     apt-get -y update &&\
     apt-get -y install qgis-server
+
+# Symlink font for QGIS Server
+RUN ln -s /usr/share/fonts directory /usr/lib/x86_64-linux-gnu
 
 # Add SQLite3 module to php.ini
 RUN echo "extension=sqlite3.so" >> /etc/php/7.0/fpm/php.ini

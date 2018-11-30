@@ -1,0 +1,37 @@
+# TIMEZONE=CET
+# LOCALE=en_US.UTF-8
+#
+# The run following commands:
+#
+# docker-compose up
+#
+# There will be created named volumes for persistence.
+#
+# 'docker-compose down' will not remove data
+# 'docker-compose down -v' will remove the volumes!!!
+
+version: '3'
+
+networks:
+  traefik-net:
+    external: true
+
+services:
+  vidi:
+    image: mapcentia/vidi
+    volumes:
+      - vidi_root_vidi:/root/vidi
+    env_file:
+      - vidi.env
+    deploy:
+     labels:
+      - traefik.backend=swarm.vidi.io
+      - traefik.frontend.rule=Host:vidi.gc2.io # SET HOST
+      - traefik.port=3000
+      - traefik.backend.loadbalancer.swarm=true
+      - traefik.docker.network=traefik-net
+      - traefik.frontend.passHostHeader=true
+    networks:
+      - traefik-net
+volumes:
+    vidi_root_vidi:

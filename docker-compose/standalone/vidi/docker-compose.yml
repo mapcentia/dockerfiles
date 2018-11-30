@@ -22,12 +22,12 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - root_vidi:/root/vidi
+      - vidi_root_vidi:/root/vidi
     env_file:
       - vidi.env
 
 volumes:
-    root_vidi:
+    vidi_root_vidi:
 
 
 

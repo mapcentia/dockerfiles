@@ -2,8 +2,7 @@
 # All volumes must shared. Here is Cloudstor used.
 # No PostgreSQL. Run and scale that on AWS RDS.
 #
-# Use Traefik to reverse-proxy
-#
+# Use Traefik as reverse-proxy:
 # Create a overlay network:
 # docker network create --driver overlay traefik-net
 #
@@ -32,8 +31,8 @@ services:
     deploy:
      labels:
       - traefik.backend=swarm.gc2.io
-      - traefik.frontend.rule=Host:swarm.gc2.io
-      - traefik.port=80    
+      - traefik.frontend.rule=Host:gc2.io # SET HOST
+      - traefik.port=80
       - traefik.backend.loadbalancer.swarm=true
       - traefik.docker.network=traefik-net
       - traefik.frontend.passHostHeader=true
@@ -49,23 +48,58 @@ services:
       - gc2core_var_www_geocloud2:/var/www/geocloud2
       - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
 
+  postgis:
+    image: mapcentia/postgis
+    volumes:
+      - postgis_var_www_geocloud2:/var/www/geocloud2
+      - postgis_var_lib_postgresql:/var/lib/postgresql
+      - postgis_var_log:/var/log
+      - postgis_etc_postgresql:/etc/postgresql
+      - postgis_etc_pgbouncer:/etc/pgbouncer
+    env_file:
+      - gc2.env
+    networks:
+      - internal
+
 volumes:
+    # gc2core
     gc2core_var_www_geocloud2:
       driver: cloudstor:aws
-      driver_opts:
-        backing: shared
-
+            driver_opts:
+              backing: shared
     gc2core_var_log:
       driver: cloudstor:aws
-      driver_opts:
-        backing: shared
-
+            driver_opts:
+              backing: shared
     gc2core_var_lib_php_sessions:
-      driver: cloudstor:aws                         
-      driver_opts:                                  
-        backing: shared 
+      driver: cloudstor:aws
+            driver_opts:
+              backing: shared
 
+    # mapcache
     mapcache_etc_apache2_sites-enabled:
-      driver: cloudstor:aws      
-      driver_opts:               
-        backing: shared
+      driver: cloudstor:aws
+            driver_opts:
+              backing: shared
+
+    # postgis
+    postgis_var_log:
+      driver: cloudstor:aws
+            driver_opts:
+              backing: shared
+    postgis_var_www_geocloud2:
+      driver: cloudstor:aws
+            driver_opts:
+              backing: shared
+    postgis_etc_postgresql:
+      driver: cloudstor:aws
+            driver_opts:
+              backing: shared
+    postgis_var_lib_postgresql:
+      driver: cloudstor:aws
+            driver_opts:
+              backing: shared
+    postgis_etc_pgbouncer:
+      driver: cloudstor:aws
+            driver_opts:
+              backing: shared

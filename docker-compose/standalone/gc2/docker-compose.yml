@@ -6,17 +6,57 @@
 #
 # The run following commands:
 #
-# docker-compose build
 # docker-compose up
 #
 # There will be created named volumes for persistence.
+#
+# Use Traefik as reverse-proxy:
+# Create a user defined bridge network:
+# docker network create web
 #
 # 'docker-compose down' will not remove data
 # 'docker-compose down -v' will remove the volumes!!!
 
 version: '3'
 
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+
 services:
+
+  gc2core:
+    image: mapcentia/gc2core
+    privileged: true
+    volumes:
+      - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - gc2core_var_log:/var/log
+      - gc2core_var_lib_php_sessions:/var/lib/php/sessions
+    env_file:
+      - gc2.env
+    labels:
+      - traefik.backend=gc2core
+      - traefik.frontend.rule=Host:gc2.test # SET HOST
+      - traefik.port=80
+      - traefik.backend.loadbalancer.swarm=false
+      - traefik.docker.network=web
+      - traefik.frontend.passHostHeader=true
+    networks:
+      - web
+      - internal
+    ports:
+      - "80:80"
+
+
+  mapcache:
+    image: mapcentia/mapcache
+    volumes:
+      - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
+    networks:
+      - internal
 
   postgis:
     image: mapcentia/postgis
@@ -28,37 +68,26 @@ services:
       - postgis_etc_pgbouncer:/etc/pgbouncer
     env_file:
       - gc2.env
-
-  gc2core:
-    image: mapcentia/gc2core
-    privileged: true
+    networks:
+      - internal
     ports:
-      - "8080:80"
-    volumes:
-      - gc2core_var_www_geocloud2:/var/www/geocloud2
-      - gc2core_var_log:/var/log
-      - gc2core_var_lib_php_sessions:/var/lib/php/sessions
-    env_file:
-      - gc2.env
-
-  mapcache:
-    image: mapcentia/mapcache
-    volumes:
-      - gc2core_var_www_geocloud2:/var/www/geocloud2
-      - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
+      - "5432:5432"
 
 volumes:
+    # gc2core
     gc2core_var_www_geocloud2:
     gc2core_var_log:
     gc2core_var_lib_php_sessions:
 
+    # mapcache
+    mapcache_etc_apache2_sites-enabled:
+
+    # postgis
     postgis_var_log:
     postgis_var_www_geocloud2:
     postgis_etc_postgresql:
     postgis_var_lib_postgresql:
     postgis_etc_pgbouncer:
-
-    mapcache_etc_apache2_sites-enabled:
 
 
 

@@ -1,0 +1,25 @@
+# Create a acme.json file on the host:
+# $ touch acme.json && chmod 600 acme.json
+
+version: '3.3'
+
+networks:
+  traefik-net:
+    external: true
+
+services:
+
+  traefik:
+    image: traefik
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./acme.json:/acme.json # SET THE RIGHT PATH
+      - ./traefik.toml:/traefik.toml # SET THE RIGHT PATH
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=false"

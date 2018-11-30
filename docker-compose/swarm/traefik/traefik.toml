@@ -11,7 +11,7 @@ defaultEntryPoints = ["http", "https"]
     [entryPoints.https.tls]
 
 [acme]
-  email = "mh@mapcentia.com"
+  email = "mh@mapcentia.com" # SET EMAIL
   storage = "acme.json"
   entryPoint = "https"
   OnHostRule = true
