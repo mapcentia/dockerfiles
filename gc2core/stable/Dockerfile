@@ -25,6 +25,17 @@ RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.6.tar.gz &&\
 
 RUN cp /mapserver-7.0.6/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
+# Install QGIS-server
+RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list
+    wget -O - http://qgis.org/downloads/qgis-2017.gpg.key | gpg --import --batch
+    gpg --fingerprint CAEB3DC3BDF7FB45
+    gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add -
+    apt-get -y update
+    apt-get -y install qgis-server
+
+# Symlink font for QGIS Server
+RUN ln -s /usr/share/fonts directory /usr/lib/x86_64-linux-gnu
+
 # Add some projections to Proj4
 RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg && \
 	echo "<34004> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg && \
