@@ -8,9 +8,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update  --fix-missing
 RUN apt-get -y install sudo vim wget curl apache2 libfcgi-dev apache2-dev cmake g++ build-essential inotify-hookable \
     libgdal-dev libgdal-dev libgeos-dev libpng-dev libjpeg-dev libcurl4-gnutls-dev libpcre3-dev libpixman-1-dev libsqlite3-dev libtiff5-dev git \
-    supervisor
-
-RUN apt-get -y install libdb5.3 libdb5.3++ libdb5.3++-dev
+    supervisor libdb5.3 libdb5.3++ libdb5.3++-dev
 
 RUN cd ~ && \
     git clone http://github.com/mapserver/mapcache.git
@@ -60,5 +58,3 @@ RUN chmod +x /run-apache.sh
 ADD conf/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-
-
