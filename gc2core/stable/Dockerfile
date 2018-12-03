@@ -5,12 +5,12 @@ RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install MapServer 7.0.6 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.0.6.tar.gz &&\
-	tar -zxvf mapserver-7.0.6.tar.gz &&\
-	cd mapserver-7.0.6 &&\
-	mkdir build &&\
-	cd build &&\
-	cmake -DCMAKE_INSTALL_PREFIX=/opt \
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz &&\
+    tar -zxvf mapserver-7.0.6.tar.gz &&\
+    cd mapserver-7.0.6 &&\
+    mkdir build &&\
+    cd build &&\
+    cmake -DCMAKE_INSTALL_PREFIX=/opt \
     -DCMAKE_PREFIX_PATH=/usr/local/pgsql/94:/usr/local:/opt:/usr/include \
     -DWITH_CLIENT_WFS=ON \
     -DWITH_CLIENT_WMS=ON \
