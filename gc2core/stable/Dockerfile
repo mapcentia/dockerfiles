@@ -5,9 +5,9 @@ RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install MapServer 7.0.6 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz &&\
-    tar -zxvf mapserver-7.0.6.tar.gz &&\
-    cd mapserver-7.0.6 &&\
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz -O mapserver-7.2.1.tar.gz
+RUN tar -zxvf mapserver-7.2.1.tar.gz
+RUN cd mapserver-7.2.1 &&\
     mkdir build &&\
     cd build &&\
     cmake -DCMAKE_INSTALL_PREFIX=/opt \
@@ -23,14 +23,14 @@ RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz &&\
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
 
-RUN cp /mapserver-7.0.6/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver-7.2.1/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install QGIS-server
-RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list
-    wget -O - http://qgis.org/downloads/qgis-2017.gpg.key | gpg --import --batch
-    gpg --fingerprint CAEB3DC3BDF7FB45
-    gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add -
-    apt-get -y update
+RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
+    wget -O - http://qgis.org/downloads/qgis-2017.gpg.key | gpg --import --batch &&\
+    gpg --fingerprint CAEB3DC3BDF7FB45 &&\
+    gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add - &&\
+    apt-get -y update &&\
     apt-get -y install qgis-server
 
 # Symlink font for QGIS Server
