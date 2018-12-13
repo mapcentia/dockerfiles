@@ -4,7 +4,7 @@ MAINTAINER Martin Høgh<mh@mapcentia.com>
 RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install MapServer 7.0.6 from source
+# Install MapServer 7.2.1 from source
 RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz -O mapserver-7.2.1.tar.gz
 RUN tar -zxvf mapserver-7.2.1.tar.gz
 RUN cd mapserver-7.2.1 &&\
