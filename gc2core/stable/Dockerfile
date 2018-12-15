@@ -5,9 +5,9 @@ RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install MapServer 7.2.1 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz -O mapserver-7.2.1.tar.gz
-RUN tar -zxvf mapserver-7.2.1.tar.gz
-RUN cd mapserver-7.2.1 &&\
+RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz -O mapserver-7.2.1.tar.gz &&\
+    tar -zxvf mapserver-7.2.1.tar.gz &&\
+    cd mapserver-7.2.1 &&\
     mkdir build &&\
     cd build &&\
     cmake -DCMAKE_INSTALL_PREFIX=/opt \
