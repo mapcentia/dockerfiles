@@ -65,41 +65,41 @@ volumes:
     # gc2core
     gc2core_var_www_geocloud2:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
     gc2core_var_log:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
     gc2core_var_lib_php_sessions:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
 
     # mapcache
     mapcache_etc_apache2_sites-enabled:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
 
     # postgis
     postgis_var_log:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
     postgis_var_www_geocloud2:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
     postgis_etc_postgresql:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
     postgis_var_lib_postgresql:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared
     postgis_etc_pgbouncer:
       driver: cloudstor:aws
-            driver_opts:
-              backing: shared
+        driver_opts:
+          backing: shared

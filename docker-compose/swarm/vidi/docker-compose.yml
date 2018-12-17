@@ -35,3 +35,6 @@ services:
       - web
 volumes:
     vidi_root_vidi:
+      driver: cloudstor:aws
+        driver_opts:
+          backing: shared
