@@ -1,12 +1,21 @@
-# Create a file called vidi2.env with these vars
+#
+# This Docker-compose is for deploying GC2 in a production environment.
+# It requires the use of Traefik as reverse proxy.
+# Docker-compose file for Traefik is included in this repository.
+#
+# How to:
+#
+# Create a file called vidi.env with these vars
 #
 # GC2_HOST=https://my_gc2_server.com
 # TIMEZONE=CET
 # LOCALE=en_US.UTF-8
 #
+# Set the traefik.frontend.rule is this file to your DNS name.
+#
 # The run following commands:
 #
-# docker-compose up
+# $ docker-compose up
 #
 # There will be created named volumes for persistence.
 #
@@ -24,7 +33,7 @@ services:
   vidi:
     image: mapcentia/vidi
     ports:
-      - "3000:3000" # Remove if using Traefik
+      - "3000:3000"
     volumes:
       - vidi_root_vidi:/root/vidi
     env_file:

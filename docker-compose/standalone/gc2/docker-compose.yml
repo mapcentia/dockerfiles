@@ -1,18 +1,23 @@
+#
+# This Docker-compose is for deploying GC2 in a production environment.
+# It requires the use of Traefik as reverse proxy.
+# Docker-compose file for Traefik is included in this repository.
+#
+# How to:
+#
 # Create a file called gc2.env with these vars
 #
 # GC2_PASSWORD=12345
 # TIMEZONE=CET
 # LOCALE=en_US.UTF-8
 #
+# Set the traefik.frontend.rule is this file to your DNS name.
+#
 # The run following commands:
 #
-# docker-compose up
+# $ docker-compose up
 #
 # There will be created named volumes for persistence.
-#
-# Use Traefik as reverse-proxy:
-# Create a user defined bridge network:
-# docker network create web
 #
 # 'docker-compose down' will not remove data
 # 'docker-compose down -v' will remove the volumes!!!
@@ -46,9 +51,6 @@ services:
     networks:
       - web
       - internal
-    ports:
-      - "8080:80" # Remove if using Traefik
-
 
   mapcache:
     image: mapcentia/mapcache
