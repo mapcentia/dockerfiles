@@ -13,7 +13,7 @@
 #
 # Set the traefik.frontend.rule is this file to your DNS name.
 #
-# The run following commands:
+# The run following command to deploy:
 #
 # $ docker-compose up
 #

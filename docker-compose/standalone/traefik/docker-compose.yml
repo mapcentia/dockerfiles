@@ -9,6 +9,10 @@
 # Create a user defined bridge network:
 # $ docker network create web
 #
+# The run following command to deploy:
+#
+# $ docker-compose up
+#
 # Remember to set email in traefik.toml
 
 version: '3.3'
