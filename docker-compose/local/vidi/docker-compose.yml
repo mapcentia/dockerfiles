@@ -1,0 +1,33 @@
+#
+# This Docker-compose is for deploying Vidi in a test environment.
+# It will expose Vidi on port 3000
+#
+# The run following command to deploy:
+#
+# $ docker-compose up
+#
+# There will be created named volumes for persistence.
+#
+# 'docker-compose down' will not remove data
+# 'docker-compose down -v' will remove the volumes!!!
+#
+
+version: '3'
+
+services:
+
+  vidi:
+    image: mapcentia/vidi
+    ports:
+      - "3000:3000"
+    volumes:
+      - vidi_root_vidi:/root/vidi
+    env_file:
+      - vidi.env
+
+volumes:
+    vidi_root_vidi:
+
+
+
+
