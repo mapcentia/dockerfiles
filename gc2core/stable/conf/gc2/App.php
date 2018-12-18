@@ -190,6 +190,8 @@ class App
             ],
         ],
 
+        "vidiUrl" => "http://127.0.0.1:3000",
+
     );
     function __construct(){
         // This is the autoload function and include path setting. No need to fiddle with this.
