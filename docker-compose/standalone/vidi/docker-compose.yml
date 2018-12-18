@@ -1,5 +1,5 @@
 #
-# This Docker-compose is for deploying GC2 in a production environment.
+# This Docker-compose is for deploying Vidi in a production environment.
 # It requires the use of Traefik as reverse proxy.
 # Docker-compose file for Traefik is included in this repository.
 #
