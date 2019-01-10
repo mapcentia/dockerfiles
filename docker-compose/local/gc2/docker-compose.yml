@@ -31,6 +31,7 @@ services:
     env_file:
       - gc2.env
     networks:
+      - default
       - internal
     ports:
       - "8080:80"
