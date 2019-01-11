@@ -5,9 +5,8 @@ RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install MapServer 7.2.1 from source
-RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz -O mapserver-7.2.1.tar.gz &&\
-    tar -zxvf mapserver-7.2.1.tar.gz &&\
-    cd mapserver-7.2.1 &&\
+RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-2 &&\
+    cd mapserver &&\
     mkdir build &&\
     cd build &&\
     cmake -DCMAKE_INSTALL_PREFIX=/opt \
@@ -23,7 +22,7 @@ RUN wget http://download.osgeo.org/mapserver/mapserver-7.2.1.tar.gz -O mapserver
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
 
-RUN cp /mapserver-7.2.1/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+RUN cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install QGIS-server
 RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
