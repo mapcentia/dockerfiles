@@ -1,5 +1,19 @@
+#
+# This Docker-compose file is for traefik in a Docker standalone environment
+#
+# How to:
+#
 # Create a acme.json file on the host:
 # $ touch acme.json && chmod 600 acme.json
+#
+# Create a user defined bridge network:
+# $ docker network create web
+#
+# The run following command to deploy:
+#
+# $ docker-compose up
+#
+# Remember to set email in traefik.toml
 
 version: '3.3'
 
@@ -21,7 +35,7 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/docker/acme.json:/acme.json # SET THE RIGHT PATH
+      - ./traefik.toml:/traefik.toml
     configs:
       - source: traefik.toml
         target: /etc/traefik/traefik.toml
