@@ -6,8 +6,8 @@
 # Create a acme.json file on the host:
 # $ touch acme.json && chmod 600 acme.json
 #
-# Create a user defined bridge network:
-# $ docker network create web
+# Create a user defined overlay network:
+# $ docker network create --driver overlay web
 #
 # The run following command to deploy:
 #
