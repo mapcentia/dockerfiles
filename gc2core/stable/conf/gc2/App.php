@@ -127,12 +127,13 @@ class App
                 "fields" => [
                     [
                         "name" => "vidi_layer_type",
-                        "type" => "combo",
+                        "type" => "checkboxgroup",
                         "title" => "Type",
                         "values" => [
-                            ["name" => "Tile", "value" => "t"],
                             ["name" => "Vector", "value" => "v"],
-                            ["name" => "Both", "value" => "tv"],
+                            ["name" => "Raster tile", "value" => "t"],
+                            ["name" => "Vector tile", "value" => "mvt"],
+                            ["name" => "WebGL", "value" => "w"]
                         ],
                         "default" => "t",
                     ],
