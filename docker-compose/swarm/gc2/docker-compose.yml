@@ -79,4 +79,4 @@ volumes:
     mapcache_etc_apache2_sites-enabled:
       driver: cloudstor:aws
       driver_opts:
-        backing: relocatable
+        backing: shared

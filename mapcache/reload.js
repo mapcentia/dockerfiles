@@ -3,22 +3,38 @@ var fs = require("fs");
 var path = require('path');
 
 var file = "/etc/apache2/sites-enabled/mapcache.conf";
+var lock = "/etc/apache2/sites-enabled/lock";
 
-fs.exists(file, function (exists) {
+fs.exists(lock, function (exists) {
     if (exists) {
-        callback();
+        console.log("locked");
     } else {
-        fs.writeFile(file, '', function (err, data) {
-            console.log("Creating mapcache.conf");
-            callback();
-        })
+        fs.exists(file, function (exists) {
+            if (exists) {
+                callback();
+            } else {
+                fs.writeFile(file, '', function (err, data) {
+                    console.log("Creating mapcache.conf");
+                    callback();
+                })
+            }
+        });
     }
 });
+
+function unlink() {
+    fs.unlink(lock, function (err) {
+        if (err) throw err;
+        console.log('successfully deleted lock');
+    });
+}
+
 
 function callback() {
     fs.readFile(file, function (err, data) {
         if (err) {
             console.log(err);
+            unlink();
         }
         console.log(data.toString('utf-8'));
 
@@ -39,6 +55,7 @@ function callback() {
                     count++;
                     if (error !== null) {
                         console.log(error);
+                        unlink();
                     }
                     if (count === length)
                         exec("service apache2 reload", function (error, stdout, stderr) {
@@ -46,6 +63,7 @@ function callback() {
                                 console.log(error);
                             }
                             console.log(stdout);
+                            unlink();
 
                         });
                 });
