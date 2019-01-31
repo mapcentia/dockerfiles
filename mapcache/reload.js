@@ -35,10 +35,14 @@ function callback() {
         if (err) {
             console.log(err);
             unlink();
+            return;
         }
         console.log(data.toString('utf-8'));
 
         fs.readdir("/var/www/geocloud2/app/wms/mapcache/", function (err, files) {
+            if (!files) {
+                return
+            }
             var targetFiles = files.filter(function (file) {
                 return path.extname(file).toLowerCase() === ".xml";
             });
