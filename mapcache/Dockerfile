@@ -44,13 +44,12 @@ ADD conf/apache/mapcache.conf /etc/apache2/sites-enabled/
 COPY watch_mapcache_changes.sh /watch_mapcache_changes.sh
 RUN chmod +x /watch_mapcache_changes.sh
 
+# Add the reload.js
+COPY reload.js /reload.js
+
 RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh &&\
     bash nodesource_setup.sh &&\
     apt-get install -y nodejs
-
-# Add the reload.js
-COPY reload.js /reload.js
-RUN /usr/bin/node /reload.js
 
 RUN mkdir /mapcache
 RUN cp /root/mapcache/mapcache.xml /mapcache/
