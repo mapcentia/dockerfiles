@@ -14,7 +14,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh &&\
 
 # Clone Vidi from GitHub
 RUN cd  ~ &&\
-	git  clone http://github.com/mapcentia/vidi.git --branch master
+	git  clone http://github.com/mapcentia/vidi.git
 
 # Install grunt
 RUN cd ~/vidi &&\
