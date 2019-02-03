@@ -1,5 +1,3 @@
-# TIMEZONE=CET
-# LOCALE=en_US.UTF-8
 #
 # The run following commands:
 #
@@ -20,9 +18,7 @@ services:
   vidi:
     image: mapcentia/vidi
     volumes:
-      - vidi_root_vidi:/root/vidi
-    env_file:
-      - vidi.env
+      - vidi_root_vidi_public_tmp:/root/vidi/public/tmp
     deploy:
      labels:
       - traefik.backend=swarm.vidi.io
@@ -34,7 +30,7 @@ services:
     networks:
       - web
 volumes:
-    vidi_root_vidi:
+    vidi_root_vidi_public_tmp:
       driver: cloudstor:aws
-        driver_opts:
-          backing: shared
+      driver_opts:
+        backing: shared
