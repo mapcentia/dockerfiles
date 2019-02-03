@@ -7,13 +7,7 @@
 # Docker-compose file for Traefik is included in this repository.
 #
 # How to:
-#
-# Create a file called gc2.env with these vars
-#
-# GC2_PASSWORD=12345
-# TIMEZONE=CET
-# LOCALE=en_US.UTF-8
-#
+##
 # Set the traefik.frontend.rule is this file to your DNS name.
 #
 # The run following commands:
@@ -33,9 +27,11 @@ services:
     image: mapcentia/gc2core
     privileged: true
     volumes:
-      - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - gc2core_var_www_geocloud2_app_wms:/var/www/geocloud2/app/wms
+      - gc2core_var_www_geocloud2_app_tmp:/var/www/geocloud2/app/tmp
+      - gc2core_var_www_geocloud2_public_logs:/var/www/geocloud2/public/logs
       - gc2core_var_log:/var/log
-      - gc2core_var_lib_php_sessions:/var/lib/php/sessions    
+      - gc2core_var_lib_php_sessions:/var/lib/php/sessions
     env_file:
       - gc2.env
     deploy:
@@ -55,12 +51,22 @@ services:
     networks:
       - internal
     volumes:
-      - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - gc2core_var_www_geocloud2_app_wms:/var/www/geocloud2/app/wms
       - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
 
 volumes:
     # gc2core
-    gc2core_var_www_geocloud2:
+    gc2core_var_www_geocloud2_app_tmp:
+      driver: cloudstor:aws
+      driver_opts:
+        backing: shared
+
+    gc2core_var_www_geocloud2_app_wms:
+      driver: cloudstor:aws
+      driver_opts:
+        backing: shared
+
+    gc2core_var_www_geocloud2_public_logs:
       driver: cloudstor:aws
       driver_opts:
         backing: shared
