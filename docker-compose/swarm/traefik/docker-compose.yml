@@ -3,17 +3,14 @@
 #
 # How to:
 #
-# Create a acme.json file on the host:
-# $ touch acme.json && chmod 600 acme.json
-#
 # Create a user defined overlay network:
 # $ docker network create --driver overlay web
 #
 # The run following command to deploy:
 #
-# $ docker-compose up
+# $ docker stack deploy --compose-file docker-compose.yml traefik
 #
-# Remember to set email in traefik.toml
+# Remember to set email!
 
 version: '3.3'
 
@@ -21,29 +18,35 @@ networks:
   web:
     external: true
 
-configs:
-  traefik.toml:
-    file: ./traefik.toml
-
 services:
-
   traefik:
     image: traefik
+    command:
+      - "--api"
+      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+      - "--entrypoints=Name:https Address::443 TLS"
+      - "--defaultentrypoints=http,https"
+      - "--acme"
+      - "--acme.storage=acme.json"
+      - "--acme.entryPoint=https"
+      - "--acme.httpChallenge.entryPoint=http"
+      - "--acme.onHostRule=true"
+      - "--acme.onDemand=false"
+      - "--acme.email=mh@mapcentia.com" # SET EMAIL
+      - "--docker"
+      - "--docker.swarmMode"
+      - "--docker.domain=traefik"
+      - "--docker.watch"
     ports:
       - "80:80"
       - "8080:8080"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/traefik.toml
-    configs:
-      - source: traefik.toml
-        target: /etc/traefik/traefik.toml
     labels:
       - "traefik.enable=false"
     networks:
       - web
-
     deploy:
       replicas: 1
       placement:
