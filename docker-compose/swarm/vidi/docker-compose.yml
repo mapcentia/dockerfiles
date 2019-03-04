@@ -19,6 +19,7 @@ services:
     image: mapcentia/vidi
     volumes:
       - vidi_root_vidi_public_tmp:/root/vidi/public/tmp
+      - vidi_tmp_sessions:/tmp/sessions
     deploy:
      labels:
       - traefik.backend=swarm.vidi.io
@@ -31,6 +32,11 @@ services:
       - web
 volumes:
     vidi_root_vidi_public_tmp:
+      driver: cloudstor:aws
+      driver_opts:
+        backing: shared
+
+    vidi_tmp_sessions:
       driver: cloudstor:aws
       driver_opts:
         backing: shared
