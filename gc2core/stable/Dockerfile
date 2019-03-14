@@ -4,6 +4,9 @@ MAINTAINER Martin Høgh<mh@mapcentia.com>
 RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
+# Set php session timeout to one day
+RUN sed -i "s/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/g" /etc/php/7.0/fpm/php.ini
+
 # Install MapServer 7.2.1 from source
 RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-2 &&\
     cd mapserver &&\
