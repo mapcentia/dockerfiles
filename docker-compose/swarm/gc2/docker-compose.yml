@@ -32,8 +32,6 @@ services:
       - gc2core_var_www_geocloud2_public_logs:/var/www/geocloud2/public/logs
       - gc2core_var_log:/var/log
       - gc2core_var_lib_php_sessions:/var/lib/php/sessions
-    env_file:
-      - gc2.env
     deploy:
      labels:
       - traefik.backend=swarm.gc2.io
