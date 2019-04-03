@@ -36,7 +36,10 @@ services:
     image: mapcentia/gc2core
     privileged: true
     volumes:
-      - gc2core_var_www_geocloud2:/var/www/geocloud2
+      - gc2core_var_www_geocloud2_app_conf:/var/www/geocloud2/app/conf
+      - gc2core_var_www_geocloud2_app_wms:/var/www/geocloud2/app/wms
+      - gc2core_var_www_geocloud2_app_tmp:/var/www/geocloud2/app/tmp
+      - gc2core_var_www_geocloud2_public_logs:/var/www/geocloud2/public/logs
       - gc2core_var_log:/var/log
       - gc2core_var_lib_php_sessions:/var/lib/php/sessions
     env_file:
@@ -77,7 +80,10 @@ services:
 
 volumes:
     # gc2core
-    gc2core_var_www_geocloud2:
+    gc2core_var_www_geocloud2_app_conf:
+    gc2core_var_www_geocloud2_app_wms:
+    gc2core_var_www_geocloud2_app_tmp:
+    gc2core_var_www_geocloud2_public_logs:
     gc2core_var_log:
     gc2core_var_lib_php_sessions:
 
