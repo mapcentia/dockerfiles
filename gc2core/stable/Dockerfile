@@ -59,7 +59,8 @@ ADD conf/gc2/Connection.php /var/www/geocloud2/app/conf/
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 
-# Add php-fpm config file from Docker repo
+# Add php-fpm config files from Docker repo
+ADD conf/fpm/php.ini /etc/php/7.0/fpm/php.ini
 ADD conf/fpm/www.conf /etc/php/7.0/fpm/pool.d/www.conf
 
 # Add the check-if-fpm-is-alive script
