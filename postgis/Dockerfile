@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:testing
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -6,16 +6,16 @@ ENV  DEBIAN_FRONTEND noninteractive
 
 # Install packages
 RUN apt-get -y update
-RUN apt-get -y install vim git php-pgsql php-cli wget curl postgis postgresql-9.6-postgis-2.3 postgresql-contrib-9.6 postgresql-9.6-pgrouting pgbouncer locales-all osm2pgsql supervisor \
-    osm2pgsql postgresql-pltcl-9.6
+RUN apt-get -y install vim git php-pgsql php-cli wget curl postgis postgresql-11-postgis-2.5 postgresql-11-pgrouting pgbouncer locales-all osm2pgsql supervisor \
+    osm2pgsql
 
 # Clone GC2 from GitHub
 RUN mkdir /var/www &&\
 	cd /var/www/ &&\
-	git clone http://github.com/mapcentia/geocloud2.git
+	git clone https://github.com/mapcentia/geocloud2.git
 
 # Add config files from Docker repo
-ADD conf/postgresql/pg_hba.conf /etc/postgresql/9.6/main/
+ADD conf/postgresql/pg_hba.conf /etc/postgresql/11/main/
 ADD conf/gc2/geometry_columns_join.sql /var/www/geocloud2/public/install/
 
 # Copy GC2 config files from GIT repo, so we can create the template database and run migrations
@@ -23,7 +23,7 @@ RUN cp /var/www/geocloud2/app/conf/App.php.dist /var/www/geocloud2/app/conf/App.
 RUN cp /var/www/geocloud2/app/conf/Connection.php.dist /var/www/geocloud2/app/conf/Connection.php
 
 # Make config in PostGreSQL
-RUN echo "listen_addresses='*'" >> /etc/postgresql/9.6/main/postgresql.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/11/main/postgresql.conf
 
 # Expose standard for PostGreSQL and pgboucer
 EXPOSE 5432 6432
