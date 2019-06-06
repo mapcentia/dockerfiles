@@ -1,53 +1,50 @@
-#
-# This Docker-compose file is for traefik in a Docker standalone environment
-#
-# How to:
-#
-# Create a user defined overlay network:
-# $ docker network create --driver overlay web
-#
-# The run following command to deploy:
-#
-# $ docker stack deploy --compose-file docker-compose.yml traefik
-#
-# Remember to set email!
-
-version: '3.3'
+version: "3.4"
 
 networks:
   web:
     external: true
+  internal:
+    external: false
 
 services:
+
   traefik:
     image: traefik
+
     command:
       - "--api"
-      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
-      - "--entrypoints=Name:https Address::443 TLS"
-      - "--defaultentrypoints=http,https"
-      - "--acme"
-      - "--acme.storage=acme.json"
-      - "--acme.entryPoint=https"
-      - "--acme.httpChallenge.entryPoint=http"
-      - "--acme.onHostRule=true"
-      - "--acme.onDemand=false"
-      - "--acme.email=mh@mapcentia.com" # SET EMAIL
+      - "--entrypoints=Name:http Address::80"
+      - "--defaultentrypoints=http"
       - "--docker"
       - "--docker.swarmMode"
       - "--docker.domain=traefik"
       - "--docker.watch"
-    ports:
-      - "80:80"
-      - "8080:8080"
-      - "443:443"
+    networks:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      - "traefik.enable=false"
     networks:
       - web
+      - internal
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+      - target: 8080
+        published: 8080
+        mode: host
     deploy:
-      replicas: 1
+      mode: global
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+
+
