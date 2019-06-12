@@ -130,20 +130,27 @@ class App
                         "type" => "checkboxgroup",
                         "title" => "Type",
                         "values" => [
+                            ["name" => "Tile", "value" => "t"],
                             ["name" => "Vector", "value" => "v"],
-                            ["name" => "Raster tile", "value" => "t"],
-                            ["name" => "Vector tile", "value" => "mvt"],
-                            ["name" => "WebGL", "value" => "w"]
+                            ["name" => "WebGL", "value" => "w"],
+                            ["name" => "MVT", "value" => "mvt"],
                         ],
                         "default" => "t",
                     ],
+                ]
+
+            ],
+            [
+                "fieldsetName" => "Editor",
+                "fields" => [
                     [
                         "name" => "vidi_layer_editable",
                         "type" => "checkbox",
                         "title" => "Editable",
                         "default" => false,
-                    ]
+                    ],
                 ]
+
             ],
             [
                 "fieldsetName" => "Tile settings",
@@ -151,14 +158,14 @@ class App
                     [
                         "name" => "single_tile",
                         "type" => "checkbox",
-                        "title" => "Single tile (WMS)",
+                        "title" => "Use tile cache",
                         "default" => false,
                     ],
                     [
                         "name" => "tiles_service_uri",
                         "type" => "text",
                         "title" => "Tiles service uri",
-                    ],
+                    ]
                 ]
 
             ],
@@ -174,9 +181,51 @@ class App
                             ["name" => "Dynamic", "value" => "d"],
                         ],
                         "default" => "s",
-                    ]
+                    ],
+                    [
+                        "name" => "max_features",
+                        "type" => "text",
+                        "title" => "Max features",
+                        "default" => "100",
+                    ],
                 ]
 
+            ],
+            [
+                "fieldsetName" => "Filters",
+                "fields" => [
+                    [
+                        "name" => "filter_config",
+                        "type" => "textarea",
+                        "title" => "Filter config",
+                    ],
+                    [
+                        "name" => "predefined_filters",
+                        "type" => "textarea",
+                        "title" => "Predefined filters",
+                    ],
+                    [
+                        "name" => "default_match",
+                        "type" => "combo",
+                        "title" => "Default match",
+                        "values" => [
+                            ["name" => "All", "value" => "all"],
+                            ["name" => "Any", "value" => "any"],
+                        ],
+                        "default" => "any",
+                    ],
+                ]
+
+            ],
+            [
+                "fieldsetName" => "References",
+                "fields" => [
+                    [
+                        "name" => "referenced_by",
+                        "type" => "textarea",
+                        "title" => "Referenced by",
+                    ],
+                ]
             ],
             [
                 "fieldsetName" => "Layer tree",
@@ -190,7 +239,6 @@ class App
 
             ],
         ],
-
         "vidiUrl" => "http://127.0.0.1:3000",
 
     );
