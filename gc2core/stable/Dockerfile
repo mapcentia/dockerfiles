@@ -45,12 +45,18 @@ RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=
 
 # Clone GC2 from GitHub
 RUN cd /var/www/ &&\
-	git clone http://github.com/mapcentia/geocloud2.git --branch master
+	git clone http://github.com/mapcentia/geocloud2.git --branch develop
 
 # Install npm packages run Grunt
 RUN	cd /var/www/geocloud2 &&\
 	npm install &&\
 	grunt production --force
+
+RUN	mkdir -p /var/www/geocloud2/public/dashboard && mkdir /dashboardtmp && cd /dashboardtmp &&\
+    git clone http://github.com/mapcentia/dashboard.git && cd /dashboardtmp/dashboard &&\
+    npm install && cp ./app/config.js.sample ./app/config.js && cp ./.env.production ./.env &&\
+    npm run build && cp -R ./build/* /var/www/geocloud2/public/dashboard/ &&\
+    rm -R /dashboardtmp
 
 # Add the custom config files from the Docker repo.
 ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
