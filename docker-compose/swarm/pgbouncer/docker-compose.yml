@@ -17,4 +17,15 @@ services:
     networks:
       - web
     ports:
-      - "5433:5433"
+      - "5433:5433"  
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
