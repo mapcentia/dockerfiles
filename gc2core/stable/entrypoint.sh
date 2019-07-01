@@ -24,11 +24,16 @@ chown www-data:www-data /var/www/geocloud2/app/wms/mapfiles/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/files/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/qgsfiles/ &&\
-chown www-data:www-data /var/www/geocloud2/public/logs/
+chown www-data:www-data /var/www/geocloud2/public/logs/ &&\
+chown chmod 737 /var/lib/php/sessions
+chown chmod +t /var/lib/php/sessions # Sticky bit
 
 # Set time zone if passed
 if [ -n "$TIMEZONE" ]; then
     echo $TIMEZONE | tee /etc/timezone
     dpkg-reconfigure -f noninteractive tzdata
 fi
+
+export CONTAINER_ID=$(cat /proc/1/cpuset | cut -c9-)
+
 exec "$@"
