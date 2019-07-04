@@ -25,8 +25,8 @@ chown www-data:www-data /var/www/geocloud2/app/wms/mapcache/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/files/ &&\
 chown www-data:www-data /var/www/geocloud2/app/wms/qgsfiles/ &&\
 chown www-data:www-data /var/www/geocloud2/public/logs/ &&\
-chown chmod 737 /var/lib/php/sessions
-chown chmod +t /var/lib/php/sessions # Sticky bit
+chmod 737 /var/lib/php/sessions
+chmod +t /var/lib/php/sessions # Sticky bit
 
 # Set time zone if passed
 if [ -n "$TIMEZONE" ]; then
