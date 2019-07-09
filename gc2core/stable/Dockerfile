@@ -32,7 +32,6 @@ RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
     wget -O - http://qgis.org/downloads/qgis-2017.gpg.key | gpg --import --batch &&\
     gpg --fingerprint CAEB3DC3BDF7FB45 &&\
     gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add - &&\
-    apt-get -y update &&\
     apt-get -y install qgis-server
 
 # Symlink font for QGIS Server
