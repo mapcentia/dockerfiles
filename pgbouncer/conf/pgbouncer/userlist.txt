@@ -1,2 +1,2 @@
-"user1" "xxxx" # List each user
+"user1" "xxxx" # List each user/password
 "user2" "xxxx"
