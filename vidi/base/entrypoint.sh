@@ -37,4 +37,8 @@ WARNING: No locale has been set for Vidi.
     locale-gen $LOCALE
     dpkg-reconfigure locales
 fi
+
+#Run Grunt
+cd /root/vidi && grunt production
+
 exec "$@"
