@@ -1,3 +1,2 @@
-"pgbouncer" "hawk2000"
-"gc2" "hawk2000"
-
+"user1" "xxxx" # List each user/password
+"user2" "xxxx"
