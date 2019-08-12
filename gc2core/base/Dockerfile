@@ -37,7 +37,7 @@ RUN pecl install rar &&\
 RUN sed 's/;daemonize = yes/daemonize = no/' -i /etc/php/7.0/fpm/php-fpm.conf
 
 # Install Node.js, Grunt and Forever
-RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh &&\
+RUN curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh &&\
     bash nodesource_setup.sh &&\
     apt-get install nodejs
 
