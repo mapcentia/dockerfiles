@@ -63,21 +63,6 @@ services:
     networks:
       - internal
 
-  postgis:
-    image: mapcentia/postgis
-    volumes:
-      - postgis_var_www_geocloud2:/var/www/geocloud2
-      - postgis_var_lib_postgresql:/var/lib/postgresql
-      - postgis_var_log:/var/log
-      - postgis_etc_postgresql:/etc/postgresql
-      - postgis_etc_pgbouncer:/etc/pgbouncer
-    env_file:
-      - gc2.env
-    networks:
-      - internal
-    ports:
-      - "5432:5432"
-
 volumes:
     # gc2core
     gc2core_var_www_geocloud2_app_conf:
@@ -90,12 +75,6 @@ volumes:
     # mapcache
     mapcache_etc_apache2_sites-enabled:
 
-    # postgis
-    postgis_var_log:
-    postgis_var_www_geocloud2:
-    postgis_etc_postgresql:
-    postgis_var_lib_postgresql:
-    postgis_etc_pgbouncer:
 
 
 
