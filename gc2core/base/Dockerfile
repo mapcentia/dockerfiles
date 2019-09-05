@@ -26,9 +26,6 @@ RUN cd ~ &&\
     cp mdb-sqlite-1.0.2/lib/commons-logging-1.1.1.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/ &&\
     cp mdb-sqlite-1.0.2/lib/commons-lang-2.4.jar /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/
 
-# Add SQLite3 module to php.ini
-RUN echo "extension=sqlite3.so" >> /etc/php/7.0/fpm/php.ini
-
 # Install rar
 RUN pecl install rar &&\
 	echo "extension=rar.so" >> /etc/php/7.0/fpm/php.ini
