@@ -26,6 +26,7 @@ RUN cd ~ && \
 RUN sed 's/Listen 80/Listen 5555/' -i /etc/apache2/ports.conf
 
 RUN a2enmod headers
+RUN a2dismod -f mime dir auth_basic authn_core access_compat authn_file authz_host authz_user filter deflate authn_file negotiation autoindex reqtimeout setenvif status
 
 # Start httpd with apache2ctl, so the lock file is created
 RUN apache2ctl start
