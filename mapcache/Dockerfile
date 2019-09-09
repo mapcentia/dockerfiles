@@ -13,12 +13,6 @@ RUN apt-get -y install sudo vim wget curl apache2 libfcgi-dev apache2-dev cmake 
 RUN cd ~ && \
     git clone http://github.com/mapserver/mapcache.git
 
-# Apply patch for MVT https://github.com/mapserver/mapcache/pull/166
-RUN cd ~ && \
-    cd mapcache &&\
-    git fetch origin pull/166/head:pr-166 &&\
-    git checkout pr-166
-
 RUN cd ~ && \
     cd mapcache &&\
     mkdir build &&\
