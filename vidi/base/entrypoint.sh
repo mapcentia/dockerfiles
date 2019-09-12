@@ -39,6 +39,6 @@ WARNING: No locale has been set for Vidi.
 fi
 
 #Run Grunt
-cd /root/vidi && grunt production
+#cd /root/vidi && grunt production
 
 exec "$@"
