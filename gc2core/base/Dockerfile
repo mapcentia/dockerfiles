@@ -4,14 +4,14 @@ MAINTAINER Martin Høgh<mh@mapcentia.com>
 RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN sed -i "s#deb http://deb.debian.org/debian stable main#deb http://deb.debian.org/debian stable main contrib non-free#g" /etc/apt/sources.list &&\
-    sed -i "s#deb http://security.debian.org/debian-security stable/updates main#deb http://security.debian.org/debian-security stable/updates main contrib non-free#g" /etc/apt/sources.list &&\
-    sed -i "s#deb http://deb.debian.org/debian stable-updates main#deb http://deb.debian.org/debian stable-updates main contrib non-free#g" /etc/apt/sources.list
+RUN sed -i "s#deb http://deb.debian.org/debian stretch main#deb http://deb.debian.org/debian stretch main contrib non-free#g" /etc/apt/sources.list &&\
+    sed -i "s#deb http://security.debian.org/debian-security stretch/updates main#deb http://security.debian.org/debian-security stretch/updates main contrib non-free#g" /etc/apt/sources.list &&\
+    sed -i "s#deb http://deb.debian.org/debian stretch-updates main#deb http://deb.debian.org/debian stretch-updates main contrib non-free#g" /etc/apt/sources.list
 
 # Install packages
 RUN apt-get -y update  --fix-missing
 RUN apt-get -y install cron vim wget g++ build-essential git unzip rng-tools apache2-utils postgresql-client supervisor netcat \
-    apache2 php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev php-zip \
+    apache2  apache2-dev php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev php-zip \
     cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev \
     libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb nodejs osm2pgsql postgis swig sudo \
     apt-transport-https ca-certificates default-jre default-jdk \
