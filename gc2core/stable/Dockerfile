@@ -29,9 +29,10 @@ RUN cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install QGIS-server
 RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
-    wget -O - https://qgis.org/downloads/qgis-2017.gpg.key | gpg --import --batch &&\
-    gpg --fingerprint CAEB3DC3BDF7FB45 &&\
-    gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add - &&\
+    wget -O - https://qgis.org/downloads/qgis-2019.gpg.key | gpg --import --batch &&\
+    gpg --fingerprint 51F523511C7028C3 &&\
+    gpg --export --armor 51F523511C7028C3 | apt-key add - &&\
+    apt-get update &&\
     apt-get -y install qgis-server
 
 # Symlink font for QGIS Server
@@ -75,7 +76,7 @@ RUN cp /root/mapcache/mapcache.xml /mapcache/
 
 # Clone GC2 from GitHub
 RUN cd /var/www/ &&\
-	git clone http://github.com/mapcentia/geocloud2.git --branch develop
+	git clone http://github.com/mapcentia/geocloud2.git
 
 # Install npm packages run Grunt
 RUN	cd /var/www/geocloud2 &&\
