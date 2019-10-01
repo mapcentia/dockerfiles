@@ -47,10 +47,6 @@ RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=
 RUN cd ~ && \
     git clone http://github.com/mapserver/mapcache.git
 
-RUN apt-get -y update  --fix-missing
-
-RUN apt-get -y install apache2-dev
-
 RUN cd ~ && \
     cd mapcache &&\
     mkdir build &&\
