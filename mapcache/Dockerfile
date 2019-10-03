@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:stretch
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -13,12 +13,6 @@ RUN apt-get -y install sudo vim wget curl apache2 libfcgi-dev apache2-dev cmake 
 RUN cd ~ && \
     git clone http://github.com/mapserver/mapcache.git
 
-# Apply patch for MVT https://github.com/mapserver/mapcache/pull/166
-RUN cd ~ && \
-    cd mapcache &&\
-    git fetch origin pull/166/head:pr-166 &&\
-    git checkout pr-166
-
 RUN cd ~ && \
     cd mapcache &&\
     mkdir build &&\
@@ -32,6 +26,7 @@ RUN cd ~ && \
 RUN sed 's/Listen 80/Listen 5555/' -i /etc/apache2/ports.conf
 
 RUN a2enmod headers
+RUN a2dismod -f mime dir auth_basic authn_core access_compat authn_file authz_host authz_user filter deflate authn_file negotiation autoindex reqtimeout setenvif status
 
 # Start httpd with apache2ctl, so the lock file is created
 RUN apache2ctl start

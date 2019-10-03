@@ -35,7 +35,9 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - vidi_root_vidi:/root/vidi
+      - vidi_root_vidi_config:/root/vidi/config
+      - vidi_root_vidi_public_tmp:/root/vidi/public/tmp
+      - vidi_tmp_sessions:/tmp/sessions
     env_file:
       - vidi.env
     networks:
@@ -49,7 +51,10 @@ services:
       - traefik.frontend.passHostHeader=true
 
 volumes:
-    vidi_root_vidi:
+    vidi_root_vidi_config:
+    vidi_root_vidi_public_tmp:
+    vidi_tmp_sessions:
+
 
 
 

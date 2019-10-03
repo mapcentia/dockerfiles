@@ -29,10 +29,10 @@ RUN cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install QGIS-server
 RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
-    wget -O - http://qgis.org/downloads/qgis-2017.gpg.key | gpg --import --batch &&\
-    gpg --fingerprint CAEB3DC3BDF7FB45 &&\
-    gpg --export --armor CAEB3DC3BDF7FB45 | apt-key add - &&\
-    apt-get -y update &&\
+    wget -O - https://qgis.org/downloads/qgis-2019.gpg.key | gpg --import --batch &&\
+    gpg --fingerprint 51F523511C7028C3 &&\
+    gpg --export --armor 51F523511C7028C3 | apt-key add - &&\
+    apt-get update &&\
     apt-get -y install qgis-server
 
 # Symlink font for QGIS Server
@@ -43,14 +43,47 @@ RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=
 	echo "<34004> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg && \
 	echo "<34005> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg
 
+# Instal MapCache
+RUN cd ~ && \
+    git clone http://github.com/mapserver/mapcache.git
+
+RUN cd ~ && \
+    cd mapcache &&\
+    mkdir build &&\
+    cd build &&\
+    cmake .. &&\
+    make &&\
+    make install &&\
+    ldconfig
+
+# Add the watch_mapcache_changes.sh
+COPY watch_mapcache_changes.sh /watch_mapcache_changes.sh
+RUN chmod +x /watch_mapcache_changes.sh
+
+# Add the reload.js
+COPY reload.js /reload.js
+
+RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh &&\
+    bash nodesource_setup.sh &&\
+    apt-get install -y nodejs
+
+RUN mkdir /mapcache
+RUN cp /root/mapcache/mapcache.xml /mapcache/
+
 # Clone GC2 from GitHub
 RUN cd /var/www/ &&\
-	git clone http://github.com/mapcentia/geocloud2.git --branch master
+	git clone http://github.com/mapcentia/geocloud2.git
 
 # Install npm packages run Grunt
 RUN	cd /var/www/geocloud2 &&\
 	npm install &&\
 	grunt production --force
+
+RUN	mkdir -p /var/www/geocloud2/public/dashboard && mkdir /dashboardtmp && cd /dashboardtmp &&\
+    git clone http://github.com/mapcentia/dashboard.git && cd /dashboardtmp/dashboard &&\
+    npm install && cp ./app/config.js.sample ./app/config.js && cp ./.env.production ./.env &&\
+    npm run build && cp -R ./build/* /var/www/geocloud2/public/dashboard/ &&\
+    rm -R /dashboardtmp
 
 # Add the custom config files from the Docker repo.
 ADD conf/gc2/App.php /var/www/geocloud2/app/conf/
@@ -58,6 +91,7 @@ ADD conf/gc2/Connection.php /var/www/geocloud2/app/conf/
 
 # Add apache config file from Docker repo
 ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
+ADD conf/apache/mapcache.conf /etc/apache2/sites-enabled/
 
 # Add php-fpm config file from Docker repo
 ADD conf/fpm/www.conf /etc/php/7.0/fpm/pool.d/www.conf

@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:buster
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
@@ -8,7 +8,7 @@ ENV  DEBIAN_FRONTEND noninteractive
 RUN apt-get -y update --fix-missing
 RUN apt-get -y install postgresql-client
 
-RUN apt-get -y install build-essential git libfuse-dev libcurl4-openssl-dev libxml2-dev mime-support automake libtool pkg-config libssl-dev fuse
+RUN apt-get -y install build-essential git libfuse-dev libcurl4-openssl-dev libxml2-dev mime-support automake libtool pkg-config libssl-dev fuse rsync
 
 RUN git clone https://github.com/s3fs-fuse/s3fs-fuse &&\
     cd s3fs-fuse/ &&\
