@@ -106,6 +106,8 @@ RUN chmod +x /run-apache.sh
 ADD conf/apache/run-fpm.sh /
 RUN chmod +x /run-fpm.sh
 
+RUN a2disconf other-vhosts-access-log
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
