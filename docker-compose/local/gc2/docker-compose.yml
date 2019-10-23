@@ -36,14 +36,6 @@ services:
     ports:
       - "8080:80"
 
-  mapcache:
-    image: mapcentia/mapcache
-    volumes:
-      - gc2core_var_www_geocloud2:/var/www/geocloud2
-      - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
-    networks:
-      - internal
-
   postgis:
     image: mapcentia/postgis
     volumes:
@@ -72,9 +64,6 @@ volumes:
     gc2core_var_www_geocloud2:
     gc2core_var_log:
     gc2core_var_lib_php_sessions:
-
-    # mapcache
-    mapcache_etc_apache2_sites-enabled:
 
     # postgis
     postgis_var_log:
