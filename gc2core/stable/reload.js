@@ -24,7 +24,7 @@ fs.exists(lock, function (exists) {
 
 function unlink() {
     fs.unlink(lock, function (err) {
-        if (err) throw err;
+        if (err) return;
         console.log('successfully deleted lock');
     });
 }
@@ -37,8 +37,6 @@ function callback() {
             unlink();
             return;
         }
-        console.log(data.toString('utf-8'));
-
         fs.readdir("/var/www/geocloud2/app/wms/mapcache/", function (err, files) {
             if (!files) {
                 return
@@ -46,8 +44,6 @@ function callback() {
             var targetFiles = files.filter(function (file) {
                 return path.extname(file).toLowerCase() === ".xml";
             });
-
-            console.log(targetFiles)
 
             var length = targetFiles.length;
             var count = 0;
@@ -58,7 +54,6 @@ function callback() {
                 exec('echo "MapCacheAlias /mapcache/' + db + ' /var/www/geocloud2/app/wms/mapcache/' + targetFile + '" >> ' + file, function (error, stdout, stderr) {
                     count++;
                     if (error !== null) {
-                        console.log(error);
                         unlink();
                     }
                     if (count === length)
