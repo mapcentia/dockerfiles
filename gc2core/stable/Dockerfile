@@ -63,7 +63,7 @@ RUN chmod +x /watch_mapcache_changes.sh
 # Add the reload.js
 COPY reload.js /reload.js
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh &&\
+RUN curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh &&\
     bash nodesource_setup.sh &&\
     apt-get install -y nodejs
 
