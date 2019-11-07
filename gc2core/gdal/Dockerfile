@@ -11,7 +11,8 @@ RUN wget http://download.osgeo.org/gdal/2.2.1/gdal221.zip && \
     ./configure \
     --with-python=yes \
     --with-ecw=/usr/local \
-    --with-java=yes \
+    --with-java=/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64 \
+    --with-jvm=/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/lib/amd64/server/ \
     --with-mdb=yes \
     --with-jvm-lib-add-rpath=yes
 

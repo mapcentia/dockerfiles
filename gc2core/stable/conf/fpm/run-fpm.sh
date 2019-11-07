@@ -4,4 +4,4 @@
 
 rm /var/run/php-fpm.sock
 
-exec /usr/sbin/php-fpm7.0
+exec /usr/sbin/php-fpm7.3

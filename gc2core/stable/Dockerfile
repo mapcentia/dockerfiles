@@ -5,7 +5,7 @@ RUN export DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND noninteractive
 
 # Set php session timeout to one day
-RUN sed -i "s/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/g" /etc/php/7.0/fpm/php.ini
+RUN sed -i "s/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/g" /etc/php/7.3/fpm/php.ini
 
 # Install MapServer 7.4 from source
 RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-4 &&\
@@ -28,7 +28,7 @@ RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-4 &&\
 RUN cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
 # Install QGIS-server
-RUN echo "deb http://qgis.org/debian stretch main" >> /etc/apt/sources.list &&\
+RUN echo "deb http://qgis.org/debian buster main" >> /etc/apt/sources.list &&\
     wget -O - https://qgis.org/downloads/qgis-2019.gpg.key | gpg --import --batch &&\
     gpg --fingerprint 51F523511C7028C3 &&\
     gpg --export --armor 51F523511C7028C3 | apt-key add - &&\
@@ -94,7 +94,7 @@ ADD conf/apache/000-default.conf /etc/apache2/sites-enabled/
 ADD conf/apache/mapcache.conf /etc/apache2/sites-enabled/
 
 # Add php-fpm config file from Docker repo
-ADD conf/fpm/www.conf /etc/php/7.0/fpm/pool.d/www.conf
+ADD conf/fpm/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
 # Add the check-if-fpm-is-alive script
 COPY check-fpm.sh /check-fpm.sh
@@ -103,7 +103,7 @@ RUN chmod +x /check-fpm.sh
 ADD conf/apache/run-apache.sh /
 RUN chmod +x /run-apache.sh
 
-ADD conf/apache/run-fpm.sh /
+ADD conf/fpm/run-fpm.sh /
 RUN chmod +x /run-fpm.sh
 
 RUN a2disconf other-vhosts-access-log
@@ -113,7 +113,7 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Share dirs
-VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php/7.0/fpm","/var/log", "/usr/share/proj"]
+VOLUME  ["/var/www/geocloud2","/etc/apache2","/etc/php/7.3/fpm","/var/log", "/usr/share/proj"]
 
 # Expose standard ports for HTTP and HTTPS
 EXPOSE 80
