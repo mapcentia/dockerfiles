@@ -55,14 +55,6 @@ services:
       - web
       - internal
 
-  mapcache:
-    image: mapcentia/mapcache
-    volumes:
-      - gc2core_var_www_geocloud2_app_wms:/var/www/geocloud2/app/wms
-      - mapcache_etc_apache2_sites-enabled:/etc/apache2/sites-enabled
-    networks:
-      - internal
-
 volumes:
     # gc2core
     gc2core_var_www_geocloud2_app_conf:
@@ -71,9 +63,6 @@ volumes:
     gc2core_var_www_geocloud2_public_logs:
     gc2core_var_log:
     gc2core_var_lib_php_sessions:
-
-    # mapcache
-    mapcache_etc_apache2_sites-enabled:
 
 
 
