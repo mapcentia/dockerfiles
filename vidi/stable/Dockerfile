@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Clone Vidi from GitHub
 RUN cd  ~ &&\
-	git  clone http://github.com/mapcentia/vidi.git
+	git  clone https://github.com/mapcentia/vidi.git
 
 # Install grunt
 RUN cd ~/vidi &&\
