@@ -22,6 +22,7 @@ RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-4 &&\
     -DWITH_PYTHON=ON \
     -DWITH_ORACLESPATIAL=0 \
     -DWITH_RSVG=ON \
+    -DWITH_POINT_Z_M=ON \
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install
 
