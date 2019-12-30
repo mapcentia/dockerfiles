@@ -11,7 +11,7 @@ RUN sed -i "s#deb http://deb.debian.org/debian buster main#deb http://deb.debian
 # Install packages
 RUN apt-get -y update  --fix-missing
 RUN apt-get -y install cron vim wget g++ build-essential git unzip rng-tools apache2-utils postgresql-client supervisor netcat \
-    apache2  apache2-dev php-fpm php-pgsql php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev php-zip \
+    apache2  apache2-dev php-fpm php-pgsql php-redis php-curl php-sqlite3 php-mbstring php-gd php-cli php-mbstring php-pear php-dev php-zip \
     cmake libgdal-dev librsvg2-dev libpng++-dev libjpeg-dev libfreetype6-dev libproj-dev libfribidi-dev libharfbuzz-dev libcairo2-dev \
     libgeos++-dev libpython-all-dev curl libapache2-mod-fcgid libfcgi-dev xvfb nodejs osm2pgsql postgis swig sudo \
     apt-transport-https ca-certificates software-properties-common \
