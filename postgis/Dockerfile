@@ -11,6 +11,11 @@ RUN apt-get -y install vim git php-pgsql php-cli wget curl \
     pgbouncer locales-all osm2pgsql supervisor \
     osm2pgsql
 
+# Install msodbcsql17
+RUN wget https://packages.microsoft.com/debian/10/prod/pool/main/m/msodbcsql17/msodbcsql17_17.4.2.1-1_amd64.deb && \
+    export ACCEPT_EULA=Y && \
+    dpkg -i msodbcsql17_17.4.2.1-1_amd64.deb
+
 # Clone GC2 from GitHub
 RUN mkdir /var/www &&\
 	cd /var/www/ &&\
