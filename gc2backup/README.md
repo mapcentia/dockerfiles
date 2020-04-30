@@ -28,12 +28,12 @@ Run a container like this. Put the command in a crontab file on the host, so it 
 ### Optional
 Restore a backup. In this case the latest one. Notice: This command is using the image mapcentia/postgis.
 
-    sudo docker run \
-        --rm=true \
-        -v $PWD/backups/postgis/latest:/restore \
-        --link postgis:postgis \
-        -t -i \
-        mapcentia/postgis pg_restore --dbname [database] -U gc2 -h postgis /restore/[database].bak
+        sudo docker run \
+            --rm=true \
+            -v $PWD/backups/postgis/latest:/restore \
+            --link postgis:postgis \
+            -t -i \
+            mapcentia/postgis pg_restore --dbname [database] -U gc2 -h postgis /restore/[database].bak
         
     
     sudo docker run \

@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:stretch
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN export DEBIAN_FRONTEND=noninteractive
@@ -50,6 +50,10 @@ ENV LD_LIBRARY_PATH /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/jre/lib/amd64/serv
 # Enable Apache2 modules
 RUN a2enmod rewrite headers expires include actions alias cgid fcgid proxy proxy_http proxy_ajp proxy_balancer proxy_connect proxy_html xml2enc proxy_wstunnel proxy_fcgi http2
 RUN a2enconf serve-cgi-bin
+
+# Disable gzip and let PHP control this
+RUN a2dismod deflate -f
+
 
 # Start fpm, so dirs are created
 RUN service php7.3-fpm start

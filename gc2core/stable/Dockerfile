@@ -109,6 +109,9 @@ RUN chmod +x /run-fpm.sh
 
 RUN a2disconf other-vhosts-access-log
 
+# Add clean job for app/tmp
+RUN crontab -l | { cat; echo "0 0 * * * php -f /var/www/geocloud2/app/scripts/clean_tmp_dir.php";} | crontab
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
