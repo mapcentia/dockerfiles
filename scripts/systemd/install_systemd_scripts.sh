@@ -64,17 +64,6 @@ if [[ $? = 1 ]]
         echo "gc2core container doesn't exist"
 fi
 
-check mapcache
-if [[ $? = 1 ]]
-    then
-        echo "mapcache container exists..."
-        cp $PWD/dockerfiles/scripts/systemd/mapcache.service /lib/systemd/system
-        systemctl enable mapcache.service
-        service mapcache start
-    else
-        echo "mapcache container doesn't exist"
-fi
-
 check vidi
 if [[ $? = 1 ]]
     then
