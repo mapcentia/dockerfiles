@@ -24,9 +24,19 @@ RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-4 &&\
     -DWITH_RSVG=ON \
     -DWITH_POINT_Z_M=ON \
     -DWITH_SVGCAIRO=0 .. &&\
-    make && make install
+    make && make install &&\
+    cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
-RUN cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+# Instal MapCache from source
+RUN cd ~ && \
+    git clone http://github.com/mapserver/mapcache.git --branch branch-1-10 && \
+    cd mapcache &&\
+    mkdir build &&\
+    cd build &&\
+    cmake .. &&\
+    make &&\
+    make install &&\
+    ldconfig
 
 # Install QGIS-server
 RUN echo "deb http://qgis.org/debian buster main" >> /etc/apt/sources.list &&\
@@ -43,19 +53,6 @@ RUN ln -s /usr/share/fonts directory /usr/lib/x86_64-linux-gnu
 RUN echo "<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs <>" >> /usr/share/proj/epsg && \
 	echo "<34004> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg && \
 	echo "<34005> +proj=omerc +lonc=11.81 +lat_0=55.3333332 +x_0=-118947.024 +y_0=101112.545 +k=0.9999855 +alpha=1.190005 +gamma=0.0 +datum=WGS84" >> /usr/share/proj/epsg
-
-# Instal MapCache
-RUN cd ~ && \
-    git clone http://github.com/mapserver/mapcache.git
-
-RUN cd ~ && \
-    cd mapcache &&\
-    mkdir build &&\
-    cd build &&\
-    cmake .. &&\
-    make &&\
-    make install &&\
-    ldconfig
 
 # Add the watch_mapcache_changes.sh
 COPY watch_mapcache_changes.sh /watch_mapcache_changes.sh
