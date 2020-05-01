@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 MAINTAINER Martin Høgh<mh@mapcentia.com>
 
 RUN  export DEBIAN_FRONTEND=noninteractive
