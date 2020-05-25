@@ -9,7 +9,7 @@ RUN apt-get -y update
 RUN apt-get -y install vim git php-pgsql php-cli wget curl \
     postgis postgresql-11-postgis-2.5 postgresql-11-pgrouting postgresql-11-ogr-fdw pgagent \
     pgbouncer locales-all osm2pgsql supervisor \
-    osm2pgsql
+    osm2pgsql unixodbc
 
 # Install msodbcsql17
 RUN wget https://packages.microsoft.com/debian/10/prod/pool/main/m/msodbcsql17/msodbcsql17_17.4.2.1-1_amd64.deb && \
