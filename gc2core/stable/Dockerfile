@@ -7,8 +7,8 @@ ENV DEBIAN_FRONTEND noninteractive
 # Set php session timeout to one day
 RUN sed -i "s/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 86400/g" /etc/php/7.3/fpm/php.ini
 
-# Install MapServer 7.4 from source
-RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-4 &&\
+# Install MapServer 7.6 from source
+RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-6 &&\
     cd mapserver &&\
     mkdir build &&\
     cd build &&\
@@ -18,7 +18,7 @@ RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-4 &&\
     -DWITH_CLIENT_WMS=ON \
     -DWITH_CURL=ON \
     -DWITH_SOS=ON \
-    -DWITH_PHP=OFF \
+    -DWITH_PHP=ON \
     -DWITH_PYTHON=ON \
     -DWITH_ORACLESPATIAL=0 \
     -DWITH_RSVG=ON \
@@ -26,6 +26,8 @@ RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-4 &&\
     -DWITH_SVGCAIRO=0 .. &&\
     make && make install &&\
     cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
+
+RUN echo "extension=php_mapscript.so" >> /etc/php/7.3/fpm/php.ini
 
 # Instal MapCache from source
 RUN cd ~ && \
@@ -39,10 +41,9 @@ RUN cd ~ && \
     ldconfig
 
 # Install QGIS-server
-RUN echo "deb http://qgis.org/debian buster main" >> /etc/apt/sources.list &&\
-    wget -O - https://qgis.org/downloads/qgis-2019.gpg.key | gpg --import --batch &&\
-    gpg --fingerprint 51F523511C7028C3 &&\
-    gpg --export --armor 51F523511C7028C3 | apt-key add - &&\
+RUN add-apt-repository "deb https://qgis.org/debian `lsb_release -c -s` main" &&\
+    wget -qO - https://qgis.org/downloads/qgis-2020.gpg.key | gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/qgis-archive.gpg --import &&\
+    chmod a+r /etc/apt/trusted.gpg.d/qgis-archive.gpg &&\
     apt-get update &&\
     apt-get -y install qgis-server
 
