@@ -48,8 +48,8 @@ services:
       - gc2.env
     networks:
       - internal
-    #ports:
-    #  - "5432:5432"
+    ports:
+      - "5432:5432"
 
   vidi:
     image: mapcentia/vidi
@@ -57,7 +57,10 @@ services:
       - vidi_root_vidi:/root/vidi
     env_file:
       - vidi.env
-    network_mode: "host"
+    networks:
+      - internal
+    ports:
+      - "3000:3000"
 
 volumes:
     # gc2core

@@ -19,7 +19,6 @@ services:
       - "--docker.swarmMode"
       - "--docker.domain=traefik"
       - "--docker.watch"
-    networks:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:

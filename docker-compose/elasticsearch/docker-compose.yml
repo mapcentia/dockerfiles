@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    volumes:
+      - elasticsearch_usr_share_elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - web
+    ports:
+      - "9200:9200"
+
+volumes:
+  elasticsearch_usr_share_elasticsearch_data:
+
+
+
+

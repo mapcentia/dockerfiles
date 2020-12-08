@@ -13,17 +13,17 @@ RUN git clone https://github.com/mapserver/mapserver.git --branch branch-7-6 &&\
     mkdir build &&\
     cd build &&\
     cmake -DCMAKE_INSTALL_PREFIX=/opt \
-    -DCMAKE_PREFIX_PATH=/usr/local/pgsql/94:/usr/local:/opt:/usr/include \
-    -DWITH_CLIENT_WFS=ON \
-    -DWITH_CLIENT_WMS=ON \
-    -DWITH_CURL=ON \
-    -DWITH_SOS=ON \
-    -DWITH_PHP=ON \
-    -DWITH_PYTHON=ON \
-    -DWITH_ORACLESPATIAL=0 \
-    -DWITH_RSVG=ON \
-    -DWITH_POINT_Z_M=ON \
-    -DWITH_SVGCAIRO=0 .. &&\
+        -DCMAKE_PREFIX_PATH=/usr/local/pgsql/94:/usr/local:/opt:/usr/include \
+        -DWITH_CLIENT_WFS=ON \
+        -DWITH_CLIENT_WMS=ON \
+        -DWITH_CURL=ON \
+        -DWITH_SOS=ON \
+        -DWITH_PHP=ON \
+        -DWITH_PYTHON=ON \
+        -DWITH_ORACLESPATIAL=0 \
+        -DWITH_RSVG=ON \
+        -DWITH_POINT_Z_M=ON \
+        -DWITH_SVGCAIRO=0 .. &&\
     make && make install &&\
     cp /mapserver/build/mapserv /usr/lib/cgi-bin/mapserv.fcgi
 
