@@ -97,7 +97,7 @@ if [[ $? = 1 ]]
             -v /usr/share/nginx/html \
             -v /var/run/docker.sock:/tmp/docker.sock \
             --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy \
-            jwilder/nginx-proxy:alpine
+            nginx-proxy/nginx-proxy
 fi
 
 
@@ -110,7 +110,7 @@ if [[ $? = 1 ]]
                 -v $PWD/nginx/certs:/etc/nginx/certs \
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 --volumes-from nginx-proxy \
-                jrcs/letsencrypt-nginx-proxy-companion
+                nginxproxy/acme-companion
 fi
 
 #

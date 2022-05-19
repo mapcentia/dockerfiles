@@ -3,10 +3,16 @@ set -e
 
 export PGPASSWORD=$PASSWORD
 export PGUSER=$USER
-export PGHOST=postgis
 export PGPORT=5432
 export AWSACCESSKEYID=$AWSACCESSKEYID
 export AWSSECRETACCESSKEY=$AWSSECRETACCESSKEY
+if [ -z ${HOST+x} ]; then
+  export PGHOST=postgis
+else
+  export PGHOST=$HOST
+fi
+
+echo $PGHOST
 
 BACKUPDIR=backups
 
