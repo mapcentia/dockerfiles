@@ -1,17 +1,19 @@
 #
-# This Docker-compose file is for traefik in a Docker standalone environment and your own certificate
+# This Docker-compose file is for traefik in a Docker standalone environment
 #
 # How to:
 #
-# In the cert folder replace the files with your domain.crt file and domain.key file
+# Create a acme.json file on the host:
+# $ cd cert && chmod 600 acme.json
 #
 # Create a user defined bridge network:
 # $ docker network create web
 #
+# Set email and domain name below
+#
 # The run following command to deploy:
 #
 # $ docker-compose up
-#
 
 version: '3.8'
 
@@ -21,8 +23,14 @@ networks:
 
 services:
   traefik:
-    restart: always
     image: traefik:v2.8.5
+    command:
+      - "--log.level=DEBUG"
+      # Enable ACME (Let's Encrypt): automatic SSL.
+      - "--certificatesresolvers.letsencrypt.acme.email=your.name@example.com" # SET EMAIL
+      - "--certificatesresolvers.letsencrypt.acme.storage=./cert/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
     logging:
       driver: "json-file"
       options:
@@ -44,6 +52,6 @@ services:
       - web
     labels:
       - traefik.enable=false
-      - traefik.http.routers.traefik.rule=Host(`example.com`)
+      - traefik.http.routers.traefik.rule=Host(`example.com`) # SET DOMAIN NAME
       # Force TLS
       - traefik.http.routers.traefik.tls=true
