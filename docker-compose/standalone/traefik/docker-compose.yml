@@ -22,7 +22,7 @@ networks:
 services:
   traefik:
     restart: always
-    image: traefik:v2.8.5
+    image: traefik:v2.8.8
     logging:
       driver: "json-file"
       options:
@@ -46,4 +46,4 @@ services:
       - traefik.enable=false
       - traefik.http.routers.traefik.rule=Host(`example.com`)
       # Force TLS
-      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.vidi.tls=true

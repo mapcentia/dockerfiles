@@ -9,8 +9,8 @@ providers:
     network: web
     exposedByDefault: false
   file:
-      filename: /traefik-certificates-and-tls.yaml
-      watch: true
+    filename: /traefik-certificates-and-tls.yaml
+    watch: true
 entryPoints:
   web:
     # Redirect HTTP → HTTPS

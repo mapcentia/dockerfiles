@@ -29,13 +29,14 @@ networks:
     external: true
 
 services:
+
   vidi:
     restart: always
     image: mapcentia/vidi
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
+        max-size: "1m"
     ports:
       - "3000:3000"
     volumes:

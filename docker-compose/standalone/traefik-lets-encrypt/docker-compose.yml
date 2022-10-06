@@ -23,7 +23,7 @@ networks:
 
 services:
   traefik:
-    image: traefik:v2.8.5
+    image: traefik:v2.8.8
     command:
       - "--log.level=DEBUG"
       # Enable ACME (Let's Encrypt): automatic SSL.
@@ -54,4 +54,4 @@ services:
       - traefik.enable=false
       - traefik.http.routers.traefik.rule=Host(`example.com`) # SET DOMAIN NAME
       # Force TLS
-      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.vidi.tls=true
