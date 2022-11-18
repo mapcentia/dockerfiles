@@ -55,7 +55,8 @@ services:
       - traefik.http.routers.vidi.rule=Host(`vidi.yourDomain.com`) # SET HOST
       - traefik.docker.network=web
       - traefik.frontend.passHostHeader=true
-
+    environment:
+      - NODE_ENV=production
 volumes:
     vidi_root_vidi_config:
     vidi_root_vidi_public_tmp:

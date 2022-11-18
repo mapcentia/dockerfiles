@@ -7,9 +7,9 @@ providers:
   docker:
     # Match this to your network
     network: web
-    exposedByDefault: false
+    exposedByDefault: true
   file:
-    filename: /traefik-certificates-and-tls.yaml
+    filename: ./traefik-certificates-and-tls.yaml
     watch: true
 entryPoints:
   web:
