@@ -24,11 +24,11 @@ tls:
     default:
       defaultCertificate:
         # Change these file names to match what you have
-        certFile: /cert/wildcard-rm-group.crt
-        keyFile: /cert/wildcard-rm-group.key
+        certFile: /cert/your-cert-file.crt
+        keyFile: /cert/your-key-file.key
   certificates:
       # Change these file names to match what you have
-    - certFile: /cert/wildcard-rm-group.crt
-      keyFile: /cert/wildcard-rm-group.key
+    - certFile: /cert/your-cert-file.crt
+      keyFile: /cert/your-key-file.key
       stores:
         - default
