@@ -11,7 +11,7 @@
 # TIMEZONE=CET
 # LOCALE=en_US.UTF-8
 #
-# Set the traefik.frontend.rule is this file to your DNS name.
+# Change the traefik.http.routers.gc2core.rule=Host(`gc2.yourDomain.com`) in this file to your domain name.
 #
 # The run following command to deploy:
 #
@@ -22,7 +22,7 @@
 # 'docker-compose down' will not remove data
 # 'docker-compose down -v' will remove the volumes!!!
 
-version: '3'
+version: '3.8'
 
 networks:
   web:
@@ -31,9 +31,19 @@ networks:
     external: false
 
 services:
+  redis:
+    restart: always
+    image: redis
+    networks:
+      - internal
 
   gc2core:
+    restart: always
     image: mapcentia/gc2core
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
     privileged: true
     volumes:
       - gc2core_var_www_geocloud2_app_conf:/var/www/geocloud2/app/conf
@@ -45,10 +55,10 @@ services:
     env_file:
       - gc2.env
     labels:
-      - traefik.backend=gc2core
-      - traefik.frontend.rule=Host:gc2.test # SET HOST
-      - traefik.port=80
-      - traefik.backend.loadbalancer.swarm=false
+      # Create a router called gc2core listening on the websecure entrypoint
+      - traefik.http.routers.gc2core.entrypoints=websecure
+      - traefik.http.routers.gc2core.tls=true
+      - traefik.http.routers.gc2core.rule=Host(`gc2.yourDomain.com`) # SET HOST
       - traefik.docker.network=web
       - traefik.frontend.passHostHeader=true
     networks:
@@ -63,7 +73,3 @@ volumes:
     gc2core_var_www_geocloud2_public_logs:
     gc2core_var_log:
     gc2core_var_lib_php_sessions:
-
-
-
-

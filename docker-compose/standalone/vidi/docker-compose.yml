@@ -11,7 +11,7 @@
 # TIMEZONE=CET
 # LOCALE=en_US.UTF-8
 #
-# Set the traefik.frontend.rule is this file to your DNS name.
+# Change the traefik.http.routers.vidi.rule=Host(`vidi.yourDomain.com`) in this file to your domain name.
 #
 # The run following command to deploy:
 #
@@ -22,7 +22,7 @@
 # 'docker-compose down' will not remove data
 # 'docker-compose down -v' will remove the volumes!!!
 
-version: '3'
+version: '3.8'
 
 networks:
   web:
@@ -31,7 +31,12 @@ networks:
 services:
 
   vidi:
+    restart: always
     image: mapcentia/vidi
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
     ports:
       - "3000:3000"
     volumes:
@@ -43,19 +48,16 @@ services:
     networks:
       - web
     labels:
-      - traefik.backend=vidi
-      - traefik.frontend.rule=Host:vidi.test # SET HOST
-      - traefik.port=3000
-      - traefik.backend.loadbalancer.swarm=false
+      - traefik.http.routers.vidi.entrypoints=websecure
+      - traefik.http.routers.vidi.tls=true
+      # Send traffic to the container via port 3000
+      - traefik.http.services.vidi-service.loadbalancer.server.port=3000
+      - traefik.http.routers.vidi.rule=Host(`vidi.yourDomain.com`) # SET HOST
       - traefik.docker.network=web
       - traefik.frontend.passHostHeader=true
-
+    environment:
+      - NODE_ENV=production
 volumes:
     vidi_root_vidi_config:
     vidi_root_vidi_public_tmp:
     vidi_tmp_sessions:
-
-
-
-
-

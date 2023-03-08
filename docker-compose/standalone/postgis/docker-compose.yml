@@ -13,7 +13,7 @@
 # 'docker-compose down -v' will remove the volumes!!!
 #
 
-version: '3'
+version: '3.8'
 
 networks:
   web:
@@ -21,7 +21,18 @@ networks:
 
 services:
   postgis:
+    restart: always
     image: mapcentia/postgis
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
     volumes:
       - postgis_var_www_geocloud2:/var/www/geocloud2
       - postgis_var_lib_postgresql:/var/lib/postgresql
@@ -41,7 +52,3 @@ volumes:
     postgis_etc_postgresql:
     postgis_var_lib_postgresql:
     postgis_etc_pgbouncer:
-
-
-
-
